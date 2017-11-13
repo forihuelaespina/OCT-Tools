@@ -1,0 +1,663 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_PoxJAMRIEeeb5M03bVqXTg" name="OCTTools_architecture">
+  <ownedComment xmi:type="uml:Comment" xmi:id="_dCyMMMRKEeeb5M03bVqXTg">
+    <body>A document. It includes information about an experiment, but also some other configuration information</body>
+  </ownedComment>
+  <packagedElement xmi:type="uml:Package" xmi:id="_Q9j8QMRJEeeb5M03bVqXTg" name="SciMeth">
+    <ownedComment xmi:type="uml:Comment" xmi:id="_fB4LkMRJEeeb5M03bVqXTg">
+      <body>Classes supporting the management of experiments according to the formal scientific method</body>
+    </ownedComment>
+    <packagedElement xmi:type="uml:Class" xmi:id="_V9I_MMRKEeeb5M03bVqXTg" name="Document">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_3x0lMMRLEeeb5M03bVqXTg">
+        <body>A document. It includes information about an experiment, but also some other configuration information.</body>
+      </ownedComment>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_CuwFcMRPEeeb5M03bVqXTg" name="theStudy" visibility="private" type="_OQa5MMRMEeeb5M03bVqXTg"/>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_eKYUIMRPEeeb5M03bVqXTg" name="lastModified" visibility="private"/>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_5zKOAMRPEeeb5M03bVqXTg" name="creationDate" visibility="private"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_4goL8MRLEeeb5M03bVqXTg" name="Experiment">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_Ixt00MRMEeeb5M03bVqXTg">
+        <body>The scientific experiment is the central element of the scientific method. In a scientific experiment, a hypothesis expresses a plausible explanation to an observed phenomenon. In a scientific experiment a umber of observations are acquired from a cohort of experimental units along a number of session. During each session, the experimental unit is administered one or more treatments. The way in which the treatments are administered and observations are acquired conforms the experimental design.</body>
+      </ownedComment>
+      <generalization xmi:type="uml:Generalization" xmi:id="_3mKSUMRMEeeb5M03bVqXTg" general="_OQa5MMRMEeeb5M03bVqXTg"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_OQa5MMRMEeeb5M03bVqXTg" name="Study" isAbstract="true">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_mKV7sMRMEeeb5M03bVqXTg">
+        <body>A study; whether an obsrevational study, a scientific experiment (randomised and controlled) or a pseudo-experiment (controlled but not randomised).</body>
+      </ownedComment>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_EV07gMRQEeeb5M03bVqXTg" name="theCohort" visibility="private" type="_IdI2gMRNEeeb5M03bVqXTg"/>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_MXqD8MRQEeeb5M03bVqXTg" name="theDesign" visibility="private" type="_9M-7cMRNEeeb5M03bVqXTg"/>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_SDgzgMRQEeeb5M03bVqXTg" name="theObservations" visibility="private" type="_JehlkMROEeeb5M03bVqXTg">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_WfJRUMRQEeeb5M03bVqXTg"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_WfR0MMRQEeeb5M03bVqXTg" value="*"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_SB0DgsWGEee4W5H7A9jk3w" type="_9M-7cMRNEeeb5M03bVqXTg" association="_SBqSgMWGEee4W5H7A9jk3w">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_SB0Dg8WGEee4W5H7A9jk3w" value="1"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_SB0DhMWGEee4W5H7A9jk3w" value="1"/>
+      </ownedAttribute>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_t7EGAMRMEeeb5M03bVqXTg" name="Pseudoexperiment">
+      <generalization xmi:type="uml:Generalization" xmi:id="_3KoM4MRMEeeb5M03bVqXTg" general="_OQa5MMRMEeeb5M03bVqXTg"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_wixvIMRMEeeb5M03bVqXTg" name="ObservationalStudy">
+      <generalization xmi:type="uml:Generalization" xmi:id="_2GOwoMRMEeeb5M03bVqXTg" general="_OQa5MMRMEeeb5M03bVqXTg"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_IdI2gMRNEeeb5M03bVqXTg" name="Cohort">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_Mel5wMRNEeeb5M03bVqXTg">
+        <body>The cohort is the set of experimental units participating in a experiment</body>
+      </ownedComment>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_gAPUccRNEeeb5M03bVqXTg" type="_PY-nQMRNEeeb5M03bVqXTg" aggregation="shared" association="_gAOGUMRNEeeb5M03bVqXTg">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_gAP7gMRNEeeb5M03bVqXTg"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_gAP7gcRNEeeb5M03bVqXTg" value="1"/>
+      </ownedAttribute>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_PY-nQMRNEeeb5M03bVqXTg" name="ExperimentalUnit">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_wEvS0MRNEeeb5M03bVqXTg">
+        <body>The minimal entity from where observations can be acquired and statistical association can be decoupled.</body>
+      </ownedComment>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_mfTHQMV5Eee4W5H7A9jk3w" name="ID" visibility="private">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_n8casMV5Eee4W5H7A9jk3w">
+          <body>A unique (across the study) identifier for the instance</body>
+        </ownedComment>
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/EcorePrimitiveTypes.library.uml#EInt"/>
+        <defaultValue xmi:type="uml:LiteralInteger" xmi:id="_VfL_wMV6Eee4W5H7A9jk3w"/>
+      </ownedAttribute>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_S_zkAMRNEeeb5M03bVqXTg" name="Subject">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_xuWU8MRNEeeb5M03bVqXTg">
+        <body>A human subject participating in a study</body>
+      </ownedComment>
+      <generalization xmi:type="uml:Generalization" xmi:id="_VhO-8MRNEeeb5M03bVqXTg" general="_PY-nQMRNEeeb5M03bVqXTg"/>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_7KyUUMV4Eee4W5H7A9jk3w" name="name" visibility="private">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_N7kSwMV5Eee4W5H7A9jk3w">
+          <body>Subject's first name</body>
+        </ownedComment>
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/EcorePrimitiveTypes.library.uml#EString"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_TJOqcMV5Eee4W5H7A9jk3w" name="surname" visibility="private">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_UdHUMMV5Eee4W5H7A9jk3w">
+          <body>Subject's family name</body>
+        </ownedComment>
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/EcorePrimitiveTypes.library.uml#EString"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_czQfwMV5Eee4W5H7A9jk3w" name="dob" visibility="private">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_gC8H0MV5Eee4W5H7A9jk3w">
+          <body>Date of birth</body>
+        </ownedComment>
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/EcorePrimitiveTypes.library.uml#EString"/>
+      </ownedAttribute>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Association" xmi:id="_gAOGUMRNEeeb5M03bVqXTg" name="aggregates" memberEnd="_gAPUccRNEeeb5M03bVqXTg _gAP7gsRNEeeb5M03bVqXTg">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_gAOtYMRNEeeb5M03bVqXTg" source="org.eclipse.papyrus">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_gAPUcMRNEeeb5M03bVqXTg" key="nature" value="UML_Nature"/>
+      </eAnnotations>
+      <ownedEnd xmi:type="uml:Property" xmi:id="_gAP7gsRNEeeb5M03bVqXTg" type="_IdI2gMRNEeeb5M03bVqXTg" association="_gAOGUMRNEeeb5M03bVqXTg"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_9M-7cMRNEeeb5M03bVqXTg" name="ExperimentalDesign">
+      <ownedComment xmi:type="uml:Comment" xmi:id="__28AQMRNEeeb5M03bVqXTg">
+        <body>An experimental design encodes how observations are acquired from experimental units following the administration of treatments at sessions.</body>
+      </ownedComment>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_pJ62QMWAEee4W5H7A9jk3w" name="theVariables" visibility="private" type="_xqpBgMV9Eee4W5H7A9jk3w">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_v7OyAMWAEee4W5H7A9jk3w"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_v7OyAcWAEee4W5H7A9jk3w" value="*"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_G18aQsWBEee4W5H7A9jk3w" type="_xqpBgMV9Eee4W5H7A9jk3w" aggregation="shared" association="_G15-AMWBEee4W5H7A9jk3w">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_G18aQ8WBEee4W5H7A9jk3w"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_G18aRMWBEee4W5H7A9jk3w" value="*"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_c6aPoMWEEee4W5H7A9jk3w" name="theTreatments" visibility="private" type="_Lv2vAMROEeeb5M03bVqXTg">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_pAVfoMWEEee4W5H7A9jk3w">
+          <body>The list of treatments tested in the experiment.</body>
+        </ownedComment>
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_jmdQ4MWEEee4W5H7A9jk3w"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_jmiJYMWEEee4W5H7A9jk3w" value="*"/>
+        <defaultValue xmi:type="uml:LiteralNull" xmi:id="_ikSCMMWEEee4W5H7A9jk3w"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_sgudMsWEEee4W5H7A9jk3w" type="_Lv2vAMROEeeb5M03bVqXTg" association="_sgsA8MWEEee4W5H7A9jk3w">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_sgudM8WEEee4W5H7A9jk3w"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_sgudNMWEEee4W5H7A9jk3w" value="*"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_2LQzYMWFEee4W5H7A9jk3w" name="theGroups" visibility="private" type="_N5k0kMROEeeb5M03bVqXTg">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_8lMw8MWFEee4W5H7A9jk3w"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_8lWh8MWFEee4W5H7A9jk3w" value="*"/>
+        <defaultValue xmi:type="uml:LiteralNull" xmi:id="_-SWPQMWFEee4W5H7A9jk3w"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_Do3oAMWGEee4W5H7A9jk3w" type="_N5k0kMROEeeb5M03bVqXTg" aggregation="shared" association="_Do1LwMWGEee4W5H7A9jk3w">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Do3oAcWGEee4W5H7A9jk3w"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Do3oAsWGEee4W5H7A9jk3w" value="*"/>
+      </ownedAttribute>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_G0dzEMROEeeb5M03bVqXTg" name="Factor">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_iSymYMWAEee4W5H7A9jk3w">
+        <body>An experimental variable put to test</body>
+      </ownedComment>
+      <generalization xmi:type="uml:Generalization" xmi:id="_Te1C0MWAEee4W5H7A9jk3w" general="_9RNxIMV_Eee4W5H7A9jk3w"/>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_xKy_IMRREeeb5M03bVqXTg" name="theLevels" visibility="private" type="_IIhb8MROEeeb5M03bVqXTg"/>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_9rMkosRREeeb5M03bVqXTg" type="_IIhb8MROEeeb5M03bVqXTg" aggregation="composite" association="_9rL9kMRREeeb5M03bVqXTg">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_9rb1MMRREeeb5M03bVqXTg" value="1"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_9rdqYMRREeeb5M03bVqXTg" value="*"/>
+      </ownedAttribute>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_IIhb8MROEeeb5M03bVqXTg" name="Level">
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_rLVXEMRREeeb5M03bVqXTg" name="value" visibility="private"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_JehlkMROEeeb5M03bVqXTg" name="Observation" isAbstract="true">
+      <ownedComment xmi:type="uml:Comment" xmi:id="__PyScMWGEee4W5H7A9jk3w">
+        <body>A piece of data as produced by a model (Synthetic) or an observationSourceDevice (Experimental). &#xD;
+&#xD;
+The observation is considered to be reconstructed. Reconstruction is the inverse problem of retrieving the variable of interest from the raw DataSource output.</body>
+      </ownedComment>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_15EmQMV8Eee4W5H7A9jk3w" name="ID" visibility="private">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_9yJbUMV8Eee4W5H7A9jk3w">
+          <body>A unique (across the study) identifier for the instance.</body>
+        </ownedComment>
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/EcorePrimitiveTypes.library.uml#EInt"/>
+        <defaultValue xmi:type="uml:LiteralInteger" xmi:id="_4cV0QMV8Eee4W5H7A9jk3w"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_NbmQ4MWHEee4W5H7A9jk3w" name="acquisitionDate" visibility="private">
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/EcorePrimitiveTypes.library.uml#EDate"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_1KPqcMd2EeetC9wcdzySOw" name="theRawObservation" type="_dfRfYMd1EeetC9wcdzySOw">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_7xymMMd2EeetC9wcdzySOw">
+          <body>The raw obsrevation from which this observation is generated.</body>
+        </ownedComment>
+        <defaultValue xmi:type="uml:LiteralNull" xmi:id="_AkOacMd3EeetC9wcdzySOw"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_4Q4nEcd9EeetC9wcdzySOw" type="_ncxwsMd9EeetC9wcdzySOw" aggregation="composite" association="_4Q3Y8Md9EeetC9wcdzySOw">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_4Q5OIMd9EeetC9wcdzySOw"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_4Q5OIcd9EeetC9wcdzySOw" value="1"/>
+      </ownedAttribute>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_KrLl8MROEeeb5M03bVqXTg" name="Session">
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_jijz4MV6Eee4W5H7A9jk3w" name="theUnit" visibility="private" type="_PY-nQMRNEeeb5M03bVqXTg">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_03p3cMV6Eee4W5H7A9jk3w">
+          <body>The experimental unit from which the obsrevation was acquired</body>
+        </ownedComment>
+        <defaultValue xmi:type="uml:LiteralNull" xmi:id="_n8clQMV6Eee4W5H7A9jk3w"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_utRY0MV6Eee4W5H7A9jk3w" name="theTreatment" visibility="private" type="_Lv2vAMROEeeb5M03bVqXTg">
+        <ownedComment xmi:type="uml:Comment" xmi:id="__3bXsMV6Eee4W5H7A9jk3w">
+          <body>The treatment that was administered to the experimental unit to acquire the observation</body>
+        </ownedComment>
+        <defaultValue xmi:type="uml:LiteralNull" xmi:id="_yVT2gMV6Eee4W5H7A9jk3w"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_CjwbEMV7Eee4W5H7A9jk3w" name="theObservations" visibility="private" type="_JehlkMROEeeb5M03bVqXTg">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_I16VoMV7Eee4W5H7A9jk3w"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_I2EGoMV7Eee4W5H7A9jk3w" value="*"/>
+        <defaultValue xmi:type="uml:LiteralNull" xmi:id="_IJvMIMV7Eee4W5H7A9jk3w"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_mGDZcMV8Eee4W5H7A9jk3w" name="theDate" visibility="private">
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/EcorePrimitiveTypes.library.uml#EDate"/>
+        <defaultValue xmi:type="uml:TimeExpression" xmi:id="_yHej8MV8Eee4W5H7A9jk3w"/>
+      </ownedAttribute>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_Lv2vAMROEeeb5M03bVqXTg" name="Treatment">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_WfW-oMROEeeb5M03bVqXTg">
+        <body>A treatment is a tuple of levels for each of the factors that are questioned in an experiment. A treatment is one element of the Cartesian product of the levels among the factors. The treatment is applied to a experimental unit during a session. As a result, an observation is generated.</body>
+      </ownedComment>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_ZEr04MV8Eee4W5H7A9jk3w" name="ID">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_haGnsMV8Eee4W5H7A9jk3w">
+          <body>A unique (across the study) identifier for the instance</body>
+        </ownedComment>
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/EcorePrimitiveTypes.library.uml#EInt"/>
+        <defaultValue xmi:type="uml:LiteralInteger" xmi:id="_bjeLgMV8Eee4W5H7A9jk3w"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_3jn_YMWDEee4W5H7A9jk3w" name="factorLevels">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_WZjxwMWEEee4W5H7A9jk3w">
+          <body>A matrix of factors (identified by their IDs) and the level each one takes chartacterizing the treatment.</body>
+        </ownedComment>
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/EcorePrimitiveTypes.library.uml#EMap"/>
+        <defaultValue xmi:type="uml:LiteralNull" xmi:id="_XwmdMMWEEee4W5H7A9jk3w"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_J1SjcMWFEee4W5H7A9jk3w" name="name">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_NnitEMWFEee4W5H7A9jk3w">
+          <body>A logical name for the treatment</body>
+        </ownedComment>
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/EcorePrimitiveTypes.library.uml#EString"/>
+        <defaultValue xmi:type="uml:LiteralString" xmi:id="_Q4zpgMWFEee4W5H7A9jk3w"/>
+      </ownedAttribute>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_N5k0kMROEeeb5M03bVqXTg" name="ExperimentalGroup">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_SRaXgMROEeeb5M03bVqXTg">
+        <body>A subset of experimental units from the cohort receiving a certain treatment (in one or more sessions).</body>
+      </ownedComment>
+      <generalization xmi:type="uml:Generalization" xmi:id="__FCcAMV7Eee4W5H7A9jk3w" general="_IdI2gMRNEeeb5M03bVqXTg"/>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_DPGosMV8Eee4W5H7A9jk3w" name="ID">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_iYAaYMV8Eee4W5H7A9jk3w">
+          <body>A unique (across the study) identifier for the instance.</body>
+        </ownedComment>
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/EcorePrimitiveTypes.library.uml#EInt"/>
+        <defaultValue xmi:type="uml:LiteralInteger" xmi:id="_JCbSMMV8Eee4W5H7A9jk3w"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_PPppcMV8Eee4W5H7A9jk3w" name="theTreatment" type="_Lv2vAMROEeeb5M03bVqXTg">
+        <defaultValue xmi:type="uml:LiteralNull" xmi:id="_TPvawMV8Eee4W5H7A9jk3w"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_VepMMMWFEee4W5H7A9jk3w" name="name">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_dLrJUMWFEee4W5H7A9jk3w">
+          <body>A logical name for the group (usually it may be the same as the name of the treatment e.g. control, placebo, intervention, etc)</body>
+        </ownedComment>
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/EcorePrimitiveTypes.library.uml#EString"/>
+        <defaultValue xmi:type="uml:LiteralString" xmi:id="_wmxQEMWFEee4W5H7A9jk3w" value=""/>
+      </ownedAttribute>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Association" xmi:id="_RmOQAMRPEeeb5M03bVqXTg" name="stores"/>
+    <packagedElement xmi:type="uml:Association" xmi:id="_2-_AwMRQEeeb5M03bVqXTg" name="involves" memberEnd="_2_AO4MRQEeeb5M03bVqXTg _2_AO4cRQEeeb5M03bVqXTg" navigableOwnedEnd="_2_AO4cRQEeeb5M03bVqXTg _2_AO4MRQEeeb5M03bVqXTg">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_2-_n0MRQEeeb5M03bVqXTg" source="org.eclipse.papyrus">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_2-_n0cRQEeeb5M03bVqXTg" key="nature" value="UML_Nature"/>
+      </eAnnotations>
+      <ownedEnd xmi:type="uml:Property" xmi:id="_2_AO4MRQEeeb5M03bVqXTg" type="_JehlkMROEeeb5M03bVqXTg" association="_2-_AwMRQEeeb5M03bVqXTg"/>
+      <ownedEnd xmi:type="uml:Property" xmi:id="_2_AO4cRQEeeb5M03bVqXTg" type="_OQa5MMRMEeeb5M03bVqXTg" association="_2-_AwMRQEeeb5M03bVqXTg">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_ALelgMRREeeb5M03bVqXTg"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_ALnvcMRREeeb5M03bVqXTg" value="*"/>
+      </ownedEnd>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Association" xmi:id="_JcuHYMRREeeb5M03bVqXTg" name="participates" memberEnd="_JcuucsRREeeb5M03bVqXTg _JcvVgMRREeeb5M03bVqXTg" navigableOwnedEnd="_JcuucsRREeeb5M03bVqXTg _JcvVgMRREeeb5M03bVqXTg">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_JcuucMRREeeb5M03bVqXTg" source="org.eclipse.papyrus">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_JcuuccRREeeb5M03bVqXTg" key="nature" value="UML_Nature"/>
+      </eAnnotations>
+      <ownedEnd xmi:type="uml:Property" xmi:id="_JcuucsRREeeb5M03bVqXTg" type="_IdI2gMRNEeeb5M03bVqXTg" association="_JcuHYMRREeeb5M03bVqXTg"/>
+      <ownedEnd xmi:type="uml:Property" xmi:id="_JcvVgMRREeeb5M03bVqXTg" type="_OQa5MMRMEeeb5M03bVqXTg" association="_JcuHYMRREeeb5M03bVqXTg"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Association" xmi:id="_hCvWcMRREeeb5M03bVqXTg" name="administered to" memberEnd="_hCv9gsRREeeb5M03bVqXTg _hCv9g8RREeeb5M03bVqXTg" navigableOwnedEnd="_hCv9gsRREeeb5M03bVqXTg _hCv9g8RREeeb5M03bVqXTg">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_hCv9gMRREeeb5M03bVqXTg" source="org.eclipse.papyrus">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_hCv9gcRREeeb5M03bVqXTg" key="nature" value="UML_Nature"/>
+      </eAnnotations>
+      <ownedEnd xmi:type="uml:Property" xmi:id="_hCv9gsRREeeb5M03bVqXTg" type="_N5k0kMROEeeb5M03bVqXTg" association="_hCvWcMRREeeb5M03bVqXTg"/>
+      <ownedEnd xmi:type="uml:Property" xmi:id="_hCv9g8RREeeb5M03bVqXTg" type="_Lv2vAMROEeeb5M03bVqXTg" association="_hCvWcMRREeeb5M03bVqXTg"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Association" xmi:id="_9rL9kMRREeeb5M03bVqXTg" name="can take" memberEnd="_9rMkosRREeeb5M03bVqXTg _9rgGoMRREeeb5M03bVqXTg">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_9rMkoMRREeeb5M03bVqXTg" source="org.eclipse.papyrus">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_9rMkocRREeeb5M03bVqXTg" key="nature" value="UML_Nature"/>
+      </eAnnotations>
+      <ownedEnd xmi:type="uml:Property" xmi:id="_9rgGoMRREeeb5M03bVqXTg" type="_G0dzEMROEeeb5M03bVqXTg" association="_9rL9kMRREeeb5M03bVqXTg"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Dependency" xmi:id="_Z0kgEMWEEee4W5H7A9jk3w" client="_Lv2vAMROEeeb5M03bVqXTg" supplier="_G0dzEMROEeeb5M03bVqXTg"/>
+    <packagedElement xmi:type="uml:Association" xmi:id="_b0-AoMV7Eee4W5H7A9jk3w" name="undergoes" memberEnd="_b1HKkMV7Eee4W5H7A9jk3w _b1HKkcV7Eee4W5H7A9jk3w">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_b0-AocV7Eee4W5H7A9jk3w" source="org.eclipse.papyrus">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_b0-AosV7Eee4W5H7A9jk3w" key="nature" value="UML_Nature"/>
+      </eAnnotations>
+      <ownedEnd xmi:type="uml:Property" xmi:id="_b1HKkMV7Eee4W5H7A9jk3w" type="_PY-nQMRNEeeb5M03bVqXTg" association="_b0-AoMV7Eee4W5H7A9jk3w"/>
+      <ownedEnd xmi:type="uml:Property" xmi:id="_b1HKkcV7Eee4W5H7A9jk3w" type="_KrLl8MROEeeb5M03bVqXTg" association="_b0-AoMV7Eee4W5H7A9jk3w"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Association" xmi:id="_uLlyoMV7Eee4W5H7A9jk3w" name="is acquired during" memberEnd="_uLlyo8V7Eee4W5H7A9jk3w _uLlypMV7Eee4W5H7A9jk3w">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_uLlyocV7Eee4W5H7A9jk3w" source="org.eclipse.papyrus">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_uLlyosV7Eee4W5H7A9jk3w" key="nature" value="UML_Nature"/>
+      </eAnnotations>
+      <ownedEnd xmi:type="uml:Property" xmi:id="_uLlyo8V7Eee4W5H7A9jk3w" type="_JehlkMROEeeb5M03bVqXTg" association="_uLlyoMV7Eee4W5H7A9jk3w"/>
+      <ownedEnd xmi:type="uml:Property" xmi:id="_uLlypMV7Eee4W5H7A9jk3w" type="_KrLl8MROEeeb5M03bVqXTg" association="_uLlyoMV7Eee4W5H7A9jk3w"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Association" xmi:id="_4D8-4MV7Eee4W5H7A9jk3w" name="applies" memberEnd="_4D8-48V7Eee4W5H7A9jk3w _4EGv4MV7Eee4W5H7A9jk3w">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_4D8-4cV7Eee4W5H7A9jk3w" source="org.eclipse.papyrus">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_4D8-4sV7Eee4W5H7A9jk3w" key="nature" value="UML_Nature"/>
+      </eAnnotations>
+      <ownedEnd xmi:type="uml:Property" xmi:id="_4D8-48V7Eee4W5H7A9jk3w" type="_Lv2vAMROEeeb5M03bVqXTg" association="_4D8-4MV7Eee4W5H7A9jk3w"/>
+      <ownedEnd xmi:type="uml:Property" xmi:id="_4EGv4MV7Eee4W5H7A9jk3w" type="_KrLl8MROEeeb5M03bVqXTg" association="_4D8-4MV7Eee4W5H7A9jk3w"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_xqpBgMV9Eee4W5H7A9jk3w" name="ExperimentalVariable" isAbstract="true">
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_9NTMYMV9Eee4W5H7A9jk3w" name="type" visibility="private" type="_ZRPYQMV-Eee4W5H7A9jk3w"/>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_2-tb0MWAEee4W5H7A9jk3w" name="ID" visibility="private">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_9wcOUMWAEee4W5H7A9jk3w">
+          <body>A unique (across the study) identifier for the instance</body>
+        </ownedComment>
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/EcorePrimitiveTypes.library.uml#EInt"/>
+        <defaultValue xmi:type="uml:LiteralInteger" xmi:id="_6oAdwMWAEee4W5H7A9jk3w"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_Y6IjAMWCEee4W5H7A9jk3w" name="unit" visibility="private">
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/EcorePrimitiveTypes.library.uml#EString"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_m5utkMWGEee4W5H7A9jk3w" name="name" visibility="private">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_os5UUMWGEee4W5H7A9jk3w">
+          <body>The variable name</body>
+        </ownedComment>
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/EcorePrimitiveTypes.library.uml#EString"/>
+        <defaultValue xmi:type="uml:LiteralString" xmi:id="_tMByEMWGEee4W5H7A9jk3w" value="varName0001"/>
+      </ownedAttribute>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_ZRPYQMV-Eee4W5H7A9jk3w" name="VariableType" isAbstract="true">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_YUEokMWCEee4W5H7A9jk3w">
+        <body>The variable type determines the properties of a measurement system that are sustained by the variable.&#xD;
+&#xD;
+A measurement system may have the following properties:&#xD;
++ Identity: Without this, then it is not a measurement system, so all scientific variables hold this property.&#xD;
++ Magnitude&#xD;
++ Interval&#xD;
++ Absolute zero</body>
+      </ownedComment>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_w6xG8MWBEee4W5H7A9jk3w" name="isQuantitative" visibility="private" isStatic="true" isReadOnly="true">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_9NvUcMWBEee4W5H7A9jk3w">
+          <body>Indicates whether the variable is quatitative (valued true) or qualitative (valued false). Categorical are qualitative. Ordinal, interval and ratio variables are quantitative.</body>
+        </ownedComment>
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/EcorePrimitiveTypes.library.uml#EBoolean"/>
+        <defaultValue xmi:type="uml:LiteralBoolean" xmi:id="_wo1M8MWCEee4W5H7A9jk3w" value="true"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_pIrOMMWCEee4W5H7A9jk3w" name="holdsMagnitudeProperty" visibility="private" isStatic="true" isReadOnly="true">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_LLgaYMWDEee4W5H7A9jk3w">
+          <body>Indicates whether the variable type holds the Magnitude property of a measurement system. Categorical variables do not hold the magnitude property. Ordinal, Interval and Ratio variables do hold the magnitude property.</body>
+        </ownedComment>
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/EcorePrimitiveTypes.library.uml#EBoolean"/>
+        <defaultValue xmi:type="uml:LiteralBoolean" xmi:id="_5OpMMMWCEee4W5H7A9jk3w" value="true"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_UBaEEMWDEee4W5H7A9jk3w" name="holdsIntervalProperty" visibility="private" isStatic="true" isReadOnly="true">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_UBaEEcWDEee4W5H7A9jk3w">
+          <body>Indicates whether the variable type holds the Interval property of a measurement system. Categorical and Ordinal variables do not hold the interval property. Interval and Ratio variables do hold the interval property.</body>
+        </ownedComment>
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/EcorePrimitiveTypes.library.uml#EBoolean"/>
+        <defaultValue xmi:type="uml:LiteralBoolean" xmi:id="_UBaEEsWDEee4W5H7A9jk3w" value="true"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_fEglIMWDEee4W5H7A9jk3w" name="holdsAbsoluteZeroProperty" visibility="private" isStatic="true" isReadOnly="true">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_fEglIcWDEee4W5H7A9jk3w">
+          <body>Indicates whether the variable type holds the Absolute zero property of a measurement system. Categorical, ordinal and interval variables do not hold the absolute zero property. Ratio variables do hold the absolute zero property.</body>
+        </ownedComment>
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/EcorePrimitiveTypes.library.uml#EBoolean"/>
+        <defaultValue xmi:type="uml:LiteralBoolean" xmi:id="_fEglIsWDEee4W5H7A9jk3w" value="true"/>
+      </ownedAttribute>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_jA7wsMV-Eee4W5H7A9jk3w" name="CategoricalVariableType">
+      <generalization xmi:type="uml:Generalization" xmi:id="_6vAvkMV-Eee4W5H7A9jk3w" general="_ZRPYQMV-Eee4W5H7A9jk3w"/>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_iZ-XAMWBEee4W5H7A9jk3w" name="labels">
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/EcorePrimitiveTypes.library.uml#EEnumerator"/>
+      </ownedAttribute>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_m3GJ8MV-Eee4W5H7A9jk3w" name="RatioVariableType">
+      <generalization xmi:type="uml:Generalization" xmi:id="_84lrMMV-Eee4W5H7A9jk3w" general="_ZRPYQMV-Eee4W5H7A9jk3w"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_rYw-UMV-Eee4W5H7A9jk3w" name="OrdinalVariableType">
+      <generalization xmi:type="uml:Generalization" xmi:id="_7kkekMV-Eee4W5H7A9jk3w" general="_ZRPYQMV-Eee4W5H7A9jk3w"/>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_ZjUfYMWBEee4W5H7A9jk3w" name="values">
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/EcorePrimitiveTypes.library.uml#EEnumerator"/>
+      </ownedAttribute>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_tC0sYMV-Eee4W5H7A9jk3w" name="IntervalVariableType">
+      <generalization xmi:type="uml:Generalization" xmi:id="_8NanQMV-Eee4W5H7A9jk3w" general="_ZRPYQMV-Eee4W5H7A9jk3w"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_vZMG0MV-Eee4W5H7A9jk3w" name="Cofactor">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_WLA8QMWAEee4W5H7A9jk3w">
+        <body>A controlled variable</body>
+      </ownedComment>
+      <generalization xmi:type="uml:Generalization" xmi:id="_SoLHoMWAEee4W5H7A9jk3w" general="_9RNxIMV_Eee4W5H7A9jk3w"/>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_igSBEMWGEee4W5H7A9jk3w" name="value"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Dependency" xmi:id="_Lr1dEMV_Eee4W5H7A9jk3w" client="_xqpBgMV9Eee4W5H7A9jk3w" supplier="_ZRPYQMV-Eee4W5H7A9jk3w"/>
+    <packagedElement xmi:type="uml:Class" xmi:id="_ke4f8MV_Eee4W5H7A9jk3w" name="Confounder">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_dKZJMMWAEee4W5H7A9jk3w">
+        <body>A non-controlled unobserved (confounding) latent variable</body>
+      </ownedComment>
+      <generalization xmi:type="uml:Generalization" xmi:id="_R9Va4MWAEee4W5H7A9jk3w" general="_9RNxIMV_Eee4W5H7A9jk3w"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_14SbwMV_Eee4W5H7A9jk3w" name="Endpoint">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_8c4xMMV_Eee4W5H7A9jk3w">
+        <body>A dependent variable</body>
+      </ownedComment>
+      <generalization xmi:type="uml:Generalization" xmi:id="_RFKcwMWAEee4W5H7A9jk3w" general="_CyyjUMWAEee4W5H7A9jk3w"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_9RNxIMV_Eee4W5H7A9jk3w" name="IndependentExperimentalVariable" isAbstract="true">
+      <generalization xmi:type="uml:Generalization" xmi:id="_LDX5cMWAEee4W5H7A9jk3w" general="_xqpBgMV9Eee4W5H7A9jk3w"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_CyyjUMWAEee4W5H7A9jk3w" name="DependentExperimentalVariable" isAbstract="true">
+      <generalization xmi:type="uml:Generalization" xmi:id="_Ln8mIMWAEee4W5H7A9jk3w" general="_xqpBgMV9Eee4W5H7A9jk3w"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_ihhl8MWAEee4W5H7A9jk3w" name="ExperimentalHypothesis">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_ovQ6kMWAEee4W5H7A9jk3w">
+        <body>The experimental hypothesis</body>
+      </ownedComment>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Association" xmi:id="_G15-AMWBEee4W5H7A9jk3w" memberEnd="_G18aQsWBEee4W5H7A9jk3w _G18aRcWBEee4W5H7A9jk3w">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_G18aQMWBEee4W5H7A9jk3w" source="org.eclipse.papyrus">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_G18aQcWBEee4W5H7A9jk3w" key="nature" value="UML_Nature"/>
+      </eAnnotations>
+      <ownedEnd xmi:type="uml:Property" xmi:id="_G18aRcWBEee4W5H7A9jk3w" type="_9M-7cMRNEeeb5M03bVqXTg" association="_G15-AMWBEee4W5H7A9jk3w">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_QZGykMWBEee4W5H7A9jk3w" value="1"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_QZGykcWBEee4W5H7A9jk3w" value="1"/>
+      </ownedEnd>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Association" xmi:id="_sgsA8MWEEee4W5H7A9jk3w" name="tests" memberEnd="_sgudMsWEEee4W5H7A9jk3w _sgudNcWEEee4W5H7A9jk3w">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_sgudMMWEEee4W5H7A9jk3w" source="org.eclipse.papyrus">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_sgudMcWEEee4W5H7A9jk3w" key="nature" value="UML_Nature"/>
+      </eAnnotations>
+      <ownedEnd xmi:type="uml:Property" xmi:id="_sgudNcWEEee4W5H7A9jk3w" type="_9M-7cMRNEeeb5M03bVqXTg" association="_sgsA8MWEEee4W5H7A9jk3w">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_9xPiwMWEEee4W5H7A9jk3w" value="1"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_9xjEwMWEEee4W5H7A9jk3w" value="1"/>
+      </ownedEnd>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Association" xmi:id="_Do1LwMWGEee4W5H7A9jk3w" name="defines" memberEnd="_Do3oAMWGEee4W5H7A9jk3w _Do3oA8WGEee4W5H7A9jk3w">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_Do1LwcWGEee4W5H7A9jk3w" source="org.eclipse.papyrus">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_Do1LwsWGEee4W5H7A9jk3w" key="nature" value="UML_Nature"/>
+      </eAnnotations>
+      <ownedEnd xmi:type="uml:Property" xmi:id="_Do3oA8WGEee4W5H7A9jk3w" type="_9M-7cMRNEeeb5M03bVqXTg" association="_Do1LwMWGEee4W5H7A9jk3w"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Association" xmi:id="_SBqSgMWGEee4W5H7A9jk3w" name="has design" memberEnd="_SB0DgsWGEee4W5H7A9jk3w _SB0DhcWGEee4W5H7A9jk3w">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_SB0DgMWGEee4W5H7A9jk3w" source="org.eclipse.papyrus">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_SB0DgcWGEee4W5H7A9jk3w" key="nature" value="UML_Nature"/>
+      </eAnnotations>
+      <ownedEnd xmi:type="uml:Property" xmi:id="_SB0DhcWGEee4W5H7A9jk3w" type="_OQa5MMRMEeeb5M03bVqXTg" association="_SBqSgMWGEee4W5H7A9jk3w"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_EnjoYMWHEee4W5H7A9jk3w" name="ExperimentalObservation" isAbstract="true">
+      <generalization xmi:type="uml:Generalization" xmi:id="_HuUlAMWHEee4W5H7A9jk3w" general="_JehlkMROEeeb5M03bVqXTg"/>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_sSMVIMWIEee4W5H7A9jk3w" name="ds" type="_nQHiYMWIEee4W5H7A9jk3w">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_x0-oQMWIEee4W5H7A9jk3w">
+          <body>The DataSource with which the observation was acquired</body>
+        </ownedComment>
+      </ownedAttribute>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_GQVkEMWHEee4W5H7A9jk3w" name="SyntheticObservation" isAbstract="true">
+      <generalization xmi:type="uml:Generalization" xmi:id="_IiM5AMWHEee4W5H7A9jk3w" general="_JehlkMROEeeb5M03bVqXTg"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_z1dHsMWHEee4W5H7A9jk3w" name="BiomedicalImage" isAbstract="true">
+      <generalization xmi:type="uml:Generalization" xmi:id="_3s6hcMWHEee4W5H7A9jk3w" general="_EnjoYMWHEee4W5H7A9jk3w"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_6KjokMWHEee4W5H7A9jk3w" name="OCTimage">
+      <generalization xmi:type="uml:Generalization" xmi:id="_9N9vMMWHEee4W5H7A9jk3w" general="_z1dHsMWHEee4W5H7A9jk3w"/>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_HedHkMWIEee4W5H7A9jk3w" name="Ascans" visibility="private">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_amRF8MWIEee4W5H7A9jk3w"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_amRF8cWIEee4W5H7A9jk3w" value="*"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_M4IiAMWIEee4W5H7A9jk3w" name="Bscans" visibility="private">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_bu464MWIEee4W5H7A9jk3w"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_bvCr4MWIEee4W5H7A9jk3w" value="*"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_WnT9EMWIEee4W5H7A9jk3w" name="Cscans" visibility="private">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_crcpwMWIEee4W5H7A9jk3w"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_crmawMWIEee4W5H7A9jk3w" value="*"/>
+      </ownedAttribute>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_jBTYkMWIEee4W5H7A9jk3w" name="RetinalOCT">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_PVF1cMdxEeetC9wcdzySOw">
+        <body>An retinal OCT imaging device capable of acquiring retinal Optical Coherent Tomography images.</body>
+      </ownedComment>
+      <generalization xmi:type="uml:Generalization" xmi:id="_0zmo4MdyEeetC9wcdzySOw" general="_rikiYMdyEeetC9wcdzySOw"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_nQHiYMWIEee4W5H7A9jk3w" name="ObservationSource" isAbstract="true">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_W0fbsMdwEeetC9wcdzySOw">
+        <body>A source of experimental observations. It may be some hardware device and/or sensor, perhaps a questionnaire, or survey.&#xD;
+&#xD;
+The ObsrevationSource may have one or more DataSource; e.g. sensors in the case of a hardware piece, or items in case of a questionnaire or survey, or perhaps a source of unstructured information. </body>
+      </ownedComment>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_lY6HYMdwEeetC9wcdzySOw" name="ID" visibility="private">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_vUTZgMdwEeetC9wcdzySOw">
+          <body>A unique identifier within a experiment</body>
+        </ownedComment>
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/EcorePrimitiveTypes.library.uml#EInt"/>
+        <defaultValue xmi:type="uml:LiteralInteger" xmi:id="_tGEnYMdwEeetC9wcdzySOw"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_E6CEcMd0EeetC9wcdzySOw" type="_iypk4MdyEeetC9wcdzySOw" aggregation="composite" association="_E6A2UMd0EeetC9wcdzySOw">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_E6CEccd0EeetC9wcdzySOw"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_E6CEcsd0EeetC9wcdzySOw" value="*"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_QC7rgMd0EeetC9wcdzySOw" name="theSources" visibility="private">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_c0ItIMd0EeetC9wcdzySOw">
+          <body>The list of DataSources incorporated that conform the ObservationSource</body>
+        </ownedComment>
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_ePtTQMd0EeetC9wcdzySOw"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_eP6uoMd0EeetC9wcdzySOw" value="*"/>
+      </ownedAttribute>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_iypk4MdyEeetC9wcdzySOw" name="DataSource" isAbstract="true">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_8KhzIMdyEeetC9wcdzySOw">
+        <body>A single sensor or questionnaire item capable of producing a tensor of data.</body>
+      </ownedComment>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_0aaQUMdzEeetC9wcdzySOw" name="ID" visibility="private">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_-PmMwMdzEeetC9wcdzySOw">
+          <body>A numerical ID which is unique within an ObservationSource</body>
+        </ownedComment>
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/EcorePrimitiveTypes.library.uml#EInt"/>
+        <defaultValue xmi:type="uml:LiteralInteger" xmi:id="_CFcc8Md0EeetC9wcdzySOw"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_kSYAUMd0EeetC9wcdzySOw" name="theObservationSource" visibility="private">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_qJkdMMd0EeetC9wcdzySOw">
+          <body>The Observation source of which it is part the DataSource.</body>
+        </ownedComment>
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_rnMRwMd0EeetC9wcdzySOw"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_rnaUMMd0EeetC9wcdzySOw" value="1"/>
+      </ownedAttribute>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_rikiYMdyEeetC9wcdzySOw" name="HardwareDevice">
+      <generalization xmi:type="uml:Generalization" xmi:id="_T5micMdxEeetC9wcdzySOw" general="_nQHiYMWIEee4W5H7A9jk3w"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_u8Y94MdyEeetC9wcdzySOw" name="Questionnaire">
+      <generalization xmi:type="uml:Generalization" xmi:id="_zIKawMdyEeetC9wcdzySOw" general="_nQHiYMWIEee4W5H7A9jk3w"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_-O7T0MdyEeetC9wcdzySOw" name="Sensor">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_nXl6QMdzEeetC9wcdzySOw">
+        <body>A detector that reacts to physical (e.g. a transducer), chemical or biological condition. It usually will be a hardware device.</body>
+      </ownedComment>
+      <generalization xmi:type="uml:Generalization" xmi:id="_pRbJsMdzEeetC9wcdzySOw" general="_iypk4MdyEeetC9wcdzySOw"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_rRT90MdzEeetC9wcdzySOw" name="QuestionnaireItem">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_vXyrAMdzEeetC9wcdzySOw">
+        <body>An item within a questionnaire.</body>
+      </ownedComment>
+      <generalization xmi:type="uml:Generalization" xmi:id="_v85jMMdzEeetC9wcdzySOw" general="_iypk4MdyEeetC9wcdzySOw"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Association" xmi:id="_E6A2UMd0EeetC9wcdzySOw" name="composed of" memberEnd="_E6CEcMd0EeetC9wcdzySOw _E6CEc8d0EeetC9wcdzySOw">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_E6BdYMd0EeetC9wcdzySOw" source="org.eclipse.papyrus">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_E6BdYcd0EeetC9wcdzySOw" key="nature" value="UML_Nature"/>
+      </eAnnotations>
+      <ownedEnd xmi:type="uml:Property" xmi:id="_E6CEc8d0EeetC9wcdzySOw" type="_nQHiYMWIEee4W5H7A9jk3w" association="_E6A2UMd0EeetC9wcdzySOw"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Dependency" xmi:id="_yyeMsMd0EeetC9wcdzySOw" client="_u8Y94MdyEeetC9wcdzySOw" supplier="_rRT90MdzEeetC9wcdzySOw"/>
+    <packagedElement xmi:type="uml:Dependency" xmi:id="_zx9TwMd0EeetC9wcdzySOw" client="_rikiYMdyEeetC9wcdzySOw" supplier="_-O7T0MdyEeetC9wcdzySOw"/>
+    <packagedElement xmi:type="uml:Class" xmi:id="_PCJugMd1EeetC9wcdzySOw" name="RawData" visibility="private" isAbstract="true">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_WL0f4Md1EeetC9wcdzySOw">
+        <body>The (unreconstructed) data tensor output of a DataSource.&#xD;
+&#xD;
+Note that the RawData may be structured (e.g. a picture) or unstructured (e.g. a document)</body>
+      </ownedComment>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_TcUh0Md3EeetC9wcdzySOw" name="ID" visibility="private">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_X8jLwMd3EeetC9wcdzySOw">
+          <body>A numerical ID which is unique within an RawObservation</body>
+        </ownedComment>
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/EcorePrimitiveTypes.library.uml#EInt"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_ckJB8Md3EeetC9wcdzySOw" name="data" visibility="private">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_fxS6cMd3EeetC9wcdzySOw">
+          <body>The raw (unreconstructed) data tensor</body>
+        </ownedComment>
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/EcorePrimitiveTypes.library.uml#EByteArray"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_OJnqYMd9EeetC9wcdzySOw" name="baseType" visibility="private" type="_ZRPYQMV-Eee4W5H7A9jk3w"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_dfRfYMd1EeetC9wcdzySOw" name="RawObservation" isAbstract="true">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_j6a94Md1EeetC9wcdzySOw">
+        <body>The (unreconstructed) output of a ObservationSource</body>
+      </ownedComment>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_n-URIcd1EeetC9wcdzySOw" type="_PCJugMd1EeetC9wcdzySOw" aggregation="composite" association="_n-TqEMd1EeetC9wcdzySOw">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_n-URIsd1EeetC9wcdzySOw"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_n-URI8d1EeetC9wcdzySOw" value="*"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_FVLA8Md3EeetC9wcdzySOw" name="ID" visibility="private">
+        <ownedComment xmi:type="uml:Comment" xmi:id="_Jo0AYMd3EeetC9wcdzySOw">
+          <body>A unique (across the study) identifier for the instance.</body>
+        </ownedComment>
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/EcorePrimitiveTypes.library.uml#EInt"/>
+        <defaultValue xmi:type="uml:LiteralInteger" xmi:id="_IT_igMd3EeetC9wcdzySOw"/>
+      </ownedAttribute>
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_MVwHwMd3EeetC9wcdzySOw" name="acquisitionDate" visibility="private">
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/EcorePrimitiveTypes.library.uml#EDate"/>
+      </ownedAttribute>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Association" xmi:id="_n-TqEMd1EeetC9wcdzySOw" memberEnd="_n-URIcd1EeetC9wcdzySOw _n-URJMd1EeetC9wcdzySOw">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_n-TqEcd1EeetC9wcdzySOw" source="org.eclipse.papyrus">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_n-URIMd1EeetC9wcdzySOw" key="nature" value="UML_Nature"/>
+      </eAnnotations>
+      <ownedEnd xmi:type="uml:Property" xmi:id="_n-URJMd1EeetC9wcdzySOw" type="_dfRfYMd1EeetC9wcdzySOw" association="_n-TqEMd1EeetC9wcdzySOw"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Dependency" xmi:id="_6IhXwMd1EeetC9wcdzySOw" client="_nQHiYMWIEee4W5H7A9jk3w" supplier="_dfRfYMd1EeetC9wcdzySOw"/>
+    <packagedElement xmi:type="uml:Dependency" xmi:id="_7FAOIMd1EeetC9wcdzySOw" client="_iypk4MdyEeetC9wcdzySOw" supplier="_PCJugMd1EeetC9wcdzySOw"/>
+    <packagedElement xmi:type="uml:Class" xmi:id="_C9M5cMd2EeetC9wcdzySOw" name="BiomedicalRawData" isAbstract="true">
+      <generalization xmi:type="uml:Generalization" xmi:id="_HMGi0Md2EeetC9wcdzySOw" general="_PCJugMd1EeetC9wcdzySOw"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_IobW4Md2EeetC9wcdzySOw" name="RawRetinalOCT_Ascan">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_bOwY0Md2EeetC9wcdzySOw">
+        <body>A-scan produced by a retinal OCT</body>
+      </ownedComment>
+      <generalization xmi:type="uml:Generalization" xmi:id="_OiwnUMd2EeetC9wcdzySOw" general="_C9M5cMd2EeetC9wcdzySOw"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_P-LccMd2EeetC9wcdzySOw" name="RawRetinalOCT_Bscan">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_WJE4cMd2EeetC9wcdzySOw">
+        <body>B scan obtained from a retinal OCT</body>
+      </ownedComment>
+      <generalization xmi:type="uml:Generalization" xmi:id="_Wpv8kMd2EeetC9wcdzySOw" general="_C9M5cMd2EeetC9wcdzySOw"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_BYG5AMd4EeetC9wcdzySOw" name="UnstructuredSource" isAbstract="true">
+      <generalization xmi:type="uml:Generalization" xmi:id="_R4GgkMd4EeetC9wcdzySOw" general="_nQHiYMWIEee4W5H7A9jk3w"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Interface" xmi:id="_pMGLgMd4EeetC9wcdzySOw" name="XMLSerializable" isAbstract="true">
+      <ownedOperation xmi:type="uml:Operation" xmi:id="_1pNzgMd4EeetC9wcdzySOw" name="xmlParse" isAbstract="true">
+        <ownedParameter xmi:type="uml:Parameter" xmi:id="_I-zvMMd5EeetC9wcdzySOw" name="xmlString">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/EcorePrimitiveTypes.library.uml#EString"/>
+        </ownedParameter>
+      </ownedOperation>
+      <ownedOperation xmi:type="uml:Operation" xmi:id="_Og9JIMd5EeetC9wcdzySOw" name="xmlWrite" visibility="public" isAbstract="true">
+        <ownedParameter xmi:type="uml:Parameter" xmi:id="_V3gf8Md5EeetC9wcdzySOw" name="xmlString" direction="return">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/EcorePrimitiveTypes.library.uml#EString"/>
+        </ownedParameter>
+      </ownedOperation>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Dependency" xmi:id="_XSZz0Md9EeetC9wcdzySOw" client="_PCJugMd1EeetC9wcdzySOw" supplier="_PoxJAMRIEeeb5M03bVqXTg"/>
+    <packagedElement xmi:type="uml:Dependency" xmi:id="_OcWjsMd-EeetC9wcdzySOw" name="reconstructs data" client="_PoxJAMRIEeeb5M03bVqXTg _ncxwsMd9EeetC9wcdzySOw" supplier="_uU9wgMd9EeetC9wcdzySOw _PoxJAMRIEeeb5M03bVqXTg _PCJugMd1EeetC9wcdzySOw"/>
+    <packagedElement xmi:type="uml:Dependency" xmi:id="_YNTgYMd-EeetC9wcdzySOw" name="reconstructs observation" client="_JehlkMROEeeb5M03bVqXTg" supplier="_dfRfYMd1EeetC9wcdzySOw"/>
+    <packagedElement xmi:type="uml:Realization" xmi:id="_W-ZAwMd_EeetC9wcdzySOw" client="_V9I_MMRKEeeb5M03bVqXTg" supplier="_pMGLgMd4EeetC9wcdzySOw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Package" xmi:id="_oN7rcMRJEeeb5M03bVqXTg" name="GUI">
+    <ownedComment xmi:type="uml:Comment" xmi:id="_zpKYoMRJEeeb5M03bVqXTg">
+      <body>GUI related classes according to a Model-View-Controller paradigm</body>
+    </ownedComment>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Package" xmi:id="_2nMQAMRJEeeb5M03bVqXTg" name="OCT">
+    <ownedComment xmi:type="uml:Comment" xmi:id="_Cra24MRKEeeb5M03bVqXTg">
+      <body>A set of processing and analsysis tools specifically for OCT studies and experiments.</body>
+    </ownedComment>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_ncxwsMd9EeetC9wcdzySOw" name="ReconstructedData" isAbstract="true">
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_uU9wgMd9EeetC9wcdzySOw" name="ID" visibility="private">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_10kVoMd9EeetC9wcdzySOw">
+        <body>A numerical ID which is unique within an Observation</body>
+      </ownedComment>
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/EcorePrimitiveTypes.library.uml#EInt"/>
+      <defaultValue xmi:type="uml:LiteralInteger" xmi:id="_xzZmQMd9EeetC9wcdzySOw"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_hWboEMd-EeetC9wcdzySOw" name="data" visibility="private">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_p7_IoMd-EeetC9wcdzySOw">
+        <body>The reconstructed data tensor</body>
+      </ownedComment>
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/EcorePrimitiveTypes.library.uml#EByteArray"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_rJCxoMd-EeetC9wcdzySOw" name="baseType" visibility="private" type="_ZRPYQMV-Eee4W5H7A9jk3w">
+      <ownedComment xmi:type="uml:Comment" xmi:id="_voNroMd-EeetC9wcdzySOw">
+        <body>The variable type</body>
+      </ownedComment>
+    </ownedAttribute>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_4Q3Y8Md9EeetC9wcdzySOw" memberEnd="_4Q4nEcd9EeetC9wcdzySOw _4Q5OIsd9EeetC9wcdzySOw">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_4Q4AAMd9EeetC9wcdzySOw" source="org.eclipse.papyrus">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_4Q4nEMd9EeetC9wcdzySOw" key="nature" value="UML_Nature"/>
+    </eAnnotations>
+    <ownedEnd xmi:type="uml:Property" xmi:id="_4Q5OIsd9EeetC9wcdzySOw" type="_JehlkMROEeeb5M03bVqXTg" association="_4Q3Y8Md9EeetC9wcdzySOw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_5wpUMMd-EeetC9wcdzySOw" name="RetinalOCT_Ascan">
+    <generalization xmi:type="uml:Generalization" xmi:id="_GHvzwMd_EeetC9wcdzySOw" general="_ncxwsMd9EeetC9wcdzySOw"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_DpMtsMd_EeetC9wcdzySOw" name="RetinalOCT_Bscan">
+    <generalization xmi:type="uml:Generalization" xmi:id="_GokB0Md_EeetC9wcdzySOw" general="_ncxwsMd9EeetC9wcdzySOw"/>
+  </packagedElement>
+</uml:Model>
