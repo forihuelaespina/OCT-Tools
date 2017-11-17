@@ -1,0 +1,314 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>3. sciMeth (.xml/.tar) File Format Specification &#8212; OCT-Tools 0.1 documentation</title>
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="2. Tutorial" href="tutorial.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="tutorial.html" title="2. Tutorial"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">OCT-Tools 0.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">3. sciMeth (.xml/.tar) File Format Specification</a><ul>
+<li><a class="reference internal" href="#version-log">3.1. Version Log</a></li>
+<li><a class="reference internal" href="#introduction">3.2. Introduction</a><ul>
+<li><a class="reference internal" href="#purpose">3.2.1. Purpose</a></li>
+<li><a class="reference internal" href="#scope">3.2.2. Scope</a></li>
+<li><a class="reference internal" href="#trademarks">3.2.3. Trademarks</a></li>
+<li><a class="reference internal" href="#permitted-use">3.2.4. Permitted Use</a></li>
+<li><a class="reference internal" href="#disclaimer">3.2.5. Disclaimer</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#the-scientific-method-tar-files">3.3. The scientific method TAR Files</a><ul>
+<li><a class="reference internal" href="#generic-document-information">3.3.1. Generic document information</a></li>
+<li><a class="reference internal" href="#client-software-settings">3.3.2. Client software settings</a></li>
+<li><a class="reference internal" href="#scientific-study">3.3.3. Scientific study</a></li>
+<li><a class="reference internal" href="#study-xml">3.3.4. study.xml</a></li>
+<li><a class="reference internal" href="#cohort-xml">3.3.5. cohort.xml</a></li>
+<li><a class="reference internal" href="#design-xml">3.3.6. design.xml</a></li>
+<li><a class="reference internal" href="#observation-folder">3.3.7. Observation folder</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#acknowledgements">3.4. Acknowledgements</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="tutorial.html"
+                        title="previous chapter">2. Tutorial</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/sciMethFileFormatSpec.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="scimeth-xml-tar-file-format-specification">
+<span id="rst-scimethfileformatspec"></span><h1>3. sciMeth (.xml/.tar) File Format Specification<a class="headerlink" href="#scimeth-xml-tar-file-format-specification" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li>File: sciMeth (.xml/.tar) File Format Specification</li>
+<li>Version: 0.1</li>
+<li>Authors: Arlem Aleida Castillo Avila, Patrick Heyer Wollenberg and Felipe Orihuela-Espina</li>
+<li>Created: November 16, 2017</li>
+<li>Revised: November 16, 2017</li>
+<li>Copyright (c) 2017 INAOE</li>
+</ul>
+<div class="section" id="version-log">
+<span id="secversionlog"></span><h2>3.1. Version Log<a class="headerlink" href="#version-log" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="11%" />
+<col width="37%" />
+<col width="17%" />
+<col width="35%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Version</th>
+<th class="head">Change Description</th>
+<th class="head">Date</th>
+<th class="head">Responsible</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>0.1</td>
+<td>Initial description</td>
+<td>16/Nov/2017</td>
+<td>Felipe Orihuela-Espina</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="introduction">
+<span id="secintro"></span><h2>3.2. Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="purpose">
+<span id="secpurpose"></span><h3>3.2.1. Purpose<a class="headerlink" href="#purpose" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div>2.1.1 This specification is intended to define a cross-platform,
+interoperable file storage and transfer format to encode a variety
+of experiments of different nature. Scientific studies are understood
+here according to constructs commonly defined in the branch of
+statistics concerning the analysis and design of experiments.</div></blockquote>
+</div>
+<div class="section" id="scope">
+<span id="secscope"></span><h3>3.2.2. Scope<a class="headerlink" href="#scope" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>2.2.1. TAR (Tape ARchiver) is a file format that can wrap
+files and directories so that they can be treated as a single file. It
+was originally developed to store data in a magnetic tape, but has
+since then survived and thrived being a popular choice as an option
+when a pipe among programs is needed as well as to serve for remote
+access. The standard specification of TAR files can be found in
+<a class="reference external" href="http://www.gnu.org/software/tar/">http://www.gnu.org/software/tar/</a></p>
+<p>2.2.2. XML (Extensible Markup Language) specification defines an XML
+document as a well-formed text, meaning that it satisfies a list of
+syntax rules provided in the specification. XML is a W3C recommendation
+that was designed for ease of implementation and for interoperability
+with both SGML and HTML. XML files are plain text files encoding an XML
+compliant XML document having both a logical and a physical structure.
+The standard specification of XML files can be found in
+<a class="reference external" href="https://www.w3.org/TR/xml/">https://www.w3.org/TR/xml/</a></p>
+<p>2.2.3. The scientific method is a mathematical formalization of the
+scientific experimental process. In this mathemtical formalization
+a number of mathematical objects co-exist and are related permitting
+controlling and informing scientists about the bias and uncertainty
+associated to measurements and experiments.</p>
+<p>2.2.4. The scientific method file format provides a way to encode
+all the mathematical objects related to a scientific study. The file
+format exploits the TAR and XML specifications as a base file format,
+describing only the internal contents of the main TAR file and some of
+its internal content in terms of XML files contained in the root TAR folder.</p>
+<p>2.2.5. In principle, the scientific method file format is thought to
+support generic scientific studies and experiments from different branches
+of science.</p>
+</div></blockquote>
+</div>
+<div class="section" id="trademarks">
+<span id="sectrademarks"></span><h3>3.2.3. Trademarks<a class="headerlink" href="#trademarks" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div>2.3.1 TAR is free software distributed under the terms of the
+GNU General Public License as published by the Free Software Foundation.
+The scientific method file format belongs to INAOE but it is licensed
+also under the terms of the GNU General Public License.
+Other marks referenced within this document appear for identification
+purposes only and are the property of their respective owners.</div></blockquote>
+</div>
+<div class="section" id="permitted-use">
+<span id="secpoermitteduse"></span><h3>3.2.4. Permitted Use<a class="headerlink" href="#permitted-use" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>2.4.1 This scientific method File Format Specification is the
+exclusive property of INAOE.  Use of the information contained in this
+document is permitted solely for the purpose of creating products,
+programs and processes that read and write files in the scientific
+method TAR File Format subject to the terms and conditions herein.</p>
+<p>2.4.2 Use of the content of this document within other publications is
+permitted only through reference to this document.  Reproduction
+or distribution of this document in whole or in part is permitted
+by giving appropriate credit to INAOE as owner of
+this file format as long as it is not used for commercial purposes.</p>
+</div></blockquote>
+</div>
+<div class="section" id="disclaimer">
+<span id="secdisclaimer"></span><h3>3.2.5. Disclaimer<a class="headerlink" href="#disclaimer" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div>2.5.1 The file format specification is provided as is. INAOE is not
+responsible under any circumstances for any damage derived from its use.
+The information relating to the subject programs
+and/or the file formats created or accessed by the subject
+programs and/or the algorithms used by the subject programs is
+subject to change without notice.</div></blockquote>
+</div>
+</div>
+<div class="section" id="the-scientific-method-tar-files">
+<span id="secscimethtar"></span><h2>3.3. The scientific method TAR Files<a class="headerlink" href="#the-scientific-method-tar-files" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div>3.0.1 A scientific method document encloses information about one
+scientific study as well as additional generic document information and
+client software settings. All this is stored within the root of the
+wrapping TAR folder.</div></blockquote>
+<div class="section" id="generic-document-information">
+<span id="secgenericdocinfo"></span><h3>3.3.1. Generic document information<a class="headerlink" href="#generic-document-information" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>3.1.1 This collects information related to the document itself such as
+file version, the creation and last moditification date, etc. This
+information is stored in
+a single <code class="docutils literal"><span class="pre">docinfo.xml</span></code> file located in the .tar root folder.</p>
+<p>3.1.2 <strong>*PENDING*</strong> definition of the associated XML Document Type Declaration (DTD)</p>
+</div></blockquote>
+</div>
+<div class="section" id="client-software-settings">
+<span id="secswsettings"></span><h3>3.3.2. Client software settings<a class="headerlink" href="#client-software-settings" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>3.2.1 This collects information related to settings of the client software
+using the file format such as user preferences and software directives. This
+information is stored in
+a single <code class="docutils literal"><span class="pre">config.xml</span></code> file located in the .tar root folder.</p>
+<p>3.2.2 <strong>*PENDING*</strong> definition of the associated XML Document Type Declaration (DTD)</p>
+</div></blockquote>
+</div>
+<div class="section" id="scientific-study">
+<span id="secstudy"></span><h3>3.3.3. Scientific study<a class="headerlink" href="#scientific-study" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>3.3.0.1 This collects information related to the scientific study. A
+scientific study is a collection of observations from a set of experimental
+units (referred collectively as cohort) according to some set of
+acquisition rules referred to as study design. The information is stored
+in 3 files and a list of folders;</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">study.xml</span></code> - Contains information about the elements included in
+the study indexing the cohort, design and observations</li>
+<li><code class="docutils literal"><span class="pre">cohort.xml</span></code> - Contains information about the cohort i.e. experimental
+units</li>
+<li><code class="docutils literal"><span class="pre">design.xml</span></code> - Contains information about the study design e.g.
+experimental groups, factors, endpoints, etc</li>
+<li><code class="docutils literal"><span class="pre">observationXXX</span></code> - A folder containig information about a single
+observation, where XXX is a numerical ID of the observation which is
+unique within the study. Note that an observation may in turn contain
+information about many data items.</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="study-xml">
+<span id="secstudyxml"></span><h3>3.3.4. study.xml<a class="headerlink" href="#study-xml" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div>3.3.1.1 <strong>*PENDING*</strong> definition of the associated XML Document Type Declaration (DTD)</div></blockquote>
+</div>
+<div class="section" id="cohort-xml">
+<span id="seccohortxml"></span><h3>3.3.5. cohort.xml<a class="headerlink" href="#cohort-xml" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div>3.3.2.1 <strong>*PENDING*</strong> definition of the associated XML Document Type Declaration (DTD)</div></blockquote>
+</div>
+<div class="section" id="design-xml">
+<span id="secdesignxml"></span><h3>3.3.6. design.xml<a class="headerlink" href="#design-xml" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div>3.3.3.1 <strong>*PENDING*</strong> definition of the associated XML Document Type Declaration (DTD)</div></blockquote>
+</div>
+<div class="section" id="observation-folder">
+<span id="secobservationfolder"></span><h3>3.3.7. Observation folder<a class="headerlink" href="#observation-folder" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div>3.3.4.1 <strong>*PENDING*</strong> definition of the associated internal structure</div></blockquote>
+</div>
+</div>
+<div class="section" id="acknowledgements">
+<h2>3.4. Acknowledgements<a class="headerlink" href="#acknowledgements" title="Permalink to this headline">¶</a></h2>
+<p>We would like to extend our special thanks to Dr. Rodrigo Matsui from the
+Instiuto de Oftalmología Conde de Valenciana in Mexico City.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="tutorial.html" title="2. Tutorial"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">OCT-Tools 0.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, Felipe Orihuela-Espina.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
+    </div>
+  </body>
+</html>
