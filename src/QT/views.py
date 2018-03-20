@@ -2,6 +2,7 @@ import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QHBoxLayout, QVBoxLayout, QTabWidget, QPushButton, QGraphicsView, QLabel, QAction, QFileDialog, QMenuBar, QMenu
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5 import uic
+from reader import AmiraReader 
 
 class panelDatosComplementarios(QWidget):
  #Método constructor de la clase
@@ -161,11 +162,11 @@ class Ventana(QMainWindow):
  def nuevo(self):
   fileName = self.menu.nuevo()
   #fname = open(fileName)
-  refName = self.menu.agregarReferencia()
-  
+  #refName = self.menu.agregarReferencia()
+  carpeta = AmiraReader(fileName).carpeta
   tab = expedienteOCT()
-  tab.setimagen(fileName)
-  tab.setDatosC(refName)
+  tab.setimagen(carpeta+'scan1.png')
+  #tab.setDatosC(refName)
   self.tabs.addTab(tab, "Sin título "+ str(self.tabs.count())) 
   self.tabs.setCurrentWidget(tab)
  
