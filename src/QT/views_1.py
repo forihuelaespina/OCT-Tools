@@ -1,6 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QHBoxLayout, QVBoxLayout, QLineEdit, QTabWidget, QPushButton, QGraphicsView, QGraphicsScene, QFrame, QGraphicsPixmapItem, QToolButton, QLabel, QAction, QFileDialog, QMenuBar, QMenu
-from PyQt5.QtCore import pyqtSignal, Qt, QPoint, QRect, QRectF
+from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QHBoxLayout, QVBoxLayout, QTabWidget, QPushButton, QGraphicsView, QLabel, QAction, QFileDialog, QMenuBar, QMenu
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5 import uic
 from reader import AmiraReader 
@@ -47,105 +46,45 @@ class canvasOCT(QWidget):
   #Iniciar el objeto QMainWindow
   QWidget.__init__(self)
   #Cargar la configuración del archivo .ui en el objeto
-   
+ 
+  
+  
  def imagen(self, img):  
   # Create widget
   label = QLabel(self)
   pixmap = QPixmap(img)
   label.setPixmap(pixmap)
+  self.canvas.resize(pixmap.width(),pixmap.height())
     
   self.show()
   
-class imagenesOCT(QGraphicsView):
-  photoClicked = pyqtSignal(QPoint)
-
-  def __init__(self):
-    
-    QGraphicsView.__init__(self)
-    
-    self._zoom = 0
-    self._empty = True
-    self._scene = QGraphicsScene(self)
-    self._photo = QGraphicsPixmapItem()
-    self._scene.addItem(self._photo)
-    self.setScene(self._scene)
-    self.setTransformationAnchor(QGraphicsView.AnchorUnderMouse)
-    self.setResizeAnchor(QGraphicsView.AnchorUnderMouse)
-    self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
-    self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
-    self.setFrameShape(QFrame.NoFrame)
-    self.setFixedWidth(620)
+class imagenesOCT(QTabWidget):
+ def __init__(self):
+  QTabWidget.__init__(self)
   
-  def hasPhoto(self):
-    return not self._empty
-
-  def fitInView(self, scale=True):
-    rect = QRectF(self._photo.pixmap().rect())
-    if not rect.isNull():
-      self.setSceneRect(rect)
-      if self.hasPhoto():
-        unity = self.transform().mapRect(QRectF(0, 0, 1, 1))
-        self.scale(1 / unity.width(), 1 / unity.height())
-        viewrect = self.viewport().rect()
-        scenerect = self.transform().mapRect(rect)
-        factor = min(viewrect.width() / scenerect.width(), viewrect.height() / scenerect.height())
-        self.scale(factor, factor)
-      self._zoom = 0
-
-  def setimagen(self, pixmap=None):
-    self._zoom = 0
-    if pixmap and not pixmap.isNull():
-      self._empty = False
-      self.setDragMode(QGraphicsView.ScrollHandDrag)
-      self._photo.setPixmap(pixmap)
-    else:
-      self._empty = True
-      self.setDragMode(QGraphicsView.NoDrag)
-      self._photo.setPixmap(QPixmap())
-    self.fitInView()
- 
-  def wheelEvent(self, event):
-    if self.hasPhoto():
-      if event.angleDelta().y() > 0:
-        factor = 1.25
-        self._zoom += 1
-      else:
-        factor = 0.8
-        self._zoom -= 1
-      if self._zoom > 0:
-        self.scale(factor, factor)
-      elif self._zoom == 0:
-        self.fitInView()
-      else:
-        self._zoom = 0
-
-  def mousePressEvent(self, event):
-    if self._photo.isUnderMouse():
-      self.photoClicked.emit(QPoint(event.pos()))
-    super(imagenesOCT, self).mousePressEvent(event)
+  self.setTabPosition(2)
+  
+ def setimagen(self, img):
+  self.canvas = canvasOCT()
+  self.canvas.imagen(img)
+  self.addTab(self.canvas, "Pr")
 
 class panelOCT(QWidget):
  #Método constructor de la clase
-  def __init__(self):
-    #Iniciar el objeto QMainWindow
-    QWidget.__init__(self)
-    
-    #Cargar la configuración del archivo .ui en el objeto
-    uic.loadUi("QT/principal_imagenes.ui", self)
-    self.imagenesOCT = imagenesOCT()
-    self.scan = panelScan()
-    self.scanL.addWidget(self.scan.tabScans)
-
-    #Arrage Layout
-    VBlayout = QVBoxLayout(self)
-    VBlayout.addWidget(self.imagenesOCT)
-    HBlayout = QHBoxLayout()
-    HBlayout.setAlignment(Qt.AlignLeft)
-    VBlayout.addLayout(HBlayout)
-
-  def setimagen(self, img):
-    self.imagenesOCT.setimagen(QPixmap(img))
-    self.canvasL.addWidget(self.imagenesOCT)
+ def __init__(self):
+  #Iniciar el objeto QMainWindow
+  QWidget.__init__(self)
+  #Cargar la configuración del archivo .ui en el objeto
+  uic.loadUi("QT/principal_imagenes.ui", self)
+  
+  self.imagenesOCT = imagenesOCT()
+  self.scan = panelScan()
+  self.scanL.addWidget(self.scan.tabScans)
+  
+ def setimagen(self, img):
+  self.imagenesOCT.setimagen(img)
+  self.canvasL.addWidget(self.imagenesOCT) 
+ 
 
 class expedienteOCT(QWidget):
  #Método constructor de la clase
@@ -224,9 +163,9 @@ class Ventana(QMainWindow):
   fileName = self.menu.nuevo()
   #fname = open(fileName)
   #refName = self.menu.agregarReferencia()
-  carpeta = AmiraReader(fileName).carpeta
+  #carpeta = AmiraReader(fileName).carpeta
   tab = expedienteOCT()
-  tab.setimagen(carpeta+'scan1.png')
+  tab.setimagen(fileName)
   #tab.setDatosC(refName)
   self.tabs.addTab(tab, "Sin título "+ str(self.tabs.count())) 
   self.tabs.setCurrentWidget(tab)
