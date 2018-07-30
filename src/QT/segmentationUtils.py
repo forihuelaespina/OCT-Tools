@@ -8,7 +8,6 @@ import matplotlib.pyplot as plt
 from skimage import io, filters
 import numpy as np
 import cv2
-from PIL import Image
 from random import randint
 import os
 
@@ -27,16 +26,16 @@ def elimina_imagen(nombre):
         os.remove(nombre)
 
 #retorna la imagen a cargar
-def carga_imagen(path):
-    img = Image.open(path)
-    nombre = ''
-    #Convierte a JPEG la imagen y la salva
-    if img.format == 'PNG':
-        nombre = '_'+str(randint(1000000, 9999999))+'_.jpg'
-        img = img.convert("RGB")
-        img.save(nombre, "JPEG")    
-    #Carga imagen
-    return [cv2.imread(nombre if nombre != '' else path),nombre]
+#def carga_imagen(path):
+#    img = Image.open(path)
+#    nombre = ''
+#    #Convierte a JPEG la imagen y la salva
+#    #if img.format == 'PNG':
+#    nombre = '_'+str(randint(1000000, 9999999))+'_.jpg'
+#    img = img.convert("RGB")
+#    img.save(nombre, "JPEG")    
+#    #Carga imagen
+#    return [cv2.imread(nombre if nombre != '' else path),nombre]
 
 #bordeSuperior si es true entonces elimina ruido hacia arriba sino hacia abajo
 def elimina_ruido(bordeSuperior,indiceY,indiceX,matrizIMG):

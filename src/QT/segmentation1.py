@@ -18,7 +18,7 @@ import bilateral as bi
 
 
 fig, ax = plt.subplots()
-src = cv2.imread('D:\Documentos\OCT\imagenes\image3.png', 0)
+src = cv2.imread('D:\Documentos\OCT\imagenes\image4.png', 0)
 io.imshow(src)
 #img_nr = bi.bilateral_filter_own(src, 5, 12, 16)
 img_nr = cv2.bilateralFilter(src, 6, 50,3)

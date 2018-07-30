@@ -12,7 +12,7 @@ from skimage import io
 def rgb2gray(rgb):
     return np.dot(rgb[...,:3], [0.299, 0.587, 0.114])
 
-def perfilometro(I = mpimg.imread('D:\Documentos\OCT\git\src\code\OCT\scan1.png'), pixel = -1 , a = 5):
+def perfilometro(I, pixel = -1 , a = 5):
     I2=rgb2gray(I);
     #io.imshow(I2)
     if pixel == -1:

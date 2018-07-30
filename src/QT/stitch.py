@@ -6,6 +6,8 @@ from pyimagesearch.panorama import Stitcher
 #import argparse
 import imutils
 import cv2
+import flattening as fl
+import numpy as np
 
 # construct the argument parse and parse the arguments
 #ap = argparse.ArgumentParser()
@@ -18,14 +20,19 @@ import cv2
 # load the two images and resize them to have a width of 400 pixels
 # (for faster processing)
 def stitch(imageA, imageB):
-    imageA = cv2.imread("D:\Documentos\OCT\imagenes\image1.jpg")
-    imageB = cv2.imread("D:\Documentos\OCT\imagenes\image2.jpg")
+    #imageA = cv2.imread("D:\Documentos\OCT\imagenes\image1.jpg")
+    #imageB = cv2.imread("D:\Documentos\OCT\imagenes\image2.jpg")
     #imageA = imutils.resize(imageA, width=400)
     #imageB = imutils.resize(imageB, width=400)
 
     # stitch the images together to create a panorama
     stitcher = Stitcher()
     (result, vis) = stitcher.stitch([imageA, imageB], showMatches=True)
+    a = fl.rgb2gray(result)
+    matriz_v = np.array(a)
+    good_cols = np.any(matriz_v.T != 0,  axis = 1)
+    matriz_v = matriz_v[:, good_cols][:, :]
+    
 
     # show the images
     #cv2.imshow("Image A", imageA)
@@ -33,7 +40,7 @@ def stitch(imageA, imageB):
     #cv2.imshow("Keypoint Matches", vis)
     #cv2.imshow("Result", result)
 #    cv2.waitKey(0)
-    return result
+    return matriz_v
 
 #imageA = cv2.imread("D:\Documentos\OCT\git\src\left.png")
 #imageB = cv2.imread("D:\Documentos\OCT\git\src\center.png") 

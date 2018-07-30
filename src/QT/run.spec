@@ -4,7 +4,7 @@ block_cipher = None
 
 
 a = Analysis(['run.py'],
-             pathex=['D:\\Documentos\\OCT\\prototipos\\QT'],
+             pathex=['D:\\Documentos\\OCT\\git\\src\\QT'],
              binaries=[],
              datas=[],
              hiddenimports=[],

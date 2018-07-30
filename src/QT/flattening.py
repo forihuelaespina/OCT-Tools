@@ -23,8 +23,8 @@ def flatening(filename):
     #img = mpimg.imread('D:\Documentos\OCT\imagenes\image3.png')
     #img = mpimg.imread(filename)
     print("entro")
-    img = filename
-    gray = rgb2gray(img)
+    gray = filename
+    #gray = rgb2gray(img)
     #ax.imshow(gray, cmap = plt.get_cmap('gray'))
     
     aux = np.argmax(gray, axis=0)

@@ -57,26 +57,30 @@ class Ventana(QMainWindow):
   self.menuVertical.addWidget(self.menu) 
 #  self.panelPrincipal.addWidget(self.tabs)
  def segmentar(self):
-     plt.close(self.fig)
+     plt.close('all')
      im = self.img
      #im = io.imread("D:\Documentos\OCT\imagenes\image5.png")
      im = seg.segmentar(im)
      self.fig = plt.figure()
      io.imshow(im)
+     
+     a = perf.perfilometro(im)
+     
      return im
      
  def rectificar(self):
      plt.close('all')
      im = self.img
+     self.fig = plt.figure()
      io.imshow(im)
      im = fl.flatening(self.img)
+     self.fig = plt.figure()
      io.imshow(im)
      #im = io.imread("D:\Documentos\OCT\imagenes\image4.png")
-     self.perfilometro(im)
+     #self.perfilometro(im)
      
-     print(im)
      #perfil = perf.perfilometro(im)
-     self.fig = plt.figure()
+     
      
      return im
      
