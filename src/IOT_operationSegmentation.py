@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# File: IOT_operationSegmentation.py
+# File: IOT_OperationSegmentation.py
 #
 # Operation Segmentation
 # 
@@ -12,7 +12,7 @@
 #
 # @dateCreated: Feb-2018
 # @authors: Arlem Aleida Castillo Avila, Felipe Orihuela-Espina
-# @dateModified: 5-Aug-2018
+# @dateModified: 22-Aug-2018
 #
 # See also:
 # 
@@ -25,10 +25,14 @@
 #   * Isolated minimal solution.
 #   * Encapsulated in class.
 #
+# 22-Aug-2018: FOE:
+#   * Class name rebranded to capital "O" in operation
+#   * Improved verbosity; now using class name
+#
 
 
-# Import packages
-from IOT_operation import IOT_operation
+## Import
+from IOT_Operation import IOT_Operation
 
 import numpy as np
 from skimage import feature, color
@@ -39,7 +43,7 @@ import segmentationUtils
 
 
 
-class IOT_operationSegmentation(IOT_operation):
+class IOT_OperationSegmentation(IOT_Operation):
 
     #Private class attributes shared by all instances
     
@@ -73,7 +77,7 @@ class IOT_operationSegmentation(IOT_operation):
             #Image is in RGB. Convert.
             img=color.rgb2gray(self._imgin);
         else: #Unexpected case. Return warning
-            print("OCT-Tools: IOT_operationSegmentation: Unexpected image shape.")
+            print(self.getClassName(),": Unexpected image shape.")
             return segmentedImage
         #segmentationUtils.mostrar_imagen(img)
         
@@ -163,7 +167,7 @@ class IOT_operationSegmentation(IOT_operation):
         #segmentationUtils.mostrar_imagen(img2)
         
                 
-        print("OCT-Tools: IOT_operationSegmentation: segmentar: Finishing retinal layer segmentation")
+        print(self.getClassName(),": segmentar: Finishing retinal layer segmentation")
         
         
         

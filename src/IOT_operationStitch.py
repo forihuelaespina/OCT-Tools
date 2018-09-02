@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# File: IOT_operationFlattening.py
+# File: IOT_OperationStitch.py
 #
 # Operation stitching or mosaicing|
 # 
@@ -30,14 +30,13 @@
 #
 # @dateCreated: 4-Aug-2018
 # @authors: Arlem Aleida Castillo Avila, Felipe Orihuela-Espina
-# @dateModified: 4-Aug-2018
+# @dateModified: 22-Aug-2018
 #
 # See also:
 # 
 
 
-#
-# LOG:
+## Log
 #
 # 3-Aug-2018: FOE: Added this comment section.
 #    Removed importing pyimagesearch.panorama (this was
@@ -49,13 +48,14 @@
 #   * Isolated minimal solution.
 #   * Encapsulated in class.
 #
+# 22-Aug-2018: FOE:
+#   * Class name rebranded to capital "O" in operation
+#   * Improved verbosity; now using class name
+#
 
 
-
-
-
-# Import packages
-from IOT_operation import IOT_operation
+## Import
+from IOT_Operation import IOT_Operation
 
 #from pyimagesearch.panorama import Stitcher
 from panorama import Stitcher
@@ -66,8 +66,8 @@ import cv2 #That's OpenCV
 
 
 
-
-class IOT_operationStitch(IOT_operation):
+## Class definition
+class IOT_OperationStitch(IOT_Operation):
 
     #Private class attributes shared by all instances
     
@@ -90,15 +90,15 @@ class IOT_operationStitch(IOT_operation):
     def stitch(self,imageA, imageB):
         
         if ( imageA is None and imageB is None ):
-            print("No images selected. Generating a default empty stitch of arbitrary size.")
+            print(self.getClassName(),": No images selected. Generating a default empty stitch of arbitrary size.")
             result = np.zeros((100,100,3),dtype=np.uint8)
     
         elif ( imageA is None ):
-            print("First image not selected. Returning second image unmodified.")
+            print(self.getClassName(),": First image not selected. Returning second image unmodified.")
             result = imageB
     
         elif ( imageB is None ):
-            print("Second image not selected. Returning first image unmodified.")
+            print(self.getClassName(),": Second image not selected. Returning first image unmodified.")
             result = imageA
         
         else:

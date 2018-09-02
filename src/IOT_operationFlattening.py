@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# File: IOT_operationFlattening.py
+# File: IOT_OperationFlattening.py
 #
 # Operation flattening or rectification
 # 
@@ -12,22 +12,26 @@
 #
 # @dateCreated: 4-Aug-2018
 # @authors: Arlem Aleida Castillo Avila, Felipe Orihuela-Espina
-# @dateModified: 4-Aug-2018
+# @dateModified: 22-Aug-2018
 #
 # See also:
 # 
 
 
-#
-# LOG:
+## Log
 #
 # 4-Aug-2018: FOE:
 #   * Isolated minimal solution.
 #   * Encapsulated in class.
 #
+# 22-Aug-2018: FOE:
+#   * Class name rebranded to capital "O" in operation
+#   * Improved verbosity; now using class name
+#
 
 
-from IOT_operation import IOT_operation
+## Import
+from IOT_Operation import IOT_Operation
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -43,7 +47,9 @@ def func(x, a, b, c):
     return a * x*x + b*x + c
 
 
-class IOT_operationFlattening(IOT_operation):
+
+## Class definition
+class IOT_OperationFlattening(IOT_Operation):
 
     #Private class attributes shared by all instances
     
@@ -57,14 +63,12 @@ class IOT_operationFlattening(IOT_operation):
     
     
     #Private methods
-    #def _rgb2gray(self,rgb):
-    #    return np.dot(rgb[...,:3], [0.299, 0.587, 0.114])
 
     
     #Public methods
     def flattening(self,image):
         #fig, ax = plt.subplots()
-        #print("OCT-Tools: IOT_operationFlattening: flattening: Starting flattening")
+        #print(self._getClasName(),": flattening: Starting flattening")
         self._imgin = image
         
         
@@ -77,13 +81,9 @@ class IOT_operationFlattening(IOT_operation):
             #Image is in RGB. Convert.
             I2=color.rgb2gray(self._imgin);
         else: #Unexpected case. Return warning
-            print("OCT-Tools: IOT_operationFlattening: Unexpected image shape.")
+            print(self._getClasName(),": Unexpected image shape.")
             return self._imgin
         
-        
-        
-        
-        #ax.imshow(I2, cmap = plt.get_cmap('gray'))
         
         aux = np.argmax(I2, axis=0)
         mg = np.mean(aux)
