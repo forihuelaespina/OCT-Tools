@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# File: IOT_operationPerfilometer.py
+# File: IOT_OperationPerfilometer.py
 #
 # Operation perfilometer
 # 
@@ -12,14 +12,13 @@
 #
 # @dateCreated: 3-May-2018
 # @authors: Arlem Aleida Castillo Avila, Felipe Orihuela-Espina
-# @dateModified: 4-Aug-2018
+# @dateModified: 22-Aug-2018
 #
 # See also:
 # 
 
 
-#
-# LOG:
+## Log
 #
 # 3-Aug-2018: FOE: Removed default value for first parameter of function
 #     perfilometer, and added an internal parameter check on the function.
@@ -28,10 +27,14 @@
 #   * Isolated minimal solution.
 #   * Encapsulated in class.
 #
+# 22-Aug-2018: FOE:
+#   * Class name rebranded to capital "O" in operation
+#   * Improved verbosity; now using class name
+#
 
 
-# Import packages
-from IOT_operation import IOT_operation
+## Import
+from IOT_Operation import IOT_Operation
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -41,8 +44,8 @@ from skimage import io, color
 
 
 
-
-class IOT_operationPerfilometer(IOT_operation):
+## Class definition
+class IOT_OperationPerfilometer(IOT_Operation):
 
     #Private class attributes shared by all instances
     
@@ -65,7 +68,7 @@ class IOT_operationPerfilometer(IOT_operation):
         perfil = np.array([0]);
         #Check whether an image has been provided
         if self._imgin is None:
-            print("OCT-Tools: IOT_operationPerfilometer: Image not selected. Generating a default empty profile.")
+            print(self.getClassName(),": Image not selected. Generating a default empty profile.")
         else:
             #Normal behaviour of the function
             
@@ -78,7 +81,7 @@ class IOT_operationPerfilometer(IOT_operation):
                 #Image is in RGB. Convert.
                 I2=color.rgb2gray(self._imgin);
             else: #Unexpected case. Return warning
-                print("OCT-Tools: IOT_operationPerfilometer: Unexpected image shape.")
+                print(self.getClassName(),": Unexpected image shape.")
                 return self._perfil
             
             I2shape = I2.shape;
