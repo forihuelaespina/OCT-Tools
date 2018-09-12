@@ -80,5 +80,12 @@ setuptools.setup(
 # 
 
 
-#pyinstaller run.py
-# #pyinstaller --onefile run.py #To one file only
+## Compiling with pyinstaller
+# To generate the .exe and the distribution from a miniconda cmd at the
+#directory where this setup-py is, and with admin permissions run:
+#
+# To one folder
+pyinstaller --onedir --hidden-import PyQt5.sip --distpath ..\dist\pyinstaller\ --workpath ..\build\pyinstaller\ OCTToolsApp.py
+#
+# To one file
+#pyinstaller --onefile --distpath ../dist/ --workpath ../build/pyinstaller/ --no-confirm OCTToolsApp.py
