@@ -85,7 +85,23 @@ setuptools.setup(
 #directory where this setup-py is, and with admin permissions run:
 #
 # To one folder
-pyinstaller --onedir --hidden-import PyQt5.sip --distpath ..\dist\pyinstaller\ --workpath ..\build\pyinstaller\ OCTToolsApp.py
+pyinstaller --onedir --noconfirm --nowindow ^
+--hidden-import scipy ^
+--hidden-import scipy._lib.messagestream ^
+--hidden-import pywt._extensions._cwt ^
+--hidden-import PyQt5.sip ^
+--distpath ..\dist\pyinstaller\ ^
+--workpath ..\build\pyinstaller\ ^
+--icon=..\resources\inaoe.ico ^
+-d ^
+OCTToolsApp.py
+# Esta de arriba me lleva al siguiente error en tiempo de ejecución:
 #
+# This application failed to start because it could not find or load the Qt platform plugin "windows" in "".
+# Reinstalling the application may fix this problem.
+#
+# Ni idea de como corregirlo!
+#
+
 # To one file
 #pyinstaller --onefile --distpath ../dist/ --workpath ../build/pyinstaller/ --no-confirm OCTToolsApp.py

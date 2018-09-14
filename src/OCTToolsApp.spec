@@ -4,10 +4,10 @@ block_cipher = None
 
 
 a = Analysis(['OCTToolsApp.py'],
-             pathex=['e:\\Felipe\\OneDrive\\Git\\OCT-Tools\\src'],
+             pathex=['E:\\Felipe\\OneDrive\\Git\\OCT-Tools\\src'],
              binaries=[],
              datas=[],
-             hiddenimports=['PyQt5.sip'],
+             hiddenimports=['scipy', 'scipy._lib.messagestream', 'pywt._extensions._cwt', 'PyQt5.sip'],
              hookspath=[],
              runtime_hooks=[],
              excludes=[],
@@ -20,10 +20,10 @@ exe = EXE(pyz,
           a.scripts,
           exclude_binaries=True,
           name='OCTToolsApp',
-          debug=False,
+          debug=True,
           strip=False,
           upx=True,
-          console=True )
+          console=True , icon='..\\resources\\inaoe.ico')
 coll = COLLECT(exe,
                a.binaries,
                a.zipfiles,

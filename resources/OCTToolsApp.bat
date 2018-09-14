@@ -38,5 +38,5 @@ IF %ERRORLEVEL% NEQ 0 (
 	::echo %ERRORLEVEL%
 	echo.
 	echo Unable to find Python in the system; trying local copy.
-	Python/Python.exe OCTToolsApp.launch.py
+	Python\Python.exe OCTToolsApp.launch.py
 )
