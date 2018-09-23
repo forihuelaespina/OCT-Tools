@@ -1,6 +1,8 @@
 # OCT-Tools
 Suite of tools for OCT analysis in Python.
 
+Documentation available at: [readthedocs](https://oct-tools.readthedocs.io/en/latest/)
+
 Currently, the following operations are supported:
 * **Flattening**: Corrects retinal curvature using a plynomial fit to reflective RPE layer.
 * **Stitching / Mosaicing**: Permits stitching together several retinal images (usually taken at different angles) to create a larger retinal image
