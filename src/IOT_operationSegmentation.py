@@ -1,35 +1,43 @@
-# -*- coding: utf-8 -*-
+"""
+-*- coding: utf-8 -*-
 
-# File: IOT_OperationSegmentation.py
-#
-# Operation Segmentation
-# 
-# Initial code isolated from previous file segment.py
-#
-# This class makes an automated segmentation of retinal layers from an OCT image
-#
-#
-#
-# @dateCreated: Feb-2018
-# @authors: Arlem Aleida Castillo Avila, Felipe Orihuela-Espina
-# @dateModified: 22-Aug-2018
-#
-# See also:
-# 
+File: IOT_OperationSegmentation.py
+
+Class IOT_OperationSegmentation
+
+A class for automatic segmentation of retinal layers from an OCT scan
+
+Initial code isolated from previous file segment.py
 
 
-#
-# LOG:
-#
-# 5-Aug-2018: FOE:
-#   * Isolated minimal solution.
-#   * Encapsulated in class.
-#
-# 22-Aug-2018: FOE:
-#   * Class name rebranded to capital "O" in operation
-#   * Improved verbosity; now using class name
-#
+:Log:
 
++-------------+--------+------------------------------------------------------+   
+| Date        | Author | Description                                          |
++=============+========+======================================================+
+| Feb-2018    | AACC   | - Class created.                                     |
++-------------+--------+------------------------------------------------------+   
+| 5-Aug-2018  | FOE    | - Isolated minimal solution.                         |
+|             |        | - Encapsulated in class.                             |
++-------------+--------+------------------------------------------------------+   
+| 22-Aug-2018 | FOE    | - Rebranded to capital "O" in operation;             |
+|             |        |   IOT_Operation                                      |
+|             |        | - Improved verbosity; now using class name           |
++-------------+--------+------------------------------------------------------+
+| 23-Sep-2018 | FOE    | - Updated comments and added Sphinx                  |
+|             |        |   documentation to the class                         |
++-------------+--------+------------------------------------------------------+
+
+.. seealso:: None
+.. note:: None
+.. todo:: None
+
+
+.. sectionauthor:: Felipe Orihuela-Espina <f.orihuela-espina@inaoep.mx>
+.. codeauthor:: Arlem Aleida Castillo Avila <acastillo@inaoep.mx>
+.. codeauthor:: Felipe Orihuela-Espina <f.orihuela-espina@inaoep.mx>
+
+"""
 
 ## Import
 from IOT_Operation import IOT_Operation
@@ -44,6 +52,16 @@ import segmentationUtils
 
 
 class IOT_OperationSegmentation(IOT_Operation):
+    #Sphinx documentation
+    """A class for automatic segmentation of retinal layers from an OCT scan.
+    
+    A class for automatic segmentation of retinal layers from an OCT scan.
+    
+    .. seealso:: 
+    .. note:: 
+    .. todo:: 
+        
+    """
 
     #Private class attributes shared by all instances
     

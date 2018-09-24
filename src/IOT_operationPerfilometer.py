@@ -1,37 +1,45 @@
-# -*- coding: utf-8 -*-
+"""
+-*- coding: utf-8 -*-
 
-# File: IOT_OperationPerfilometer.py
-#
-# Operation perfilometer
-# 
-# Initial code isolated from previous file perfilometro.py
-#
-# This class retrieves the specular reflectivity from an OCT image
-#
-#
-#
-# @dateCreated: 3-May-2018
-# @authors: Arlem Aleida Castillo Avila, Felipe Orihuela-Espina
-# @dateModified: 22-Aug-2018
-#
-# See also:
-# 
+File: IOT_OperationPerfilometer.py
+
+Class IOT_OperationPerfilometer
+
+Estimates reflectance perfilometry from OCT scans.
+
+Initial code isolated from previous file perfilometro.py
 
 
-## Log
-#
-# 3-Aug-2018: FOE: Removed default value for first parameter of function
-#     perfilometer, and added an internal parameter check on the function.
-#
-# 4-Aug-2018: FOE:
-#   * Isolated minimal solution.
-#   * Encapsulated in class.
-#
-# 22-Aug-2018: FOE:
-#   * Class name rebranded to capital "O" in operation
-#   * Improved verbosity; now using class name
-#
+:Log:
 
++-------------+--------+------------------------------------------------------+
+| Date        | Author | Description                                          |
++=============+========+======================================================+
+| 3-Aug-2018  | FOE    | - Removed default value for first parameter of       |
+|             |        |   function perfilometer, and added an internal       |
+|             |        |   parameter check on the function.                   |
++-------------+--------+------------------------------------------------------+   
+| 4-Aug-2018  | FOE    | - Isolated minimal solution.                         |
+|             |        | - Encapsulated in class.                             |
++-------------+--------+------------------------------------------------------+   
+| 22-Aug-2018 | FOE    | - Rebranded to capital "O" in operation;             |
+|             |        |   IOT_Operation                                      |
+|             |        | - Improved verbosity; now using class name           |
++-------------+--------+------------------------------------------------------+
+| 23-Sep-2018 | FOE    | - Updated comments and added Sphinx                  |
+|             |        |   documentation to the class                         |
++-------------+--------+------------------------------------------------------+
+
+.. seealso:: None
+.. note:: None
+.. todo:: None
+
+    
+.. sectionauthor:: Felipe Orihuela-Espina <f.orihuela-espina@inaoep.mx>
+.. codeauthor:: Arlem Aleida Castillo Avila <acastillo@inaoep.mx>
+.. codeauthor:: Felipe Orihuela-Espina <f.orihuela-espina@inaoep.mx>
+
+"""
 
 ## Import
 from IOT_Operation import IOT_Operation
@@ -46,7 +54,17 @@ from skimage import io, color
 
 ## Class definition
 class IOT_OperationPerfilometer(IOT_Operation):
+    #Sphinx documentation
+    """This class retrieves the specular reflectivity from an OCT image.
+    
+    Estimates reflectance perfilometry from OCT scans.
 
+    .. seealso:: 
+    .. note:: 
+    .. todo:: 
+        
+    """
+ 
     #Private class attributes shared by all instances
     
     #Class constructor

@@ -1,0 +1,7 @@
+src.panorama module
+===================
+
+.. automodule:: src.panorama
+    :members:
+    :undoc-members:
+    :show-inheritance:

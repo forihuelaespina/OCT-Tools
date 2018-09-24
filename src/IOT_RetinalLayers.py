@@ -1,44 +1,35 @@
-# File: IOT_RetinalLayers.py
-#
-# A collection of constants for identifying retinal layers.
-#
-# It is basically a dictionary of pairs key:value
-# 
-#
-# The following retinal layers are considered:
-#
-# + Inner Limiting Membrane (ILM)
-# + Nerve Fiber Layer (NFL)
-# + Ganglion Cell Layer (GCL)
-# + Inner Plexiform Layer (IPL)
-# + Inner Nuclear Layer (INL)
-# + Outer Plexiform Layer (OPL)
-# + Outner Nuclear Layer (ONL)
-# + External Limiting Membrane (ELM)
-# + Rods and Cones layers (RCL)
-# + RetinalPigmentEpithelium (RPE)
-#
-# also the non-retinal layer is indexed:
-# + Choroid
-#
-#
-#
-#
-#
-# @dateCreated: 26-Aug-2018
-# @authors: Felipe Orihuela-Espina
-# @dateModified: 26-Aug-2018
-#
-# See also:
-# 
+"""
+-*- coding: utf-8 -*-
+
+File: IOT_RetinalLayers.py
+
+Class IOT_RetinalLayers
+
+A collection of constants for identifying retinal layers.
+
+Initial code isolated from previous file segment.py
 
 
-## Log
-#
-# 26-Aug-2018: FOE:
-#   * Class creation
-#
+:Log:
 
++-------------+--------+------------------------------------------------------+
+| Date        | Author | Description                                          |
++=============+========+======================================================+
+| 26-Aug-2018 | FOE    | - Class created.                                     |
++-------------+--------+------------------------------------------------------+
+| 23-Sep-2018 | FOE    | - Updated comments and added Sphinx                  |
+|             |        |   documentation to the class                         |
++-------------+--------+------------------------------------------------------+
+
+.. seealso:: None
+.. note:: None
+.. todo:: None
+
+
+.. sectionauthor:: Felipe Orihuela-Espina <f.orihuela-espina@inaoep.mx>
+.. codeauthor:: Felipe Orihuela-Espina <f.orihuela-espina@inaoep.mx>
+
+"""
 
 
 ## Import
@@ -47,6 +38,36 @@
 
 ## Class definition
 class IOT_RetinalLayers():
+    #Sphinx documentation
+    """A collection of constants for identifying retinal layers.
+    
+    A collection of constants for identifying retinal layers.
+    
+    It is basically a dictionary of pairs key:value
+    
+    
+    The following retinal layers are considered:
+    
+    * Inner Limiting Membrane (ILM)
+    * Nerve Fiber Layer (NFL)
+    * Ganglion Cell Layer (GCL)
+    * Inner Plexiform Layer (IPL)
+    * Inner Nuclear Layer (INL)
+    * Outer Plexiform Layer (OPL)
+    * Outner Nuclear Layer (ONL)
+    * External Limiting Membrane (ELM)
+    * Rods and Cones layers (RCL)
+    * RetinalPigmentEpithelium (RPE)
+    
+    Also the non-retinal layer is indexed:
+    
+    * Choroid
+
+    .. seealso:: 
+    .. note:: 
+    .. todo:: 
+        
+    """
     
     
     #Private class attributes shared by all instances

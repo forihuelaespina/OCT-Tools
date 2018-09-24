@@ -1,41 +1,54 @@
-# -*- coding: utf-8 -*-
+"""
+-*- coding: utf-8 -*-
 
-# File: IOT_GUI_DocumentWindow.py
-#
-# The document window for OCT-Tools.
-# 
-# This is where the current document (i.e. the OCT image) is displayed.
-#
-#
-#
-# @dateCreated: 21-Aug-2018
-# @authors: Arlem Aleida Castillo Avila, Felipe Orihuela-Espina
-# @dateModified: 21-Aug-2018
-#
-# See also:
-# 
+File: IOT_GUI_DocumentWindow.py
+
+Class IOT_GUI_DocumentWindow
+
+IOT stands for INAOE OCT Tools
+
+The main document window for OCT-Tools. This is where the current document
+(i.e. the OCT image) is displayed.
+
+:Log:
+
++-------------+--------+------------------------------------------------------+
+| Date        | Author | Description                                          |
++=============+========+======================================================+
+| 21-Aug-2018 | FOE    | - Class created. This class was created as a wrapper |
+|             |        |   to host the OCT image figure canvas.               |
++-------------+--------+------------------------------------------------------+
+| 30-Aug-2018 | FOE    | - New instance attribute _lastMouseEvent now keeps   |
+|             |        |   track of mouseEvents so that other classes to have |
+|             |        |   access to it. A get method is also added.          |
++-------------+--------+------------------------------------------------------+
+| 1-Sep-2018  | FOE    | - There is no longer a _flagEditSegmentation to keep |
+|             |        |   track of when editing is possible.                 |
+|             |        | - Method editSegmentar is no longer needed, and      |
+|             |        |   opEditSegmentation exhibits a behaviour more       |
+|             |        |   analogous to other operations.                     |
+|             |        | - Mouse listening methods, now are only respoonsible |
+|             |        |   for storing the last event.                        |
+|             |        | - Some cleaning. Removal of unused code              |
++-------------+--------+------------------------------------------------------+
+| 23-Sep-2018 | FOE    | - Updated comments and added Sphinx documentation to |
+|             |        |   the class                                          |
++-------------+--------+------------------------------------------------------+
+
+.. seealso:: None
+.. note:: None
+.. todo:: None
 
 
-## Log
-#
-# 21-Aug-2018: FOE: 
-#  * Class created. We are currently having problems to listen to mouse inputs.
-#       This class was created as a wrapper to host the OCT image figure
-#       canvas.
-#
-# 30-Aug-2018: FOE
-#   * New instance attribute _lastMouseEvent now keeps track of mouseEvents 
-#   so that other classes to have access to it. A get method is also added.
-#
-# 1-Sep-2018: FOE
-#  * There is no longer a _flagEditSegmentation to keep track of when editing
-#   is possible.
-#  * Method editSegmentar is no longer needed, and opEditSegmentation exhibits
-#   a behaviour more analogous to other operations.
-#  * Mouse listening methods, now are only respoonsible for storing the last
-#   event.
-#  * Some cleaning. Removal of unused code.
-#
+
+@dateCreated: 21-Aug-2018
+@dateModified: 23-Sep-2018
+
+.. sectionauthor:: Felipe Orihuela-Espina <f.orihuela-espina@inaoep.mx>
+.. codeauthor:: Arlem Aleida Castillo Avila <acastillo@inaoep.mx>
+.. codeauthor:: Felipe Orihuela-Espina <f.orihuela-espina@inaoep.mx>
+
+"""
 
 
 ## Import
@@ -76,7 +89,18 @@ from IOT_RetinalLayers import IOT_RetinalLayers
 
 ## Class definition
 class IOT_GUI_DocumentWindow(QMainWindow):
- 
+    #Sphinx documentation
+    """The main document window for OCT-Tools.
+    
+    The main document window for OCT-Tools. This is where the current document
+    (i.e. the OCT image) is displayed.
+    
+    .. seealso:: 
+    .. note:: 
+    .. todo:: 
+        
+    """
+     
     #Private class attributes shared by all instances
     workingDir = os.getcwd()
 

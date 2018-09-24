@@ -1,0 +1,158 @@
+src package
+===========
+
+Submodules
+----------
+
+src.AmiraReader module
+----------------------
+
+.. automodule:: src.AmiraReader
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+src.IOT\_Document module
+------------------------
+
+.. automodule:: src.IOT_Document
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+src.IOT\_GUI\_DocumentWindow module
+-----------------------------------
+
+.. automodule:: src.IOT_GUI_DocumentWindow
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+src.IOT\_GUI\_EditSegmentationTools module
+------------------------------------------
+
+.. automodule:: src.IOT_GUI_EditSegmentationTools
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+src.IOT\_GUI\_ToolsWindow module
+--------------------------------
+
+.. automodule:: src.IOT_GUI_ToolsWindow
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+src.IOT\_Operation module
+-------------------------
+
+.. automodule:: src.IOT_Operation
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+src.IOT\_OperationEditSegmentation module
+-----------------------------------------
+
+.. automodule:: src.IOT_OperationEditSegmentation
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+src.IOT\_OperationFlattening module
+-----------------------------------
+
+.. automodule:: src.IOT_OperationFlattening
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+src.IOT\_OperationMeasureLayerThickness module
+----------------------------------------------
+
+.. automodule:: src.IOT_OperationMeasureLayerThickness
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+src.IOT\_OperationPerfilometer module
+-------------------------------------
+
+.. automodule:: src.IOT_OperationPerfilometer
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+src.IOT\_OperationSegmentation module
+-------------------------------------
+
+.. automodule:: src.IOT_OperationSegmentation
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+src.IOT\_OperationStitch module
+-------------------------------
+
+.. automodule:: src.IOT_OperationStitch
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+src.IOT\_RetinalLayers module
+-----------------------------
+
+.. automodule:: src.IOT_RetinalLayers
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+src.OCTToolsApp module
+----------------------
+
+.. automodule:: src.OCTToolsApp
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+src.Test module
+---------------
+
+.. automodule:: src.Test
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+src.panorama module
+-------------------
+
+.. automodule:: src.panorama
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+src.segmentationUtils module
+----------------------------
+
+.. automodule:: src.segmentationUtils
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+src.setup module
+----------------
+
+.. automodule:: src.setup
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: src
+    :members:
+    :undoc-members:
+    :show-inheritance:

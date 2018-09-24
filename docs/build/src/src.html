@@ -1,0 +1,675 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>src package &#8212; OCT-Tools 0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">OCT-Tools 0.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">src package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-src.AmiraReader">src.AmiraReader module</a></li>
+<li><a class="reference internal" href="#module-src.IOT_Document">src.IOT_Document module</a></li>
+<li><a class="reference internal" href="#src-iot-gui-documentwindow-module">src.IOT_GUI_DocumentWindow module</a></li>
+<li><a class="reference internal" href="#src-iot-gui-editsegmentationtools-module">src.IOT_GUI_EditSegmentationTools module</a></li>
+<li><a class="reference internal" href="#src-iot-gui-toolswindow-module">src.IOT_GUI_ToolsWindow module</a></li>
+<li><a class="reference internal" href="#module-src.IOT_Operation">src.IOT_Operation module</a></li>
+<li><a class="reference internal" href="#src-iot-operationeditsegmentation-module">src.IOT_OperationEditSegmentation module</a></li>
+<li><a class="reference internal" href="#src-iot-operationflattening-module">src.IOT_OperationFlattening module</a></li>
+<li><a class="reference internal" href="#src-iot-operationmeasurelayerthickness-module">src.IOT_OperationMeasureLayerThickness module</a></li>
+<li><a class="reference internal" href="#src-iot-operationperfilometer-module">src.IOT_OperationPerfilometer module</a></li>
+<li><a class="reference internal" href="#src-iot-operationsegmentation-module">src.IOT_OperationSegmentation module</a></li>
+<li><a class="reference internal" href="#src-iot-operationstitch-module">src.IOT_OperationStitch module</a></li>
+<li><a class="reference internal" href="#module-src.IOT_RetinalLayers">src.IOT_RetinalLayers module</a></li>
+<li><a class="reference internal" href="#src-octtoolsapp-module">src.OCTToolsApp module</a></li>
+<li><a class="reference internal" href="#src-test-module">src.Test module</a></li>
+<li><a class="reference internal" href="#module-src.panorama">src.panorama module</a></li>
+<li><a class="reference internal" href="#module-src.segmentationUtils">src.segmentationUtils module</a></li>
+<li><a class="reference internal" href="#src-setup-module">src.setup module</a></li>
+<li><a class="reference internal" href="#module-src">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/src/src.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="src-package">
+<h1>src package<a class="headerlink" href="#src-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-src.AmiraReader">
+<span id="src-amirareader-module"></span><h2>src.AmiraReader module<a class="headerlink" href="#module-src.AmiraReader" title="Permalink to this headline">¶</a></h2>
+<p>-<em>- coding: utf-8 -</em>-</p>
+<p>File: AmiraReader.py</p>
+<p>Class AmiraReader</p>
+<p>The original code was created from a web example by Felipe in Matlab and
+then “translated” to Python between Felipe and Arlem.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Log:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<p>+=============+========+======================================================+
+| Date        | Author | Description                                          |
++=============+========+======================================================+
+| 4-Aug-2018  | FOE    | - Isolated minimal solution.                         |
+|             |        | - Encapsulated in class.                             |
+|             |        | - Class name updated to AmiraReader.                 |
+|             |        | - Added comments and declared attributes.            |
+|             |        | - Methods fread, findField and findStruct are now    |
+|             |        |   private.                                           |
++————-+——–+——————————————————+
+| 23-Sep-2018 | FOE    | - Updated comments and added Sphinx                  |
+|             |        |   documentation to the class                         |
++=============+========+======================================================+</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">text</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">text</p>
+</div>
+<div class="admonition-todo admonition" id="index-0">
+<p class="first admonition-title">Todo</p>
+<p class="last">text</p>
+</div>
+<dl class="class">
+<dt id="src.AmiraReader.AmiraReader">
+<em class="property">class </em><code class="descclassname">src.AmiraReader.</code><code class="descname">AmiraReader</code><a class="reference internal" href="../_modules/src/AmiraReader.html#AmiraReader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.AmiraReader.AmiraReader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>A class to read Amira formatted files.</p>
+<p>A class to read Amira formatted files.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Known issues:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li>Currently it only returns the first scan</li>
+</ul>
+<dl class="method">
+<dt id="src.AmiraReader.AmiraReader.readAmiraImage">
+<code class="descname">readAmiraImage</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/AmiraReader.html#AmiraReader.readAmiraImage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.AmiraReader.AmiraReader.readAmiraImage" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-src.IOT_Document">
+<span id="src-iot-document-module"></span><h2>src.IOT_Document module<a class="headerlink" href="#module-src.IOT_Document" title="Permalink to this headline">¶</a></h2>
+<p>-<em>- coding: utf-8 -</em>-</p>
+<p>File: IOT_Document.py</p>
+<p>Class IOT_Document</p>
+<p>The document class for OCT-Tools.</p>
+<p>IOT stands for INAOE OCT Tools</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Log:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<p>+=============+========+======================================================+
+| Date        | Author | Description                                          |
++=============+========+======================================================+
+| 21-Aug-2018 | FOE    | - Class created.                                     |
++————-+——–+——————————————————+
+| 22-Aug-2018 | FOE    | - Defined method _getClassName                       |
+|             |        | - Improved verbosity; now using class name           |
++————-+——–+——————————————————+
+| 23-Sep-2018 | FOE    | - Updated comments and added Sphinx documentation to |
+|             |        |   the class                                          |
++=============+========+======================================================+</p>
+<blockquote>
+<div></div></blockquote>
+<p>&#64;dateCreated: 21-Aug-2018
+&#64;dateModified: 23-Sep-2018</p>
+<dl class="class">
+<dt id="src.IOT_Document.IOT_Document">
+<em class="property">class </em><code class="descclassname">src.IOT_Document.</code><code class="descname">IOT_Document</code><a class="reference internal" href="../_modules/src/IOT_Document.html#IOT_Document"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.IOT_Document.IOT_Document" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>The document class for OCT-Tools.</p>
+<p>The document class for OCT-Tools.</p>
+<p>This class represents a document in OCT-Tools. A document holds information
+about a study plus some additional metadata.</p>
+<p>Currently, a study is only an OCT image (with several scans) with or without
+segmentation information.</p>
+<dl class="attribute">
+<dt id="src.IOT_Document.IOT_Document.defaultName">
+<code class="descname">defaultName</code><em class="property"> = 'IOTDocument'</em><a class="headerlink" href="#src.IOT_Document.IOT_Document.defaultName" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="src.IOT_Document.IOT_Document.getClassName">
+<code class="descname">getClassName</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/IOT_Document.html#IOT_Document.getClassName"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.IOT_Document.IOT_Document.getClassName" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="src.IOT_Document.IOT_Document.getFileName">
+<code class="descname">getFileName</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/IOT_Document.html#IOT_Document.getFileName"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.IOT_Document.IOT_Document.getFileName" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="src.IOT_Document.IOT_Document.getFolderName">
+<code class="descname">getFolderName</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/IOT_Document.html#IOT_Document.getFolderName"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.IOT_Document.IOT_Document.getFolderName" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="src.IOT_Document.IOT_Document.getName">
+<code class="descname">getName</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/IOT_Document.html#IOT_Document.getName"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.IOT_Document.IOT_Document.getName" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="src.IOT_Document.IOT_Document.getScanSegmentation">
+<code class="descname">getScanSegmentation</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/IOT_Document.html#IOT_Document.getScanSegmentation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.IOT_Document.IOT_Document.getScanSegmentation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="src.IOT_Document.IOT_Document.getStudy">
+<code class="descname">getStudy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/IOT_Document.html#IOT_Document.getStudy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.IOT_Document.IOT_Document.getStudy" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="src.IOT_Document.IOT_Document.setFileName">
+<code class="descname">setFileName</code><span class="sig-paren">(</span><em>newName</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/IOT_Document.html#IOT_Document.setFileName"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.IOT_Document.IOT_Document.setFileName" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="src.IOT_Document.IOT_Document.setFolderName">
+<code class="descname">setFolderName</code><span class="sig-paren">(</span><em>d</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/IOT_Document.html#IOT_Document.setFolderName"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.IOT_Document.IOT_Document.setFolderName" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="src.IOT_Document.IOT_Document.setName">
+<code class="descname">setName</code><span class="sig-paren">(</span><em>newName</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/IOT_Document.html#IOT_Document.setName"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.IOT_Document.IOT_Document.setName" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="src.IOT_Document.IOT_Document.setScanSegmentation">
+<code class="descname">setScanSegmentation</code><span class="sig-paren">(</span><em>newSegmentation</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/IOT_Document.html#IOT_Document.setScanSegmentation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.IOT_Document.IOT_Document.setScanSegmentation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="src.IOT_Document.IOT_Document.setStudy">
+<code class="descname">setStudy</code><span class="sig-paren">(</span><em>newStudy</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/IOT_Document.html#IOT_Document.setStudy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.IOT_Document.IOT_Document.setStudy" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="src-iot-gui-documentwindow-module">
+<h2>src.IOT_GUI_DocumentWindow module<a class="headerlink" href="#src-iot-gui-documentwindow-module" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="src-iot-gui-editsegmentationtools-module">
+<h2>src.IOT_GUI_EditSegmentationTools module<a class="headerlink" href="#src-iot-gui-editsegmentationtools-module" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="src-iot-gui-toolswindow-module">
+<h2>src.IOT_GUI_ToolsWindow module<a class="headerlink" href="#src-iot-gui-toolswindow-module" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-src.IOT_Operation">
+<span id="src-iot-operation-module"></span><h2>src.IOT_Operation module<a class="headerlink" href="#module-src.IOT_Operation" title="Permalink to this headline">¶</a></h2>
+<p>-<em>- coding: utf-8 -</em>-</p>
+<p>File: IOT_Operation.py</p>
+<p>Class IOT_Operation</p>
+<p>A general class for operations.</p>
+<p>IOT stands for INAOE OCT Tools</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Log:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<p>+=============+========+======================================================+
+| Date        | Author | Description                                          |
++=============+========+======================================================+
+| 4-Aug-2018  | FOE    | - Isolated minimal solution.                         |
+|             |        | - Encapsulated in class.                             |
++————-+——–+——————————————————+
+| 22-Aug-2018 | FOE    | - Rebranded to capital “O” in operation;             |
+|             |        |   IOT_Operation                                      |
+|             |        | - Updated known subclasses                           |
+|             |        | - Defined method getClassName                        |
+|             |        | - _arity attribute “downgraded” from class to        |
+|             |        |   instance attribute                                 |
+|             |        | - _arity get/set methods added                       |
++————-+——–+——————————————————+
+| 23-Sep-2018 | FOE    | - Updated comments and added Sphinx documentation to |
+|             |        |   the class.                                         |
++=============+========+======================================================+</p>
+<blockquote>
+<div></div></blockquote>
+<p>&#64;dateCreated: 4-Aug-2018
+&#64;dateModified: 23-Sep-2018</p>
+<dl class="class">
+<dt id="src.IOT_Operation.IOT_Operation">
+<em class="property">class </em><code class="descclassname">src.IOT_Operation.</code><code class="descname">IOT_Operation</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/IOT_Operation.html#IOT_Operation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.IOT_Operation.IOT_Operation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>A base class for operations on IOT_OCTvolumes and IOT_OCTscans.</p>
+<p>A base class for operations on IOT_OCTvolumes and IOT_OCTscans.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Known subclasses:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li>IOT_OperationEditSegmentation</li>
+<li>IOT_OperationFlattening</li>
+<li>IOT_OperationMeasureLayerThickness</li>
+<li>IOT_OperationPerfilometer</li>
+<li>IOT_OperationSegmentation</li>
+<li>IOT_OperationStitch</li>
+</ul>
+<dl class="attribute">
+<dt id="src.IOT_Operation.IOT_Operation.arity">
+<code class="descname">arity</code><a class="headerlink" href="#src.IOT_Operation.IOT_Operation.arity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the operation arity.</p>
+<p>Property arity getter. Gets the operation arity.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The operation arity.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.IOT_Operation.IOT_Operation.getArity">
+<code class="descname">getArity</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/IOT_Operation.html#IOT_Operation.getArity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.IOT_Operation.IOT_Operation.getArity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the operation arity.</p>
+<p>Get the operation arity.</p>
+<div class="deprecated">
+<p><span class="versionmodified">Deprecated since version 0.2: </span>Use property .arity instead.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.IOT_Operation.IOT_Operation.getClassName">
+<code class="descname">getClassName</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/IOT_Operation.html#IOT_Operation.getClassName"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.IOT_Operation.IOT_Operation.getClassName" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the class name as a string.</p>
+<p>Get the class name as a string.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The class name.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">string</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.IOT_Operation.IOT_Operation.setArity">
+<code class="descname">setArity</code><span class="sig-paren">(</span><em>d</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/IOT_Operation.html#IOT_Operation.setArity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.IOT_Operation.IOT_Operation.setArity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the operation arity.</p>
+<p>Set the operation arity.</p>
+<div class="deprecated">
+<p><span class="versionmodified">Deprecated since version 0.2: </span>Use property .arity instead.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="src-iot-operationeditsegmentation-module">
+<h2>src.IOT_OperationEditSegmentation module<a class="headerlink" href="#src-iot-operationeditsegmentation-module" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="src-iot-operationflattening-module">
+<h2>src.IOT_OperationFlattening module<a class="headerlink" href="#src-iot-operationflattening-module" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="src-iot-operationmeasurelayerthickness-module">
+<h2>src.IOT_OperationMeasureLayerThickness module<a class="headerlink" href="#src-iot-operationmeasurelayerthickness-module" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="src-iot-operationperfilometer-module">
+<h2>src.IOT_OperationPerfilometer module<a class="headerlink" href="#src-iot-operationperfilometer-module" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="src-iot-operationsegmentation-module">
+<h2>src.IOT_OperationSegmentation module<a class="headerlink" href="#src-iot-operationsegmentation-module" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="src-iot-operationstitch-module">
+<h2>src.IOT_OperationStitch module<a class="headerlink" href="#src-iot-operationstitch-module" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-src.IOT_RetinalLayers">
+<span id="src-iot-retinallayers-module"></span><h2>src.IOT_RetinalLayers module<a class="headerlink" href="#module-src.IOT_RetinalLayers" title="Permalink to this headline">¶</a></h2>
+<p>-<em>- coding: utf-8 -</em>-</p>
+<p>File: IOT_RetinalLayers.py</p>
+<p>Class IOT_RetinalLayers</p>
+<p>A collection of constants for identifying retinal layers.</p>
+<p>Initial code isolated from previous file segment.py</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Log:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<p>+=============+========+======================================================+
+| Date        | Author | Description                                          |
++=============+========+======================================================+
+| 26-Aug-2018 | FOE    | - Class created.                                     |
++————-+——–+——————————————————+
+| 23-Sep-2018 | FOE    | - Updated comments and added Sphinx                  |
+|             |        |   documentation to the class                         |
++=============+========+======================================================+</p>
+<dl class="class">
+<dt id="src.IOT_RetinalLayers.IOT_RetinalLayers">
+<em class="property">class </em><code class="descclassname">src.IOT_RetinalLayers.</code><code class="descname">IOT_RetinalLayers</code><a class="reference internal" href="../_modules/src/IOT_RetinalLayers.html#IOT_RetinalLayers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.IOT_RetinalLayers.IOT_RetinalLayers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>A collection of constants for identifying retinal layers.</p>
+<p>A collection of constants for identifying retinal layers.</p>
+<p>It is basically a dictionary of pairs key:value</p>
+<p>The following retinal layers are considered:</p>
+<ul class="simple">
+<li>Inner Limiting Membrane (ILM)</li>
+<li>Nerve Fiber Layer (NFL)</li>
+<li>Ganglion Cell Layer (GCL)</li>
+<li>Inner Plexiform Layer (IPL)</li>
+<li>Inner Nuclear Layer (INL)</li>
+<li>Outer Plexiform Layer (OPL)</li>
+<li>Outner Nuclear Layer (ONL)</li>
+<li>External Limiting Membrane (ELM)</li>
+<li>Rods and Cones layers (RCL)</li>
+<li>RetinalPigmentEpithelium (RPE)</li>
+</ul>
+<p>Also the non-retinal layer is indexed:</p>
+<ul class="simple">
+<li>Choroid</li>
+</ul>
+<dl class="method">
+<dt id="src.IOT_RetinalLayers.IOT_RetinalLayers.getAllLayersIndexes">
+<code class="descname">getAllLayersIndexes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/IOT_RetinalLayers.html#IOT_RetinalLayers.getAllLayersIndexes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.IOT_RetinalLayers.IOT_RetinalLayers.getAllLayersIndexes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="src.IOT_RetinalLayers.IOT_RetinalLayers.getAllLayersNames">
+<code class="descname">getAllLayersNames</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/IOT_RetinalLayers.html#IOT_RetinalLayers.getAllLayersNames"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.IOT_RetinalLayers.IOT_RetinalLayers.getAllLayersNames" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="src.IOT_RetinalLayers.IOT_RetinalLayers.getClassName">
+<code class="descname">getClassName</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/IOT_RetinalLayers.html#IOT_RetinalLayers.getClassName"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.IOT_RetinalLayers.IOT_RetinalLayers.getClassName" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="src.IOT_RetinalLayers.IOT_RetinalLayers.getLayerAcronym">
+<code class="descname">getLayerAcronym</code><span class="sig-paren">(</span><em>idx</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/IOT_RetinalLayers.html#IOT_RetinalLayers.getLayerAcronym"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.IOT_RetinalLayers.IOT_RetinalLayers.getLayerAcronym" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="src.IOT_RetinalLayers.IOT_RetinalLayers.getLayerIndex">
+<code class="descname">getLayerIndex</code><span class="sig-paren">(</span><em>layerName</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/IOT_RetinalLayers.html#IOT_RetinalLayers.getLayerIndex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.IOT_RetinalLayers.IOT_RetinalLayers.getLayerIndex" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="src.IOT_RetinalLayers.IOT_RetinalLayers.getLayerName">
+<code class="descname">getLayerName</code><span class="sig-paren">(</span><em>idx</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/IOT_RetinalLayers.html#IOT_RetinalLayers.getLayerName"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.IOT_RetinalLayers.IOT_RetinalLayers.getLayerName" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="src.IOT_RetinalLayers.IOT_RetinalLayers.getNumLayers">
+<code class="descname">getNumLayers</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/IOT_RetinalLayers.html#IOT_RetinalLayers.getNumLayers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.IOT_RetinalLayers.IOT_RetinalLayers.getNumLayers" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="src-octtoolsapp-module">
+<h2>src.OCTToolsApp module<a class="headerlink" href="#src-octtoolsapp-module" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="src-test-module">
+<h2>src.Test module<a class="headerlink" href="#src-test-module" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-src.panorama">
+<span id="src-panorama-module"></span><h2>src.panorama module<a class="headerlink" href="#module-src.panorama" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="src.panorama.Stitcher">
+<em class="property">class </em><code class="descclassname">src.panorama.</code><code class="descname">Stitcher</code><a class="reference internal" href="../_modules/src/panorama.html#Stitcher"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.panorama.Stitcher" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="method">
+<dt id="src.panorama.Stitcher.detectAndDescribe">
+<code class="descname">detectAndDescribe</code><span class="sig-paren">(</span><em>image</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/panorama.html#Stitcher.detectAndDescribe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.panorama.Stitcher.detectAndDescribe" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="src.panorama.Stitcher.drawMatches">
+<code class="descname">drawMatches</code><span class="sig-paren">(</span><em>imageA</em>, <em>imageB</em>, <em>kpsA</em>, <em>kpsB</em>, <em>matches</em>, <em>status</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/panorama.html#Stitcher.drawMatches"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.panorama.Stitcher.drawMatches" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="src.panorama.Stitcher.matchKeypoints">
+<code class="descname">matchKeypoints</code><span class="sig-paren">(</span><em>kpsA</em>, <em>kpsB</em>, <em>featuresA</em>, <em>featuresB</em>, <em>ratio</em>, <em>reprojThresh</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/panorama.html#Stitcher.matchKeypoints"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.panorama.Stitcher.matchKeypoints" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="src.panorama.Stitcher.stitch">
+<code class="descname">stitch</code><span class="sig-paren">(</span><em>images</em>, <em>ratio=0.75</em>, <em>reprojThresh=4.0</em>, <em>showMatches=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/panorama.html#Stitcher.stitch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.panorama.Stitcher.stitch" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-src.segmentationUtils">
+<span id="src-segmentationutils-module"></span><h2>src.segmentationUtils module<a class="headerlink" href="#module-src.segmentationUtils" title="Permalink to this headline">¶</a></h2>
+<p>Created on Mon Jun 25 20:12:03 2018</p>
+<p>&#64;author: Aleida</p>
+<dl class="function">
+<dt id="src.segmentationUtils.carga_imagen">
+<code class="descclassname">src.segmentationUtils.</code><code class="descname">carga_imagen</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/segmentationUtils.html#carga_imagen"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.segmentationUtils.carga_imagen" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="src.segmentationUtils.ejecuta_OTSU">
+<code class="descclassname">src.segmentationUtils.</code><code class="descname">ejecuta_OTSU</code><span class="sig-paren">(</span><em>matrizIMG</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/segmentationUtils.html#ejecuta_OTSU"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.segmentationUtils.ejecuta_OTSU" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="src.segmentationUtils.ejecuta_blackhat">
+<code class="descclassname">src.segmentationUtils.</code><code class="descname">ejecuta_blackhat</code><span class="sig-paren">(</span><em>matrizIMG</em>, <em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/segmentationUtils.html#ejecuta_blackhat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.segmentationUtils.ejecuta_blackhat" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="src.segmentationUtils.ejecuta_close">
+<code class="descclassname">src.segmentationUtils.</code><code class="descname">ejecuta_close</code><span class="sig-paren">(</span><em>matrizIMG</em>, <em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/segmentationUtils.html#ejecuta_close"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.segmentationUtils.ejecuta_close" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="src.segmentationUtils.ejecuta_dilate">
+<code class="descclassname">src.segmentationUtils.</code><code class="descname">ejecuta_dilate</code><span class="sig-paren">(</span><em>matrizIMG</em>, <em>x</em>, <em>y</em>, <em>i</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/segmentationUtils.html#ejecuta_dilate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.segmentationUtils.ejecuta_dilate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="src.segmentationUtils.ejecuta_elimina_izq_der">
+<code class="descclassname">src.segmentationUtils.</code><code class="descname">ejecuta_elimina_izq_der</code><span class="sig-paren">(</span><em>tempY</em>, <em>tempX</em>, <em>matrizIMG</em>, <em>bordeSuperior</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/segmentationUtils.html#ejecuta_elimina_izq_der"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.segmentationUtils.ejecuta_elimina_izq_der" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="src.segmentationUtils.ejecuta_elimina_ruido_extremos">
+<code class="descclassname">src.segmentationUtils.</code><code class="descname">ejecuta_elimina_ruido_extremos</code><span class="sig-paren">(</span><em>bordeSuperior</em>, <em>tempY</em>, <em>tempX</em>, <em>matrizIMG</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/segmentationUtils.html#ejecuta_elimina_ruido_extremos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.segmentationUtils.ejecuta_elimina_ruido_extremos" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="src.segmentationUtils.ejecuta_erode">
+<code class="descclassname">src.segmentationUtils.</code><code class="descname">ejecuta_erode</code><span class="sig-paren">(</span><em>matrizIMG</em>, <em>x</em>, <em>y</em>, <em>i</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/segmentationUtils.html#ejecuta_erode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.segmentationUtils.ejecuta_erode" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="src.segmentationUtils.ejecuta_gradient">
+<code class="descclassname">src.segmentationUtils.</code><code class="descname">ejecuta_gradient</code><span class="sig-paren">(</span><em>matrizIMG</em>, <em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/segmentationUtils.html#ejecuta_gradient"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.segmentationUtils.ejecuta_gradient" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="src.segmentationUtils.ejecuta_open">
+<code class="descclassname">src.segmentationUtils.</code><code class="descname">ejecuta_open</code><span class="sig-paren">(</span><em>matrizIMG</em>, <em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/segmentationUtils.html#ejecuta_open"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.segmentationUtils.ejecuta_open" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="src.segmentationUtils.elimina_columnas">
+<code class="descclassname">src.segmentationUtils.</code><code class="descname">elimina_columnas</code><span class="sig-paren">(</span><em>matrizIMG</em>, <em>x</em>, <em>yInicial</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/segmentationUtils.html#elimina_columnas"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.segmentationUtils.elimina_columnas" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="src.segmentationUtils.elimina_desde_arreglos">
+<code class="descclassname">src.segmentationUtils.</code><code class="descname">elimina_desde_arreglos</code><span class="sig-paren">(</span><em>matrizIMG</em>, <em>arraySuperior</em>, <em>arrayInferior</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/segmentationUtils.html#elimina_desde_arreglos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.segmentationUtils.elimina_desde_arreglos" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="src.segmentationUtils.elimina_imagen">
+<code class="descclassname">src.segmentationUtils.</code><code class="descname">elimina_imagen</code><span class="sig-paren">(</span><em>nombre</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/segmentationUtils.html#elimina_imagen"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.segmentationUtils.elimina_imagen" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="src.segmentationUtils.elimina_indices">
+<code class="descclassname">src.segmentationUtils.</code><code class="descname">elimina_indices</code><span class="sig-paren">(</span><em>indiceY</em>, <em>indiceX</em>, <em>tempY</em>, <em>tempX</em>, <em>matrizIMG</em>, <em>indiceActualY</em>, <em>bordeSuperior</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/segmentationUtils.html#elimina_indices"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.segmentationUtils.elimina_indices" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="src.segmentationUtils.elimina_izq_der">
+<code class="descclassname">src.segmentationUtils.</code><code class="descname">elimina_izq_der</code><span class="sig-paren">(</span><em>bordeSuperior</em>, <em>matrizIMG</em>, <em>tempActualY</em>, <em>tempX</em>, <em>tempY</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/segmentationUtils.html#elimina_izq_der"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.segmentationUtils.elimina_izq_der" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="src.segmentationUtils.elimina_ruido">
+<code class="descclassname">src.segmentationUtils.</code><code class="descname">elimina_ruido</code><span class="sig-paren">(</span><em>bordeSuperior</em>, <em>indiceY</em>, <em>indiceX</em>, <em>matrizIMG</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/segmentationUtils.html#elimina_ruido"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.segmentationUtils.elimina_ruido" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="src.segmentationUtils.elimina_ruido_canny">
+<code class="descclassname">src.segmentationUtils.</code><code class="descname">elimina_ruido_canny</code><span class="sig-paren">(</span><em>matrizIMG</em>, <em>iteraciones</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/segmentationUtils.html#elimina_ruido_canny"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.segmentationUtils.elimina_ruido_canny" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="src.segmentationUtils.elimina_ruido_der_izq">
+<code class="descclassname">src.segmentationUtils.</code><code class="descname">elimina_ruido_der_izq</code><span class="sig-paren">(</span><em>indiceX</em>, <em>indiceY</em>, <em>matrizIMG</em>, <em>bordeSuperior</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/segmentationUtils.html#elimina_ruido_der_izq"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.segmentationUtils.elimina_ruido_der_izq" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="src.segmentationUtils.esPNG">
+<code class="descclassname">src.segmentationUtils.</code><code class="descname">esPNG</code><span class="sig-paren">(</span><em>nombre</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/segmentationUtils.html#esPNG"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.segmentationUtils.esPNG" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="src.segmentationUtils.mostrar_imagen">
+<code class="descclassname">src.segmentationUtils.</code><code class="descname">mostrar_imagen</code><span class="sig-paren">(</span><em>img</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/segmentationUtils.html#mostrar_imagen"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.segmentationUtils.mostrar_imagen" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="src.segmentationUtils.obten_bordes_externos">
+<code class="descclassname">src.segmentationUtils.</code><code class="descname">obten_bordes_externos</code><span class="sig-paren">(</span><em>matrizIMG</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/segmentationUtils.html#obten_bordes_externos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.segmentationUtils.obten_bordes_externos" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="src.segmentationUtils.obten_indices">
+<code class="descclassname">src.segmentationUtils.</code><code class="descname">obten_indices</code><span class="sig-paren">(</span><em>bordeSuperior</em>, <em>indiceY</em>, <em>indiceX</em>, <em>matrizIMG</em>, <em>borde</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/segmentationUtils.html#obten_indices"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.segmentationUtils.obten_indices" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="src.segmentationUtils.resalta_bordes">
+<code class="descclassname">src.segmentationUtils.</code><code class="descname">resalta_bordes</code><span class="sig-paren">(</span><em>matrizIMG</em>, <em>esMedia</em>, <em>porcentaje</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/src/segmentationUtils.html#resalta_bordes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.segmentationUtils.resalta_bordes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="src-setup-module">
+<h2>src.setup module<a class="headerlink" href="#src-setup-module" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-src">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-src" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">OCT-Tools 0.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, Felipe Orihuela-Espina.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
+    </div>
+  </body>
+</html>

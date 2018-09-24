@@ -1,0 +1,7 @@
+src.segmentationUtils module
+============================
+
+.. automodule:: src.segmentationUtils
+    :members:
+    :undoc-members:
+    :show-inheritance:

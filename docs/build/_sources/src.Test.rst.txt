@@ -1,0 +1,7 @@
+src.Test module
+===============
+
+.. automodule:: src.Test
+    :members:
+    :undoc-members:
+    :show-inheritance:

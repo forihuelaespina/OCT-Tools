@@ -1,34 +1,49 @@
-# File: run.py
-#
-# Main file for OCT-Tools
-#
-#
-#
-# @dateCreated: ??
-# @authors: Arlem Aleida Castillo Avila, Felipe Orihuela-Espina
-# @dateModified: 9-Sep-2018
-#
-# See also:
-# 
+"""
+-*- coding: utf-8 -*-
 
+File: OCTToolsApp.py
 
-## Log
-# 4-Aug-2018: FOE: Isolated minimal solution
-# 
-# 21-Aug-2018: FOE: Updated main window class from OCTToolsMainWindow to
-#   IOT_GUI_MainWindow (later rebranded as IOT_GUI_ToolsWindow
-# 
-# 21-Aug-2018: FOE:
-#   * Run is now a class
-#   * The application main window is no longer the tools menu window (IOT_GUI_ToolsWindow),
-#   but the document window (IOT_GUI_DocumentWindow)
-# 
-# 9-Sep-2018: FOE:
-#   * "Separated" the entry points as a script, from the entry point as an
-#   installed program.
-#   * Added "src" to the path for "installed" execution
-# 
+Class OCTToolsApp
 
+Application entrance point.
+
+:Log:
+
++-------------+--------+------------------------------------------------------+   
+| Date        | Author | Description                                          |
++=============+========+======================================================+
+| Feb-2018    | AACA   | - File created as run.py                             |
++-------------+--------+------------------------------------------------------+   
+| 4-Aug-2018  | FOE    | - Isolated minimal solution.                         |
++-------------+--------+------------------------------------------------------+   
+| 21-Aug-2018 | FOE    | - Updated main window class from OCTToolsMainWindow  |
+|             |        |   to IOT_GUI_MainWindow (later rebranded as          |
+|             |        |   IOT_GUI_ToolsWindow                                |
++-------------+--------+------------------------------------------------------+   
+| 22-Aug-2018 | FOE    | - Run is now a class. File rebranded to OCTToolsApp  |
+|             |        |   from run.py                                        |
+|             |        | - The application main window is no longer the tools |
+|             |        |   menu window (IOT_GUI_ToolsWindow), but the document|
+|             |        |   window (IOT_GUI_DocumentWindow).                   |
++-------------+--------+------------------------------------------------------+   
+| 9-Sep-2018  | FOE    | - "Separated" the entry points as a script, from the |
+|             |        |   entry point as an installed program.               |
+|             |        | - Added "src" to the path for "installed" execution. |
++-------------+--------+------------------------------------------------------+
+| 23-Sep-2018 | FOE    | - Updated comments and added Sphinx                  |
+|             |        |   documentation to the class                         |
++-------------+--------+------------------------------------------------------+
+
+.. seealso:: None
+.. note:: None
+.. todo:: None
+    
+ 
+.. sectionauthor:: Felipe Orihuela-Espina <f.orihuela-espina@inaoep.mx>
+.. codeauthor:: Arlem Aleida Castillo Avila <acastillo@inaoep.mx>
+.. codeauthor:: Felipe Orihuela-Espina <f.orihuela-espina@inaoep.mx>
+
+"""
 
 
 ## Import
@@ -52,6 +67,16 @@ from IOT_GUI_ToolsWindow import *
 
 ## Class definition
 class OCTToolsApp():
+    #Sphinx documentation
+    """Application entrance point.
+    
+    Application entrance point.
+    
+    .. seealso:: 
+    .. note:: 
+    .. todo:: 
+        
+    """
 
     #Private class attributes shared by all instances
 

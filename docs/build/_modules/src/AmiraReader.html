@@ -1,0 +1,272 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>src.AmiraReader &#8212; OCT-Tools 0.1 documentation</title>
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">OCT-Tools 0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for src.AmiraReader</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">-*- coding: utf-8 -*-</span>
+
+<span class="sd">File: AmiraReader.py</span>
+
+<span class="sd">Class AmiraReader</span>
+
+<span class="sd">The original code was created from a web example by Felipe in Matlab and</span>
+<span class="sd">then &quot;translated&quot; to Python between Felipe and Arlem.</span>
+
+<span class="sd">:Log:</span>
+
+<span class="sd">+-------------+--------+------------------------------------------------------+</span>
+<span class="sd">| Date        | Author | Description                                          |</span>
+<span class="sd">+=============+========+======================================================+</span>
+<span class="sd">| 4-Aug-2018  | FOE    | - Isolated minimal solution.                         |</span>
+<span class="sd">|             |        | - Encapsulated in class.                             |</span>
+<span class="sd">|             |        | - Class name updated to AmiraReader.                 |</span>
+<span class="sd">|             |        | - Added comments and declared attributes.            |</span>
+<span class="sd">|             |        | - Methods fread, findField and findStruct are now    |</span>
+<span class="sd">|             |        |   private.                                           |</span>
+<span class="sd">+-------------+--------+------------------------------------------------------+</span>
+<span class="sd">| 23-Sep-2018 | FOE    | - Updated comments and added Sphinx                  |</span>
+<span class="sd">|             |        |   documentation to the class                         |</span>
+<span class="sd">+-------------+--------+------------------------------------------------------+</span>
+
+<span class="sd">.. seealso:: None</span>
+<span class="sd">.. note:: None</span>
+<span class="sd">.. todo:: None</span>
+
+<span class="sd">.. sectionauthor:: Felipe Orihuela-Espina &lt;f.orihuela-espina@inaoep.mx&gt;</span>
+<span class="sd">.. codeauthor:: Arlem Aleida Castillo Avila &lt;acastillo@inaoep.mx&gt;</span>
+<span class="sd">.. codeauthor:: Felipe Orihuela-Espina &lt;f.orihuela-espina@inaoep.mx&gt;</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+
+
+<div class="viewcode-block" id="AmiraReader"><a class="viewcode-back" href="../../src.AmiraReader.html#src.AmiraReader.AmiraReader">[docs]</a><span class="k">class</span> <span class="nc">AmiraReader</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="c1">#Sphinx documentation</span>
+    <span class="sd">&quot;&quot;&quot;A class to read Amira formatted files.</span>
+
+<span class="sd">    A class to read Amira formatted files.</span>
+
+
+<span class="sd">    :Known issues:</span>
+
+<span class="sd">    * Currently it only returns the first scan</span>
+
+<span class="sd">    .. seealso::</span>
+<span class="sd">    .. note::</span>
+<span class="sd">    .. todo::</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1">#Private class attributes shared by all instances</span>
+
+
+
+    <span class="c1">#Class constructor</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1">#Initialize private attributes unique to this instance</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_filename</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span> <span class="c1">#File name</span>
+        <span class="c1">#self._fileFolder = &quot;&quot; #File folder</span>
+
+
+
+    <span class="c1">#some private methods</span>
+    <span class="k">def</span> <span class="nf">_fread</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fid</span><span class="p">,</span> <span class="n">nelements</span><span class="p">,</span> <span class="n">dtype</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Equivalent to Matlab fread function&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">dtype</span> <span class="ow">is</span> <span class="n">np</span><span class="o">.</span><span class="n">str</span><span class="p">:</span>
+            <span class="n">dt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint16</span>  <span class="c1"># WARNING: assuming 8-bit ASCII for np.str!</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">dt</span> <span class="o">=</span> <span class="n">dtype</span>
+        <span class="n">data_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fromfile</span><span class="p">(</span><span class="n">fid</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">nelements</span><span class="p">)</span>
+        <span class="n">data_array</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">nelements</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">data_array</span>
+
+
+
+    <span class="k">def</span> <span class="nf">_findField</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">file</span><span class="p">,</span> <span class="n">fieldName</span><span class="p">):</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="n">lineString</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
+        <span class="k">while</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">lineString</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">k</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">lineString</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="n">lineString</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">fieldName</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">lineString</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s2">&quot;# &quot;</span><span class="o">+</span><span class="n">fieldName</span><span class="o">+</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+
+
+
+    <span class="k">def</span> <span class="nf">_findStruct</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">file</span><span class="p">,</span> <span class="n">structName</span><span class="p">):</span>
+        <span class="n">lineString</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_findField</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">structName</span><span class="o">+</span><span class="s2">&quot; {&quot;</span><span class="p">)</span>
+        <span class="n">parameters</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">lineString</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">))</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="n">lineString</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;}&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="n">parameters</span> <span class="o">+=</span> <span class="p">[</span><span class="n">lineString</span><span class="p">[:(</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">)]]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">lineString</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+            <span class="k">while</span> <span class="n">lineString</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;}&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="n">parameters</span> <span class="o">+=</span> <span class="p">[</span><span class="n">lineString</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)]</span>
+                <span class="n">lineString</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">parameters</span>
+
+
+
+    <span class="c1">#Public methods</span>
+<div class="viewcode-block" id="AmiraReader.readAmiraImage"><a class="viewcode-back" href="../../src.AmiraReader.html#src.AmiraReader.AmiraReader.readAmiraImage">[docs]</a>    <span class="k">def</span> <span class="nf">readAmiraImage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">filename</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_filename</span> <span class="o">=</span> <span class="n">filename</span>
+        <span class="n">nDims</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">formatFile</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">version</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">parameters</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">dataType</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1">#abrimos el archivo</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">lineString</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_findField</span><span class="p">(</span><span class="n">file</span><span class="p">,</span><span class="s1">&#39;AmiraMesh&#39;</span><span class="p">);</span>
+            <span class="c1">#Encuentra el número de dimensiones</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="n">lineString</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;2D &#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="n">nDims</span> <span class="o">=</span> <span class="mi">2</span>
+                <span class="n">lineString</span> <span class="o">=</span> <span class="n">lineString</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s2">&quot;2D &quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">k</span> <span class="o">=</span> <span class="n">lineString</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;3D &quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">k</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                    <span class="n">nDims</span> <span class="o">=</span> <span class="mi">3</span>
+                    <span class="n">lineString</span> <span class="o">=</span> <span class="n">lineString</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s2">&quot;3D &quot;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Unexpected Data Type&#39;</span><span class="p">)</span>
+
+            <span class="c1">#Encuentra el formato del archivo</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="n">lineString</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;BINARY&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="n">formatFile</span> <span class="o">=</span> <span class="s1">&#39;binary&#39;</span>
+                <span class="n">lineString</span> <span class="o">=</span> <span class="n">lineString</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s1">&#39;BINARY &#39;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Unexpected Data Type&#39;</span><span class="p">)</span>
+
+            <span class="n">version</span> <span class="o">=</span> <span class="n">lineString</span>
+
+            <span class="c1">#Definiciones</span>
+            <span class="n">lineString</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_findField</span><span class="p">(</span><span class="n">file</span><span class="p">,</span><span class="s1">&#39;define&#39;</span><span class="p">)</span>
+            <span class="n">lineString</span> <span class="o">=</span> <span class="n">lineString</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s2">&quot;Lattice &quot;</span><span class="p">)</span>
+            <span class="n">sizes</span> <span class="o">=</span> <span class="n">lineString</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+            <span class="n">sizes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sizes</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">sizes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sizes</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">sizes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sizes</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+
+            <span class="c1">#Parámetros</span>
+            <span class="n">parameters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_findStruct</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="s2">&quot;Parameters&quot;</span><span class="p">)</span>
+            <span class="n">dataType</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_findStruct</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="s2">&quot;Lattice&quot;</span><span class="p">)</span>
+
+            <span class="n">temp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_findField</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="s2">&quot;Data section&quot;</span><span class="p">)</span>
+            <span class="n">temp</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+            <span class="k">while</span> <span class="n">temp</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;@1&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="n">temp</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+
+            <span class="n">pos</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">tell</span><span class="p">()</span>
+            <span class="n">file</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">SEEK_SET</span><span class="p">)</span>
+
+            <span class="n">NumToRead</span> <span class="o">=</span> <span class="n">sizes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">sizes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">sizes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="n">pos</span><span class="o">=</span><span class="n">file</span><span class="o">.</span><span class="n">tell</span><span class="p">()</span>
+        <span class="c1">#    A = fread(file, NumToRead, np.uint16)</span>
+        <span class="c1">#    A = A.reshape((sizes[2], sizes[1], sizes[0]))</span>
+            <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fromfile</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">,</span> <span class="n">NumToRead</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">sizes</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">sizes</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">sizes</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+
+
+
+        <span class="c1">#By now return just the first scan. THIS IS A BUG</span>
+        <span class="k">return</span> <span class="n">A</span><span class="p">[:,:,</span><span class="mi">1</span><span class="p">]</span></div></div>
+
+
+<span class="c1">#             nRows=2;</span>
+<span class="c1">#             nCols=sizes[2]/nRows;</span>
+<span class="c1">#             for kk in range(1,sizes[2]+1):</span>
+<span class="c1"># #                plt.subplot(nRows,int(nCols), kk);</span>
+<span class="c1"># #                im = plt.imshow(np.rot90(A[:,:,kk-1], 3), aspect=&#39;auto&#39;, interpolation=&#39;none&#39;, origin=&#39;upper&#39;);</span>
+<span class="c1">#                 plt.imsave(&#39;D:\Documentos\OCT\expedientes\\new\\scan&#39;+str(kk)+&#39;.png&#39;, np.rot90(A[:,:,kk-1], 3) , format =&#39;png&#39;)</span>
+<span class="c1">#</span>
+<span class="c1">#             self.fileFolder = &#39;D:\\Documentos\\OCT\\expedientes\\new\\&#39;</span>
+
+            <span class="c1">#plt.title(gca,[&#39;Plane z=&#39; num2str(kk)]);</span>
+
+<span class="c1">#expediente = AmiraReader(&#39;D:\Documentos\OCT\git\src\code\OCT\MMH48_20170817_115332_3DOCT00_L_01.am&#39;)</span>
+<span class="c1">#carpeta = expediente.carpeta</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">OCT-Tools 0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, Felipe Orihuela-Espina.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
+    </div>
+  </body>
+</html>

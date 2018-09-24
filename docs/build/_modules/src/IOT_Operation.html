@@ -1,0 +1,258 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>src.IOT_Operation &#8212; OCT-Tools 0.1 documentation</title>
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">OCT-Tools 0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for src.IOT_Operation</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">-*- coding: utf-8 -*-</span>
+
+<span class="sd">File: IOT_Operation.py</span>
+
+<span class="sd">Class IOT_Operation</span>
+
+<span class="sd">A general class for operations.</span>
+
+<span class="sd">IOT stands for INAOE OCT Tools</span>
+
+<span class="sd">:Log:</span>
+
+<span class="sd">+-------------+--------+------------------------------------------------------+</span>
+<span class="sd">| Date        | Author | Description                                          |</span>
+<span class="sd">+=============+========+======================================================+</span>
+<span class="sd">| 4-Aug-2018  | FOE    | - Isolated minimal solution.                         |</span>
+<span class="sd">|             |        | - Encapsulated in class.                             |</span>
+<span class="sd">+-------------+--------+------------------------------------------------------+</span>
+<span class="sd">| 22-Aug-2018 | FOE    | - Rebranded to capital &quot;O&quot; in operation;             |</span>
+<span class="sd">|             |        |   IOT_Operation                                      |</span>
+<span class="sd">|             |        | - Updated known subclasses                           |</span>
+<span class="sd">|             |        | - Defined method getClassName                        |</span>
+<span class="sd">|             |        | - _arity attribute &quot;downgraded&quot; from class to        |</span>
+<span class="sd">|             |        |   instance attribute                                 |</span>
+<span class="sd">|             |        | - _arity get/set methods added                       |</span>
+<span class="sd">+-------------+--------+------------------------------------------------------+</span>
+<span class="sd">| 23-Sep-2018 | FOE    | - Updated comments and added Sphinx documentation to |</span>
+<span class="sd">|             |        |   the class.                                         |</span>
+<span class="sd">+-------------+--------+------------------------------------------------------+</span>
+
+<span class="sd">.. seealso:: None</span>
+<span class="sd">.. note:: None</span>
+<span class="sd">.. todo:: None</span>
+
+
+<span class="sd">.. sectionauthor:: Felipe Orihuela-Espina &lt;f.orihuela-espina@inaoep.mx&gt;</span>
+<span class="sd">.. codeauthor:: Felipe Orihuela-Espina &lt;f.orihuela-espina@inaoep.mx&gt;</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<span class="c1">## Import</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+
+
+
+<span class="c1">## Class definition</span>
+<div class="viewcode-block" id="IOT_Operation"><a class="viewcode-back" href="../../src.IOT_Operation.html#src.IOT_Operation.IOT_Operation">[docs]</a><span class="k">class</span> <span class="nc">IOT_Operation</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="c1">#Sphinx documentation</span>
+    <span class="sd">&quot;&quot;&quot;A base class for operations on IOT_OCTvolumes and IOT_OCTscans.</span>
+
+<span class="sd">    A base class for operations on IOT_OCTvolumes and IOT_OCTscans.</span>
+
+
+
+<span class="sd">    :Known subclasses:</span>
+<span class="sd">    * IOT_OperationEditSegmentation</span>
+<span class="sd">    * IOT_OperationFlattening</span>
+<span class="sd">    * IOT_OperationMeasureLayerThickness</span>
+<span class="sd">    * IOT_OperationPerfilometer</span>
+<span class="sd">    * IOT_OperationSegmentation</span>
+<span class="sd">    * IOT_OperationStitch</span>
+
+<span class="sd">    .. seealso::</span>
+<span class="sd">    .. note::</span>
+<span class="sd">    .. todo::</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+
+
+
+    <span class="c1">#Private class attributes shared by all instances</span>
+
+    <span class="c1">#Class constructor</span>
+    <span class="c1">#</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The class constructor.</span>
+
+<span class="sd">        The IOT_Operation class constructor</span>
+
+<span class="sd">        tmp = IOT_Operation() - Creates an operation of arity 1.</span>
+<span class="sd">        tmp = IOT_Operation(n) - Creates an operation of arity n.</span>
+
+<span class="sd">        :param n: the arity of the operation</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">warnMsg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getClassName</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;:__init__: Unexpected number of input arguments.&#39;</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">warnMsg</span><span class="p">,</span><span class="ne">SyntaxWarning</span><span class="p">)</span>
+
+        <span class="c1">#Initialize attributes (without decorator @property)</span>
+
+        <span class="c1">#Initialize properties (with decorator @property)</span>
+        <span class="n">n</span><span class="o">=</span><span class="mi">1</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">):</span>
+            <span class="n">n</span><span class="o">=</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">arity</span> <span class="o">=</span> <span class="n">n</span> <span class="c1">#Set arity of the operation</span>
+
+
+    <span class="c1">#Properties getters/setters</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">arity</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="c1">#arity getter</span>
+        <span class="sd">&quot;&quot;&quot;Gets the operation arity.</span>
+
+<span class="sd">        Property arity getter. Gets the operation arity.</span>
+
+<span class="sd">        :returns: The operation arity.</span>
+<span class="sd">        :rtype: int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__arity</span>
+
+    <span class="nd">@arity</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">arity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">d</span><span class="p">):</span> <span class="c1">#arity setter</span>
+        <span class="sd">&quot;&quot;&quot;Sets the operation arity.</span>
+
+<span class="sd">        Property arity setter. Sets the operation arity. Arity of the operation</span>
+<span class="sd">        has to be bigger or equal than 1.</span>
+
+<span class="sd">        :param d: Operation arity</span>
+<span class="sd">        :type d: int</span>
+<span class="sd">        :returns: None</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">d</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="n">d</span><span class="o">&lt;</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">warnMsg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getClassName</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;:getArity: &#39;</span> \
+                      <span class="o">+</span> <span class="s1">&#39;Arity must be a positive integer. Setting it to 1.&#39;</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">warnMsg</span><span class="p">,</span><span class="ne">SyntaxWarning</span><span class="p">)</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__arity</span> <span class="o">=</span> <span class="n">d</span><span class="p">;</span>
+        <span class="k">return</span>
+
+    <span class="c1">#Private methods</span>
+
+    <span class="c1">#Public methods</span>
+<div class="viewcode-block" id="IOT_Operation.getClassName"><a class="viewcode-back" href="../../src.IOT_Operation.html#src.IOT_Operation.IOT_Operation.getClassName">[docs]</a>    <span class="k">def</span> <span class="nf">getClassName</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the class name as a string.</span>
+
+<span class="sd">        Get the class name as a string.</span>
+
+<span class="sd">        :returns: The class name.</span>
+<span class="sd">        :rtype: string</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span></div>
+
+<div class="viewcode-block" id="IOT_Operation.getArity"><a class="viewcode-back" href="../../src.IOT_Operation.html#src.IOT_Operation.IOT_Operation.getArity">[docs]</a>    <span class="k">def</span> <span class="nf">getArity</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the operation arity.</span>
+
+<span class="sd">        Get the operation arity.</span>
+
+
+<span class="sd">        .. deprecated:: 0.2</span>
+<span class="sd">           Use property .arity instead.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">warnMsg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getClassName</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;:getArity: Deprecated. &#39;</span> \
+                 <span class="o">+</span> <span class="s1">&#39;Use &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">getClassName</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;.arity instead.&#39;</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">warnMsg</span><span class="p">,</span><span class="ne">DeprecationWarning</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arity</span></div>
+
+<div class="viewcode-block" id="IOT_Operation.setArity"><a class="viewcode-back" href="../../src.IOT_Operation.html#src.IOT_Operation.IOT_Operation.setArity">[docs]</a>    <span class="k">def</span> <span class="nf">setArity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">d</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set the operation arity.</span>
+
+<span class="sd">        Set the operation arity.</span>
+
+
+<span class="sd">        .. deprecated:: 0.2</span>
+<span class="sd">           Use property .arity instead.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">warnMsg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getClassName</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;:getArity: Deprecated. &#39;</span> \
+                 <span class="o">+</span> <span class="s1">&#39;Use &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">getClassName</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;.arity instead.&#39;</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">warnMsg</span><span class="p">,</span><span class="ne">DeprecationWarning</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">arity</span> <span class="o">=</span> <span class="n">d</span>
+        <span class="k">return</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">OCT-Tools 0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, Felipe Orihuela-Espina.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
+    </div>
+  </body>
+</html>

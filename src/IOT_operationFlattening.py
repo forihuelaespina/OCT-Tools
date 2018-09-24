@@ -1,33 +1,39 @@
-# -*- coding: utf-8 -*-
+"""
+-*- coding: utf-8 -*-
 
-# File: IOT_OperationFlattening.py
-#
-# Operation flattening or rectification
-# 
-# Initial code isolated from previous file flattening.py
-#
-# This class rectifies and OCT image
-#
-#
-#
-# @dateCreated: 4-Aug-2018
-# @authors: Arlem Aleida Castillo Avila, Felipe Orihuela-Espina
-# @dateModified: 22-Aug-2018
-#
-# See also:
-# 
+File: IOT_OperationFlattening.py
+
+Class IOT_OperationFlattening
+
+Initial code was isolated from previous file flattening.py
 
 
-## Log
-#
-# 4-Aug-2018: FOE:
-#   * Isolated minimal solution.
-#   * Encapsulated in class.
-#
-# 22-Aug-2018: FOE:
-#   * Class name rebranded to capital "O" in operation
-#   * Improved verbosity; now using class name
-#
+:Log:
+
++-------------+--------+------------------------------------------------------+
+| Date        | Author | Description                                          |
++=============+========+======================================================+
+| 4-Aug-2018  | FOE    | - Isolated minimal solution.                         |
+|             |        | - Encapsulated in class.                             |
++-------------+--------+------------------------------------------------------+   
+| 22-Aug-2018 | FOE    | - Rebranded to capital "O" in operation;             |
+|             |        |   IOT_Operation                                      |
+|             |        | - Improved verbosity; now using class name           |
++-------------+--------+------------------------------------------------------+
+| 23-Sep-2018 | FOE    | - Updated comments and added Sphinx                  |
+|             |        |   documentation to the class                         |
++-------------+--------+------------------------------------------------------+
+
+.. seealso:: None
+.. note:: None
+.. todo:: None
+
+
+.. sectionauthor:: Felipe Orihuela-Espina <f.orihuela-espina@inaoep.mx>
+.. codeauthor:: Arlem Aleida Castillo Avila <acastillo@inaoep.mx>
+.. codeauthor:: Felipe Orihuela-Espina <f.orihuela-espina@inaoep.mx>
+
+"""
 
 
 ## Import
@@ -50,7 +56,20 @@ def func(x, a, b, c):
 
 ## Class definition
 class IOT_OperationFlattening(IOT_Operation):
+    """A flattening operation for OCT scans.
+    
+    A flattening operation for OCT scans.
 
+    The operation represented by this class rectifies an OCT scan.
+
+    
+    
+    .. seealso:: 
+    .. note:: 
+    .. todo:: 
+        
+    """
+ 
     #Private class attributes shared by all instances
     
     #Class constructor

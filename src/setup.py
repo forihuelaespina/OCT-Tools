@@ -86,6 +86,7 @@ setuptools.setup(
 #
 # To one folder
 pyinstaller --onedir --noconfirm --nowindow ^
+--hidden-import tkinter ^
 --hidden-import scipy ^
 --hidden-import scipy._lib.messagestream ^
 --hidden-import pywt._extensions._cwt ^

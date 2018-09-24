@@ -1,35 +1,43 @@
-# -*- coding: utf-8 -*-
+"""
+-*- coding: utf-8 -*-
 
-# File: IOT_Document.py
-#
-# The document class for OCT-Tools.
-# IOT stands for INAOE OCT Tools
-# 
-# This class represents a document in OCT-Tools. A document holds information
-#about a study plus some additional metadata.
-#
-# Currently, a study is only an OCT image (with several scans) with or without
-#segmentation information.
-#
-#
-#
-# @dateCreated: 21-Aug-2018
-# @authors: Arlem Aleida Castillo Avila, Felipe Orihuela-Espina
-# @dateModified: 22-Aug-2018
-#
-# See also:
-# 
+File: IOT_Document.py
+
+Class IOT_Document
+
+The document class for OCT-Tools.
+
+IOT stands for INAOE OCT Tools
+
+:Log:
+
++-------------+--------+------------------------------------------------------+
+| Date        | Author | Description                                          |
++=============+========+======================================================+
+| 21-Aug-2018 | FOE    | - Class created.                                     |
++-------------+--------+------------------------------------------------------+
+| 22-Aug-2018 | FOE    | - Defined method _getClassName                       |
+|             |        | - Improved verbosity; now using class name           |
++-------------+--------+------------------------------------------------------+
+| 23-Sep-2018 | FOE    | - Updated comments and added Sphinx documentation to |
+|             |        |   the class                                          |
++-------------+--------+------------------------------------------------------+
+
+.. seealso:: None
+.. note:: None
+.. todo:: None
+
+    
 
 
-## Log
-#
-# 21-Aug-2018: FOE: 
-#  * Class created. 
-#
-# 22-Aug-2018: FOE: 
-#   * Defined method _getClassName
-#   * Improved verbosity; now using class name
-#
+@dateCreated: 21-Aug-2018
+@dateModified: 23-Sep-2018
+
+.. sectionauthor:: Felipe Orihuela-Espina <f.orihuela-espina@inaoep.mx>
+.. codeauthor:: Felipe Orihuela-Espina <f.orihuela-espina@inaoep.mx>
+
+"""
+
 
 
 ## Import
@@ -39,6 +47,24 @@
 
 ## Class definition
 class IOT_Document():
+    #Sphinx documentation
+    """The document class for OCT-Tools.
+    
+    The document class for OCT-Tools.
+    
+    This class represents a document in OCT-Tools. A document holds information
+    about a study plus some additional metadata.
+    
+    Currently, a study is only an OCT image (with several scans) with or without
+    segmentation information.
+    
+    
+
+    .. seealso:: 
+    .. note:: 
+    .. todo:: 
+        
+    """
 
     #Private class attributes shared by all instances
     defaultName = 'IOTDocument'

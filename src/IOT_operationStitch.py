@@ -1,58 +1,49 @@
-# -*- coding: utf-8 -*-
+"""
+-*- coding: utf-8 -*-
 
-# File: IOT_OperationStitch.py
-#
-# Operation stitching or mosaicing|
-# 
-# Initial code isolated from previous file stitch.py
-#
-#
-#
-# This class makes a mosaic from several images
-#
-#
-# USAGE
-# python stitch.py --first images/bryce_left_01.png --second images/bryce_right_01.png 
-# Original example imported from web. Likely from:
-#   https://github.com/haurbano/PythonPanorama
-#  or
-#   https://www.pyimagesearch.com/2016/01/11/opencv-panorama-stitching/
-#
-#
-# Known issues:
-# + Currently it can only stitch two images. This shod be generalized to n
-#   images. In the meantime, stitching more than two images requires
-#   instatiating this class several times.
-#
-#
-#
-#
-#
-# @dateCreated: 4-Aug-2018
-# @authors: Arlem Aleida Castillo Avila, Felipe Orihuela-Espina
-# @dateModified: 22-Aug-2018
-#
-# See also:
-# 
+File: IOT_OperationStitch.py
+
+Class IOT_OperationStitch
+
+This class makes a mosaic from several images
+
+Initial code isolated from previous file stitch.py
 
 
-## Log
-#
-# 3-Aug-2018: FOE: Added this comment section.
-#    Removed importing pyimagesearch.panorama (this was
-#    actually a function defined in the original example)
-#    Removed default values for parameters of function
-#    stitch, and added an internal parameter check on the function.
-#
-# 4/5-Aug-2018: FOE:
-#   * Isolated minimal solution.
-#   * Encapsulated in class.
-#
-# 22-Aug-2018: FOE:
-#   * Class name rebranded to capital "O" in operation
-#   * Improved verbosity; now using class name
-#
+:Log:
 
++-------------+--------+------------------------------------------------------+
+| Date        | Author | Description                                          |
++=============+========+======================================================+
+| 3-Aug-2018  | FOE    | - Added a comment section.                           |
+|             |        | - Removed importing pyimagesearch.panorama (this was |
+|             |        |   actually a function defined in the original        |
+|             |        |   example)                                           |
+|             |        | - Removed default values for parameters of function  |
+|             |        |   stitch, and added an internal parameter check on   |
+|             |        |   the function.                                      |
++-------------+--------+------------------------------------------------------+   
+| 5-Aug-2018  | FOE    | - Isolated minimal solution.                         |
+|             |        | - Encapsulated in class.                             |
++-------------+--------+------------------------------------------------------+   
+| 22-Aug-2018 | FOE    | - Rebranded to capital "O" in operation;             |
+|             |        |   IOT_Operation                                      |
+|             |        | - Improved verbosity; now using class name           |
++-------------+--------+------------------------------------------------------+
+| 23-Sep-2018 | FOE    | - Updated comments and added Sphinx                  |
+|             |        |   documentation to the class                         |
++-------------+--------+------------------------------------------------------+
+
+.. seealso:: None
+.. note:: None
+.. todo:: None
+
+
+.. sectionauthor:: Felipe Orihuela-Espina <f.orihuela-espina@inaoep.mx>
+.. codeauthor:: Arlem Aleida Castillo Avila <acastillo@inaoep.mx>
+.. codeauthor:: Felipe Orihuela-Espina <f.orihuela-espina@inaoep.mx>
+
+"""
 
 ## Import
 from IOT_Operation import IOT_Operation
@@ -68,6 +59,30 @@ import cv2 #That's OpenCV
 
 ## Class definition
 class IOT_OperationStitch(IOT_Operation):
+    #Sphinx documentation
+    """This class makes a mosaic from several OCT scans.
+    
+    This class makes a mosaic from several OCT scans.
+    
+    :Usage:
+    python stitch.py --first images/bryce_left_01.png --second images/bryce_right_01.png 
+    Original example imported from web. Likely from:
+    https://github.com/haurbano/PythonPanorama
+    or
+    https://www.pyimagesearch.com/2016/01/11/opencv-panorama-stitching/
+    
+    
+    :Known issues:
+    + Currently it can only stitch two images. This shod be generalized to n
+    images. In the meantime, stitching more than two images requires
+    instatiating this class several times.
+    
+
+    .. seealso:: 
+    .. note:: 
+    .. todo:: 
+        
+    """
 
     #Private class attributes shared by all instances
     

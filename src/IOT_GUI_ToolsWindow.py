@@ -1,54 +1,70 @@
-# -*- coding: utf-8 -*-
+"""
+-*- coding: utf-8 -*-
 
-# File: IOT_GUI_ToolsWindow.py
-#
-# A window for accessing tools
-# 
-#
-#
-#
-# @dateCreated: 4-Aug-2018
-# @authors: Arlem Aleida Castillo Avila, Felipe Orihuela-Espina
-# @dateModified: 21-Aug-2018
-#
-# See also:
-# 
+File: IOT_GUI_ToolsWindow.py
+
+Class IOT_GUI_ToolsWindow
+
+A panel for accessing tools
+
+IOT stands for INAOE OCT Tools
 
 
-## Log
-#
-# 3-Aug-2018: FOE: 
-#  * Initial code isolated from previous file emergentes.py
-#  * Explicit declaration of attributes
-#  * "Nuevo": Ahora captura el caso de que se "cancele" la operación de abrir
-#
-# 4/5-Aug-2018: FOE:
-#   * Isolated minimal solution.
-#   * menuHerramientas now rebranded menuTools
-#   * Function nuevo now rebranded abrir (because that its what it actually does
-#   * Desactivate not programmes menu options
-#   * Added menu File->Exit functionality
-#   * Revised image rendering algorithm. It is now open from the beginning and
-#       automatically updates the perfilometer with every change in the main
-#       figure. Also the gridding of the subplots has been improved.
-#
-# 21-Aug-2018: FOE: 
-#  * Class rebranded as IOT_GUI_MainWindow
-#
-# 22-Aug-2018: FOE: 
-#  * Class rebranded as IOT_GUI_ToolsWindow
-#
-# 26-Aug-2018: FOE: 
-#  * Tools menu no longer rely on the QtDesigner generated .ui file. Now,
-#   all butons are added "manually" for greater control. 
-#
-# 30-Aug-2018/1-Sep-2018: FOE: 
-#  * There is no longer a flagEditSegmentation to keep track of when editing
-#   is possible. Instead, only buttons related to these operations are set
-#   enable or disabled.
-#  * Some cleaning. Removal of unused code.
-#
 
+:Log:
+
++-------------+--------+------------------------------------------------------+
+| Date        | Author | Description                                          |
++=============+========+======================================================+
+| 3-Aug-2018  | FOE    | - Initial code isolated from previous file           |
+|             |        |   emergentes.py                                      |
+|             |        | - Explicit declaration of attributes                 |
+|             |        | - "Nuevo": Ahora captura el caso de que se "cancele" |
+|             |        |   la operación de abrir                              |
++-------------+--------+------------------------------------------------------+
+| 5-Aug-2018  | FOE    | - Isolated minimal solution.                         |
+|             |        | - menuHerramientas now rebranded menuTools           |
+|             |        | - Function nuevo now rebranded abrir (because that   |
+|             |        |   its what it actually does                          |
+|             |        | - Desactivate not programmes menu options            |
+|             |        | - Added menu File->Exit functionality                |
+|             |        | - Revised image rendering algorithm. It is now open  |
+|             |        |   from the beginning and automatically updates the   |
+|             |        |   perfilometer with every change in the main figure. |
+|             |        |   Also the gridding of the subplots has been         |
+|             |        |   improved.                                          |
++-------------+--------+------------------------------------------------------+
+| 21-Aug-2018 | FOE    | - Class rebranded as IOT_GUI_MainWindow              |
++-------------+--------+------------------------------------------------------+
+| 22-Aug-2018 | FOE    | - Class rebranded as IOT_GUI_ToolsWindow             |
++-------------+--------+------------------------------------------------------+
+| 26-Aug-2018 | FOE    | - Tools menu no longer rely on the QtDesigner        |
+|             |        |   generated .ui file. Now, all butons are added      |
+|             |        |   "manually" for greater control.                    |
++-------------+--------+------------------------------------------------------+
+| 1-Sep-2018  | FOE    | - There is no longer a flagEditSegmentation to keep  |
+|             |        |   track of when editing is possible. Instead, only   |
+|             |        |   buttons related to these operations are set        |
+|             |        |   enable or disabled.                                |
+|             |        | - Some cleaning. Removal of unused code.             |
++-------------+--------+------------------------------------------------------+
+| 23-Sep-2018 | FOE    | - Reconverted attribute _arity to property arity.    |
+|             |        |   Methods getArity and setArity become deprecated,   |
+|             |        |   and issue a warning.                               |
+|             |        | - Updated comments and added Sphinx documentation    |
+|             |        |   to the class                                       |
++-------------+--------+------------------------------------------------------+
+
+.. seealso:: None
+.. note:: None
+.. todo:: None
+   
+
+.. sectionauthor:: Felipe Orihuela-Espina <f.orihuela-espina@inaoep.mx>
+.. codeauthor:: Arlem Aleida Castillo Avila <acastillo@inaoep.mx>
+.. codeauthor:: Felipe Orihuela-Espina <f.orihuela-espina@inaoep.mx>
+
+"""
 
 ## Import
 
@@ -71,6 +87,18 @@ from IOT_OperationEditSegmentation import IOT_OperationEditSegmentation
 
 #Clase heredada de QMainWindow (Constructor de ventanas)
 class IOT_GUI_ToolsWindow(QMainWindow):
+    #Sphinx documentation
+    """A panel for accessing tools.
+    
+    A panel for accessing tools.
+    
+    
+    .. seealso:: 
+    .. note:: 
+    .. todo:: 
+        
+    """
+    
  
     #Private class attributes shared by all instances
 

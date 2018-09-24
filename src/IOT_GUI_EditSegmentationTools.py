@@ -1,30 +1,40 @@
-# -*- coding: utf-8 -*-
+"""
+-*- coding: utf-8 -*-
 
-# File: IOT_GUI_EditSegmentationTools.py
-#
-# A frame (QGroupBox) for accessing the editing segmentation tools
-#(IOT_OperationEditSegmentation)
-# 
-#
-#
-#
-# @dateCreated: 27-Aug-2018
-# @authors: Felipe Orihuela-Espina
-# @dateModified: 30-Aug-2018
-#
-# See also: IOT_OperationEditSegmentation
-# 
+File: IOT_GUI_EditSegmentationTools.py
 
+Class IOT_GUI_EditSegmentationTools
 
-## Log
-#
-# 27-Aug-2018: FOE: 
-#  * Class created. Added initial groups for COI and ROI based manipulations.
-#       Added initial oprations; Delete and ChangeLabel
-#
-# 28-30-Aug-2018: FOE: 
-#  * Incorporated other editing operations.
-#
+A frame (QGroupBox) for accessing the editing segmentation tools (IOT_OperationEditSegmentation)
+
+IOT stands for INAOE OCT Tools
+
+:Log:
+
++-------------+--------+------------------------------------------------------+
+| Date        | Author | Description                                          |
++=============+========+======================================================+
+| 27-Aug-2018 | FOE    | - Class created.                                     |
+|             |        | - Added initial groups for COI and ROI based         |
+|             |        |   manipulations.                                     |
+|             |        | - Added buttons for initial operations; Delete and   |
+|             |        |   ChangeLabel                                        |
++-------------+--------+------------------------------------------------------+
+| 30-Aug-2018 | FOE    | - Incorporated buttons other editing operations.     |
++-------------+--------+------------------------------------------------------+
+| 23-Sep-2018 | FOE    | - Updated comments and added Sphinx documentation to |
+|             |        |   the class                                          |
++-------------+--------+------------------------------------------------------+
+
+.. seealso:: None
+.. note:: None
+.. todo:: None
+
+.. sectionauthor:: Felipe Orihuela-Espina <f.orihuela-espina@inaoep.mx>
+.. codeauthor:: Felipe Orihuela-Espina <f.orihuela-espina@inaoep.mx>
+
+"""
+
 
 ## Import
 #import sys
@@ -40,6 +50,18 @@ from matplotlib.backend_bases import KeyEvent, MouseEvent
 
 ## Class description
 class IOT_GUI_EditSegmentationTools(QGroupBox):
+    #Sphinx documentation
+    """A base class for operations on IOT_OCTvolumes and IOT_OCTscans.
+    
+    A base class for operations on IOT_OCTvolumes and IOT_OCTscans.
+    
+
+    .. seealso:: IOT_OperationEditSegmentation
+    .. note:: 
+    .. todo:: 
+        
+    """
+    
  
     #Private class attributes shared by all instances
 

@@ -1,53 +1,51 @@
-# -*- coding: utf-8 -*-
+"""
+-*- coding: utf-8 -*-
 
-# File: IOT_OperationEditSegmentation.py
-#
-# Operation EditSegmentation
-# 
-# This class permits manual manipulation of a segmentation of retinal layers
-#from an OCT image. The class provides its functionality by manipulating
-#local regions of interest (ROI) and or Classes of interest (COI) in the
-#segmentation.
-#A ROI is just a connected set of pixels with the same label. A COI is the
-#set of all ROIs sharing the same label.
-#
-# The class provides a set of basic operations for selecting and
-#then maniplating some ROI or COI in a segmentation; including:
-#
-#   + Delete
-#   + Change label
-#
-#
-# Whether working with ROI or COI always select the active COI or ROI
-#before applying an operation.
-#
-#
-# @dateCreated: Feb-2018
-# @authors: Arlem Aleida Castillo Avila, Felipe Orihuela-Espina
-# @dateModified: 26-Aug-2018
-#
-# See also:
-# 
+File: IOT_OperationEditSegmentation.py
+
+Class IOT_OperationEditSegmentation
+
+Operation EditSegmentation
 
 
-## Log
-#
-# 5-Aug-2018: FOE:
-#   * Isolated minimal solution.
-#   * Encapsulated in class.
-#
-# 22-Aug-2018: FOE:
-#   * Class name rebranded to capital "O" in operation
-#   * Improved verbosity; now using class name
-#
-# 26-Aug-2018: FOE:
-#   * Dummy segmentation now takes into account IOT_RetinalLayers
-#   * Added constant for background
-#   * Incorporated the initial functionality; ROISelect, ROIDeselect,
-#   ROIDelete, ROIRelabel
-#   * Debugged getROIPixels; it now correctly parcellates background connected
-#   components
-#
+
+:Log:
+
++-------------+--------+------------------------------------------------------+
+| Date        | Author | Description                                          |
++=============+========+======================================================+
+| 5-Aug-2018  | FOE    | - Isolated minimal solution.                         |
+|             |        | - Encapsulated in class.                             |
++-------------+--------+------------------------------------------------------+
+| 22-Aug-2018 | FOE    | - Class name rebranded to capital "O" in operation   |
+|             |        | - Improved verbosity; now using class name           |
++-------------+--------+------------------------------------------------------+
+| 26-Aug-2018 | FOE    | - Dummy segmentation now takes into account          |
+|             |        |   IOT_RetinalLayers                                  |
+|             |        | - Added constant for background                      |
+|             |        | - Incorporated the initial functionality; ROISelect, |
+|             |        |   ROIDeselect, ROIDelete, ROIRelabel                 |
+|             |        | - Debugged getROIPixels; it now correctly parcellates|
+|             |        |   background connected components                    |
++-------------+--------+------------------------------------------------------+
+| 23-Sep-2018 | FOE    | - Updated comments and added Sphinx documentation to |
+|             |        |   the class.                                         |
++-------------+--------+------------------------------------------------------+
+
+.. seealso:: None
+.. note:: None
+.. todo:: None
+
+    
+
+@dateCreated: Feb-2018
+@dateModified: 23-Sep-2018
+
+.. sectionauthor:: Felipe Orihuela-Espina <f.orihuela-espina@inaoep.mx>
+.. codeauthor:: Arlem Aleida Castillo Avila <acastillo@inaoep.mx>
+.. codeauthor:: Felipe Orihuela-Espina <f.orihuela-espina@inaoep.mx>
+
+"""
 
 ## Import
 
@@ -82,6 +80,31 @@ from IOT_RetinalLayers import IOT_RetinalLayers
 
 ## Class definition
 class IOT_OperationEditSegmentation(IOT_Operation):
+    #Sphinx documentation
+    """Operation EditSegmentation
+    
+    This class permits manual manipulation of a segmentation of retinal layers
+    from an OCT image. The class provides its functionality by manipulating
+    local regions of interest (ROI) and or Classes of interest (COI) in the
+    segmentation.
+    A ROI is just a connected set of pixels with the same label. A COI is the
+    set of all ROIs sharing the same label.
+    
+    The class provides a set of basic operations for selecting and
+    then maniplating some ROI or COI in a segmentation; including:
+    
+    * Delete
+    * Change label
+    
+    Whether working with ROI or COI always select the active COI or ROI
+    before applying an operation.
+    
+    
+    .. seealso:: 
+    .. note:: 
+    .. todo:: 
+        
+    """
 
     #Private class attributes shared by all instances
     BACKGROUND = 0
