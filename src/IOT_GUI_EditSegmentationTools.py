@@ -5,9 +5,11 @@ File: IOT_GUI_EditSegmentationTools.py
 
 Class IOT_GUI_EditSegmentationTools
 
-A frame (QGroupBox) for accessing the editing segmentation tools (IOT_OperationEditSegmentation)
+A frame (QGroupBox) for accessing the editing segmentation tools
+(originally for operation in class:`IOT_OperationEditSegmentation` but
+later extended to other operations that work over class:`IOT_OCTscanSegmentation`)
 
-IOT stands for INAOE OCT Tools
+IOT stands for INAOE OCT Tools.
 
 :Log:
 
@@ -24,6 +26,10 @@ IOT stands for INAOE OCT Tools
 +-------------+--------+------------------------------------------------------+
 | 23-Sep-2018 | FOE    | - Updated comments and added Sphinx documentation to |
 |             |        |   the class                                          |
++-------------+--------+------------------------------------------------------+
+| 20-Jan-2019 | FOE    | - Incorporated support for voxel based operations.   |
+|             |        |   This currently supports class:`IOT_OperationBrush`.|
+|             |        | - Improved Sphinx comments on methods.               |
 +-------------+--------+------------------------------------------------------+
 
 .. seealso:: None
@@ -51,14 +57,19 @@ from matplotlib.backend_bases import KeyEvent, MouseEvent
 ## Class description
 class IOT_GUI_EditSegmentationTools(QGroupBox):
     #Sphinx documentation
-    """A base class for operations on IOT_OCTvolumes and IOT_OCTscans.
+    """A class:`QGroupBox` GUI for accesing operations over class:`IOT_OCTscanSegmentation`.
     
-    A base class for operations on IOT_OCTvolumes and IOT_OCTscans.
+    A class:`QGroupBox` GUI for accesing operations over
+    class:`IOT_OCTscanSegmentation`. This includes operations executed by:
+    
+    * class:`IOT_OperationEditSegmentation` - Note that this in turn represent
+    several ROI and COI based operations.
+    * class:`IOT_OperationBrush`
     
 
-    .. seealso:: IOT_OperationEditSegmentation
-    .. note:: 
-    .. todo:: 
+    .. seealso:: None
+    .. note:: None
+    .. todo:: None
         
     """
     
@@ -67,6 +78,17 @@ class IOT_GUI_EditSegmentationTools(QGroupBox):
 
     #Class constructor
     def __init__(self):
+        """The class constructor.
+
+        The class constructor.
+        
+        tmp = IOT_GUI_EditSegmentationTools - Creates a default 
+            class:`QGroupBox` GUI for accesing operations over class:`IOT_OCTscanSegmentation`
+
+        :param theOCTScan: The OCT scan to be segmented
+        :type img: :class:`IOT_OCTscan`
+        
+        """
         #Call superclass constructor
         QGroupBox.__init__(self)
         
@@ -116,10 +138,26 @@ class IOT_GUI_EditSegmentationTools(QGroupBox):
         self._buttonList.append(bROIDelete)
         self._buttonList.append(bROIChangeLabel)
 
+
+        #Group for Voxel (VOI) based manipulation operations
+        VOIframe = QGroupBox("VOI based manipulation")
+
+        bVOIBrush = QPushButton("Brush")
+        bVOIBrush.clicked.connect(self.opVOIBrush)
+        bVOIBrush.setEnabled(True)
+
+        VOIframeLayout = QVBoxLayout();
+        VOIframeLayout.addWidget(bVOIBrush);
+        VOIframe.setLayout(VOIframeLayout);
+
+        self._buttonList.append(bVOIBrush)
+
+
         #Add subgroups to the main group
         frameLayout = QVBoxLayout();
         frameLayout.addWidget(COIframe);
         frameLayout.addWidget(ROIframe);
+        frameLayout.addWidget(VOIframe);
         self.setLayout(frameLayout);
         
         
@@ -133,16 +171,35 @@ class IOT_GUI_EditSegmentationTools(QGroupBox):
 
     #Public methods
     def getClassName(self):
+        """Get the class name as a string.
+
+        Get the class name as a string.
+
+        :returns: The class name.
+        :rtype: string
+        """
         return type(self).__name__
 
     def connectDocumentWindow(self,theDocWindow):
+        """Connects this GUI to a main document window class:`IOT_GUI_DocumentWindow`.
+
+        Connects this GUI to a main document window class:`IOT_GUI_DocumentWindow`.
+
+        :returns: None
+        """
         self._docWindow = theDocWindow
+        return None
     
     
     
 
     def opCOIDelete(self):
-    #Execute a COI deletion operation
+        """Calls for the execution of a class:`IOT_OperationEditSegmentation` COI deletion operation
+
+        Calls for the execution of a class:`IOT_OperationEditSegmentation` COI deletion operation
+
+        :returns: None
+        """
         #Get parameters
         r = IOT_RetinalLayers()
         items = r.getAllLayersNames()
@@ -152,10 +209,15 @@ class IOT_GUI_EditSegmentationTools(QGroupBox):
             params.append(r.getLayerIndex(lName))
             #...and simply pass the command.
             self._docWindow.opEditSegmentation('COIDelete',params)
-        return
+        return None
 
     def opCOIChangeLabel(self):
-    #Execute a COI deletion operation
+        """Calls for the execution of a class:`IOT_OperationEditSegmentation` COI change label operation
+
+        Calls for the execution of a class:`IOT_OperationEditSegmentation` COI change label operation
+
+        :returns: None
+        """
         #Get parameters
         r = IOT_RetinalLayers()
         items = r.getAllLayersNames()
@@ -171,12 +233,17 @@ class IOT_GUI_EditSegmentationTools(QGroupBox):
             #...and simply pass the command.
             self._docWindow.opEditSegmentation('COIChangeLabel',params)
             
-        return
+        return None
 
 
 
     def opROIDelete(self):
-    #Execute a ROI deletion operation
+        """Calls for the execution of a class:`IOT_OperationEditSegmentation` ROI deletion operation
+
+        Calls for the execution of a class:`IOT_OperationEditSegmentation` ROI deletion operation
+
+        :returns: None
+        """
         #Get parameters
         #Select ROI
         tmp=QMessageBox(QMessageBox.Information,"Select ROI","Please click on figure to select ROI.")
@@ -197,10 +264,15 @@ class IOT_GUI_EditSegmentationTools(QGroupBox):
         
         #...and simply pass the command.
         self._docWindow.opEditSegmentation('ROIDelete',params)
-        return
+        return None
 
     def opROIChangeLabel(self):
-    #Execute a ROI deletion operation
+        """Calls for the execution of a class:`IOT_OperationEditSegmentation` ROI change label operation
+
+        Calls for the execution of a class:`IOT_OperationEditSegmentation` ROI change label operation
+
+        :returns: None
+        """
         #Get parameters
         #Select ROI
         tmp=QMessageBox(QMessageBox.Information,"Select ROI","Please click on figure to select ROI.")
@@ -229,11 +301,28 @@ class IOT_GUI_EditSegmentationTools(QGroupBox):
             params.append(mousePos)
             #...and simply pass the command
             self._docWindow.opEditSegmentation('ROIChangeLabel',params)
-        return
+        return None
 
+
+    def opVOIBrush(self):
+        """Calls for the execution of a class:`IOT_OperationBrush` operation
+
+        Calls for the execution of a class:`IOT_OperationBrush` operation
+
+        :returns: None
+        """
+        if self._docWindow is not None:
+            self._docWindow.brush()
+        return None
 
     def setEnable(self,b):
+        """Enables buttons in the GUI.
+        
+        Enables buttons in the GUI
+
+        :returns: None
+        """
         for theButton in self._buttonList:
             theButton.setEnabled(b)
-        return
+        return None
 

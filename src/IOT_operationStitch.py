@@ -33,6 +33,16 @@ Initial code isolated from previous file stitch.py
 | 23-Sep-2018 | FOE    | - Updated comments and added Sphinx                  |
 |             |        |   documentation to the class                         |
 +-------------+--------+------------------------------------------------------+
+| 17-Oct-2018 | FOE    | - Adapted to IOT_Operation becoming abstract and new |
+|             |        |   capabilities. Added method .execute, integration of|
+|             |        |   operands, given operation name, deprecated method  |
+|             |        |   stitch.                                            |
++-------------+--------+------------------------------------------------------+
+|  5-Nov-2018 | FOE    | - Minor debugging                                    |
++-------------+--------+------------------------------------------------------+
+|  1-Dec-2018 | FOE    | - Adapted to new signature of inherited execute()    |
+|             |        |   method to accept parameters.                       |
++-------------+--------+------------------------------------------------------+
 
 .. seealso:: None
 .. note:: None
@@ -47,6 +57,10 @@ Initial code isolated from previous file stitch.py
 
 ## Import
 from IOT_Operation import IOT_Operation
+from IOT_OCTscan import IOT_OCTscan
+
+import warnings
+from deprecated import deprecated
 
 #from pyimagesearch.panorama import Stitcher
 from panorama import Stitcher
@@ -60,27 +74,28 @@ import cv2 #That's OpenCV
 ## Class definition
 class IOT_OperationStitch(IOT_Operation):
     #Sphinx documentation
-    """This class makes a mosaic from several OCT scans.
+    """This class makes a mosaic from two :class:`OCTscan` .
     
-    This class makes a mosaic from several OCT scans.
+    This class makes a mosaic from two :class:`OCTscan` .
     
-    :Usage:
-    python stitch.py --first images/bryce_left_01.png --second images/bryce_right_01.png 
-    Original example imported from web. Likely from:
-    https://github.com/haurbano/PythonPanorama
-    or
-    https://www.pyimagesearch.com/2016/01/11/opencv-panorama-stitching/
-    
-    
-    :Known issues:
-    + Currently it can only stitch two images. This shod be generalized to n
-    images. In the meantime, stitching more than two images requires
-    instatiating this class several times.
-    
+    The operation represented by this class corresponds to a binary
+    operation by which a mosaic is created from two images by shifting
+    one over the other until optimal matching.
 
-    .. seealso:: 
-    .. note:: 
-    .. todo:: 
+    :Usage:
+      python stitch.py --first images/bryce_left_01.png --second images/bryce_right_01.png 
+      Original example imported from web. Likely from:
+      https://github.com/haurbano/PythonPanorama
+      or
+      https://www.pyimagesearch.com/2016/01/11/opencv-panorama-stitching/
+    
+    
+    .. seealso:: None
+    .. note:: The result will have a different shape from the operands.
+    .. todo:: Currently it can only stitch two images. This should be generalized to n
+        images. In the meantime, stitching more than two images requires
+        instatiating this class several times.
+
         
     """
 
@@ -90,11 +105,15 @@ class IOT_OperationStitch(IOT_Operation):
     #Class constructor
     def __init__(self):
         #Call superclass constructor
-        super().__init__(2) #Set operation arity to 2.
+        super().__init__()
+        
+        #Set the operation name
+        self.name = "Stitching"
+        
         #Initialize private attributes unique to this instance
-        self._inimgA  = np.zeros(shape = (0,0,0), dtype = np.uint8 ) #input image A
-        self._inimgB  = np.zeros(shape = (0,0,0), dtype = np.uint8 ) #input image B
-        self._outimg = np.zeros(shape = (0,0,0), dtype = np.uint8 ) #output image result from the operation
+        #self._inimgA  = np.zeros(shape = (0,0,0), dtype = np.uint8 ) #input image A
+        #self._inimgB  = np.zeros(shape = (0,0,0), dtype = np.uint8 ) #input image B
+        #self._outimg = np.zeros(shape = (0,0,0), dtype = np.uint8 ) #output image result from the operation
     
     
 
@@ -102,7 +121,31 @@ class IOT_OperationStitch(IOT_Operation):
 
 
     #Public methods
-    def stitch(self,imageA, imageB):
+    def execute(self,*args,**kwargs):
+        """Executes the operation on the :py:attr:`operands`.
+        
+        Executes the operation on the :py:attr:`operands` and stores the outcome
+        in :py:attr:`result`. Preload operands using
+        :func:`IOT:Operation.addOperand()`.
+        
+        :returns: Result of executing the operation.
+        :rtype: :class:`IOT_OCTscan`
+        """
+        #print(self._getClasName(),": flattening: Starting flattening")
+        
+        #Ensure the operand has been set.
+        if (self.arity() <2):
+            warnMsg = self.getClassName() + ':execute: Operands not set.'
+            warnings.warn(warnMsg,SyntaxWarning)
+            return None
+        
+        imageA = self.operands[0]
+        if isinstance(imageA,(IOT_OCTscan,)):
+            imageA=imageA.data
+        
+        imageB = self.operands[1]
+        if isinstance(imageB,(IOT_OCTscan,)):
+            imageB=imageB.data
         
         if ( imageA is None and imageB is None ):
             print(self.getClassName(),": No images selected. Generating a default empty stitch of arbitrary size.")
@@ -118,11 +161,49 @@ class IOT_OperationStitch(IOT_Operation):
         
         else:
             #Normal behaviour of the function
+
+            #Panorama works only from RGB images
+            #...so convert to RGB if grayscales
+            if(len(imageA.shape)<3):
+                #print('**Converting to RGB')
+                #print(imageA)
+                imageA = np.dstack((imageA, imageA, imageA))
+                #print(imageA)
+            
+            if(len(imageB.shape)<3):
+                imageB = np.dstack((imageB, imageB, imageB))
+                
+
             
             # stitch the images together to create a panorama
             stitcher = Stitcher()
+            #print(imageA)
+            #print(imageB)
             (result, vis) = stitcher.stitch([imageA, imageB], showMatches=True)
+            
+            #Remove the "black" unused region on the "right" due to
+            #shifting imageB over imageA
+            width = result.shape[1]
+            flagStop = False
+            col=width-1
+            while not flagStop:
+                if (result[:,col,:]==0).all():
+                    result=np.delete(result,col,1)
+                else:
+                    flagStop=True
+                col = col - 1
+                    
+        self.result = IOT_OCTscan(result)
         
-        self._outimg = result
-        return result
+        return self.result
 
+    @deprecated(version='0.2', reason="Deprecated. Use method execute() instead.")
+    def stitch(self,imageA, imageB):
+        #Encapsulate the image as an IOT_OCTscan
+        tmp1=IOT_OCTscan(imageA)
+        tmp2=IOT_OCTscan(imageB)
+        self.clear()
+        self.addOperand(tmp1)
+        self.addOperand(tmp2)
+        #Execute
+        self.execute()

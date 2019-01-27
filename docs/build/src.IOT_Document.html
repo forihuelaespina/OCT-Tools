@@ -126,6 +126,15 @@ the class</li>
 </ul>
 </td>
 </tr>
+<tr class="row-odd"><td>2-Dec-2018</td>
+<td>FOE</td>
+<td><ul class="first last simple">
+<li>Encapsulated properties and deprecated get/set
+pairs for those properties.</li>
+<li>Minor debugging</li>
+</ul>
+</td>
+</tr>
 </tbody>
 </table>
 <div class="admonition seealso">
@@ -140,8 +149,6 @@ the class</li>
 <p class="first admonition-title">Todo</p>
 <p class="last">None</p>
 </div>
-<p>&#64;dateCreated: 21-Aug-2018
-&#64;dateModified: 23-Sep-2018</p>
 <dl class="class">
 <dt id="src.IOT_Document.IOT_Document">
 <em class="property">class </em><code class="descclassname">src.IOT_Document.</code><code class="descname">IOT_Document</code><a class="reference internal" href="_modules/src/IOT_Document.html#IOT_Document"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.IOT_Document.IOT_Document" title="Permalink to this definition">¶</a></dt>
@@ -152,10 +159,62 @@ the class</li>
 about a study plus some additional metadata.</p>
 <p>Currently, a study is only an OCT image (with several scans) with or without
 segmentation information.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">None</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">None</p>
+</div>
+<div class="admonition-todo admonition" id="index-1">
+<p class="first admonition-title">Todo</p>
+<p class="last">None</p>
+</div>
 <dl class="attribute">
 <dt id="src.IOT_Document.IOT_Document.defaultName">
 <code class="descname">defaultName</code><em class="property"> = 'IOTDocument'</em><a class="headerlink" href="#src.IOT_Document.IOT_Document.defaultName" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.IOT_Document.IOT_Document.fileName">
+<code class="descname">fileName</code><a class="headerlink" href="#src.IOT_Document.IOT_Document.fileName" title="Permalink to this definition">¶</a></dt>
+<dd><p>The filename of the document.</p>
+<p>..note: Also retrieve the py:attr:<cite>folderName</cite> to build the full path.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Getter:</th><td class="field-body">Gets the the filename of the document.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Setter:</th><td class="field-body">Sets the The filename of the document. If new name is None,
+a default name is given.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.IOT_Document.IOT_Document.folderName">
+<code class="descname">folderName</code><a class="headerlink" href="#src.IOT_Document.IOT_Document.folderName" title="Permalink to this definition">¶</a></dt>
+<dd><p>Folder where the document is currently stored.</p>
+<p>..note: Also retrieve the py:attr:<cite>fileName</cite> to build the full path.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Getter:</th><td class="field-body">Gets the study folder name.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Setter:</th><td class="field-body">Sets the study folder name. If new folder is None,
+the current directory ‘.’ is chosen.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="src.IOT_Document.IOT_Document.getClassName">
@@ -187,6 +246,46 @@ segmentation information.</p>
 <code class="descname">getStudy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/IOT_Document.html#IOT_Document.getStudy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.IOT_Document.IOT_Document.getStudy" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="attribute">
+<dt id="src.IOT_Document.IOT_Document.name">
+<code class="descname">name</code><a class="headerlink" href="#src.IOT_Document.IOT_Document.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>A logical name for the study.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Getter:</th><td class="field-body">Gets the OCT study name.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Setter:</th><td class="field-body">Sets the OCT study name.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.IOT_Document.IOT_Document.segmentation">
+<code class="descname">segmentation</code><a class="headerlink" href="#src.IOT_Document.IOT_Document.segmentation" title="Permalink to this definition">¶</a></dt>
+<dd><p>The segmentation over the OCT study being processed and analysed.</p>
+<dl class="docutils">
+<dt>..todo: Upgrade to volume. Watch out! This will affect many</dt>
+<dd>other classess using this method.</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Getter:</th><td class="field-body">Gets the OCT scan segmentation.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Setter:</th><td class="field-body">Sets the OCT scan segmentation.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">IOT_OCTscanSegmentation</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="method">
 <dt id="src.IOT_Document.IOT_Document.setFileName">
 <code class="descname">setFileName</code><span class="sig-paren">(</span><em>newName</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/IOT_Document.html#IOT_Document.setFileName"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.IOT_Document.IOT_Document.setFileName" title="Permalink to this definition">¶</a></dt>
@@ -211,6 +310,28 @@ segmentation information.</p>
 <dt id="src.IOT_Document.IOT_Document.setStudy">
 <code class="descname">setStudy</code><span class="sig-paren">(</span><em>newStudy</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/IOT_Document.html#IOT_Document.setStudy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.IOT_Document.IOT_Document.setStudy" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.IOT_Document.IOT_Document.study">
+<code class="descname">study</code><a class="headerlink" href="#src.IOT_Document.IOT_Document.study" title="Permalink to this definition">¶</a></dt>
+<dd><p>The OCT scan being processed and analysed.</p>
+<dl class="docutils">
+<dt>..todo: Upgrade to volume. Watch out! This will affect many</dt>
+<dd>other classess using this method.</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Getter:</th><td class="field-body">Gets the OCT scan.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Setter:</th><td class="field-body">Sets the OCT scan.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference internal" href="src.IOT_OCTscan.html#module-src.IOT_OCTscan" title="src.IOT_OCTscan"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.IOT_OCTscan</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 </dd></dl>
 
@@ -244,7 +365,7 @@ segmentation information.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2017, Felipe Orihuela-Espina.
+        &#169; Copyright 2017-8, Felipe Orihuela-Espina.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
     </div>
   </body>

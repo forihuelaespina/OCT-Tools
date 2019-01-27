@@ -54,6 +54,30 @@ IOT stands for INAOE OCT Tools
 |             |        | - Updated comments and added Sphinx documentation    |
 |             |        |   to the class                                       |
 +-------------+--------+------------------------------------------------------+
+| 14-Nov-2018 | FOE    | - Added panel for settings.                          |
+|             |        | - Window title set to "IOT tools menu"               |
+|             |        | - New method updateSettings                          |
+|             |        | - Added tab to settings panel to control operation   |
+|             |        |   class:`IOT_OperationPerfilometer`                  |
++-------------+--------+------------------------------------------------------+
+|  2-Dec-2018 | FOE    | - Encapsulated the docWindow properties and          |
+|             |        |   deprecated get/set pair for that property.         |
+|             |        | - Minor debugging                                    |
++-------------+--------+------------------------------------------------------+
+| 12-Dec-2018 | FOE    | - Added button and execute call for operation        |
+|             |        |   class:`IOT_OperationMeasureThickness`              |
+|             |        | - Added tab to settings panel to control operation   |
+|             |        |   class:`IOT_OperationMeasureThickness`              |
+|             |        | - Internal methods are now named in English          |
+|             |        |   e.g. 'openDocument' instead of 'abrir'             |
+|             |        | - Updated comments and added Sphinx documentation    |
+|             |        |   to the class                                       |
+|             |        | - Added method measureThickness to call for the      |
+|             |        |   corresponding operation to be executed.            |
++-------------+--------+------------------------------------------------------+
+| 20-Jan-2019 | FOE    | - Added support for the class:`IOT_OperationBrush`   |
+|             |        |   operation.                                         |
++-------------+--------+------------------------------------------------------+
 
 .. seealso:: None
 .. note:: None
@@ -70,11 +94,15 @@ IOT stands for INAOE OCT Tools
 
 #import sys
 
-from PyQt5.QtWidgets import QMainWindow, QDockWidget, QWidget, QGroupBox, QPushButton, QMenu, QAction, QVBoxLayout
+from PyQt5.QtWidgets import QMainWindow, QDockWidget, QWidget, QGroupBox, \
+        QPushButton, QMenu, QAction, QVBoxLayout, QTabWidget
 #from PyQt5 import uic
 
 from IOT_GUI_DocumentWindow import IOT_GUI_DocumentWindow
 from IOT_GUI_EditSegmentationTools import IOT_GUI_EditSegmentationTools
+from IOT_GUI_PerfilometerParameterSettings import IOT_GUI_PerfilometerParameterSettings
+from IOT_GUI_MeasureThicknessParameterSettings import IOT_GUI_MeasureThicknessParameterSettings
+from IOT_GUI_BrushParameterSettings import IOT_GUI_BrushParameterSettings
 
 from IOT_OperationEditSegmentation import IOT_OperationEditSegmentation
 
@@ -85,7 +113,7 @@ from IOT_OperationEditSegmentation import IOT_OperationEditSegmentation
 ###################################################################################
 
 
-#Clase heredada de QMainWindow (Constructor de ventanas)
+#Class inherited from QMainWindow (Constructor de ventanas)
 class IOT_GUI_ToolsWindow(QMainWindow):
     #Sphinx documentation
     """A panel for accessing tools.
@@ -93,9 +121,9 @@ class IOT_GUI_ToolsWindow(QMainWindow):
     A panel for accessing tools.
     
     
-    .. seealso:: 
-    .. note:: 
-    .. todo:: 
+    .. seealso:: None
+    .. note:: None
+    .. todo:: None
         
     """
     
@@ -104,11 +132,19 @@ class IOT_GUI_ToolsWindow(QMainWindow):
 
     #Class constructor
     def __init__(self):
+        """The class constructor.
+
+        The class constructor.
+
+        tmp = IOT_GUI_ToolsWindow() - Creates a panel of GUI controls for
+        operating the OCTTools app.
+                
+        """
         #Call superclass constructor
         QMainWindow.__init__(self)
         #QDockWidget.__init__(self)
 
-        self._docWindow = None
+        self.docWindow = None
         
         #Cargar la configuración del archivo .ui en el objeto
         # uic.loadUi("GUI/IOT_GUI_ToolsWindow.ui", self)
@@ -122,24 +158,28 @@ class IOT_GUI_ToolsWindow(QMainWindow):
         self._menuTools = QGroupBox()
         
         bOpenImage = QPushButton("Open Image")
-        bOpenImage.clicked.connect(self.abrir)
+        bOpenImage.clicked.connect(self.openDocument)
         bOpenImage.setEnabled(True)
 
         bMosaicing = QPushButton("Mosaicing")
-        bMosaicing.clicked.connect(self.stitching)
+        bMosaicing.clicked.connect(self.stitch)
         bMosaicing.setEnabled(False)
         
         bFlattening = QPushButton("Flattening")
-        bFlattening.clicked.connect(self.rectificar)
+        bFlattening.clicked.connect(self.flatten)
         bFlattening.setEnabled(False)
         
         bSegment = QPushButton("Automatic segmentation")
-        bSegment.clicked.connect(self.segmentar)
+        bSegment.clicked.connect(self.segment)
         bSegment.setEnabled(False)
         
         bEditSegment = QPushButton("Start edit segmentation")
-        bEditSegment.clicked.connect(self.editSegmentar)
+        bEditSegment.clicked.connect(self.editSegmentation)
         bEditSegment.setEnabled(False)
+        
+        # bMeasureThickness = QPushButton("Measure layers thickness ")
+        # bMeasureThickness.clicked.connect(self.editSegmentation)
+        # bMeasureThickness.setEnabled(False)
         
         buttonPanelLayout = QVBoxLayout();
         buttonPanelLayout.addWidget(bOpenImage);
@@ -147,6 +187,7 @@ class IOT_GUI_ToolsWindow(QMainWindow):
         buttonPanelLayout.addWidget(bFlattening);
         buttonPanelLayout.addWidget(bSegment);
         buttonPanelLayout.addWidget(bEditSegment);
+        #buttonPanelLayout.addWidget(bMeasureThickness);
         self._menuTools.setLayout(buttonPanelLayout);
         #self._menuTools.setVisible(True)
 
@@ -158,7 +199,7 @@ class IOT_GUI_ToolsWindow(QMainWindow):
         actionOpen.setObjectName('Open')
         actionOpen.setShortcut('Ctrl+O')
         actionOpen.setStatusTip('Open OCT image')
-        actionOpen.triggered.connect(self.abrir)
+        actionOpen.triggered.connect(self.openDocument)
         
         actionExit = QAction(mArchive)
         actionOpen.setObjectName('Exit')
@@ -170,25 +211,48 @@ class IOT_GUI_ToolsWindow(QMainWindow):
         mArchive.addAction(actionExit)
         self.menuBar().addMenu(mArchive)
         
-        
-        #self.actionNuevo.setShortcut('Ctrl+a')
-        #self.actionAbrir.setShortcut('Ctrl+o')
-        #self.actionSalir.triggered.connect(self.close)
-        
-        #self.actionAbrir.triggered.connect(self.abrir)
-        #self.actionSalir.triggered.connect(self.closeEvent)
-        
-        
-        
         #Edit segmentation panel
         self._groupEditSegmentation = IOT_GUI_EditSegmentationTools() #Edit segmentation tools panel
         
+
+        #Tools settings panel
+        self._settings = QTabWidget()
+
+        self._settingsOperationPerfilometer = IOT_GUI_PerfilometerParameterSettings()
+        #Listen to changes in the controls
+        self._settingsOperationPerfilometer.columnEditBox.returnPressed.connect(self.updateSettings)
+        self._settingsOperationPerfilometer.widthEditBox.returnPressed.connect(self.updateSettings)
+
+        self._settingsOperationMeasureThickness = IOT_GUI_MeasureThicknessParameterSettings()
+        #Listen to changes in the controls
+        self._settingsOperationMeasureThickness.columnEditBox.returnPressed.connect(self.updateSettings)
+        self._settingsOperationMeasureThickness.windowHalfWidthEditBox.returnPressed.connect(self.updateSettings)
+        self._settingsOperationMeasureThickness.pixelWidthEditBox.returnPressed.connect(self.updateSettings)
+        self._settingsOperationMeasureThickness.pixelHeightEditBox.returnPressed.connect(self.updateSettings)
+        
+        self._settingsOperationBrush = IOT_GUI_BrushParameterSettings()
+        #Listen to changes in the controls
+        self._settingsOperationBrush.colorDropMenu.currentIndexChanged.connect(self.updateSettings)
+        self._settingsOperationBrush.radiusEditBox.returnPressed.connect(self.updateSettings)
+
+
+
+        self._settings.addTab(self._settingsOperationPerfilometer,"Perfilometer");
+        self._settings.addTab(self._settingsOperationMeasureThickness,"Thickness Measurement");
+        self._settings.addTab(self._settingsOperationBrush,"Brush");
+
+
         frameLayout = QVBoxLayout();
         frameLayout.addWidget(self._menuTools) 
         frameLayout.addWidget(self._groupEditSegmentation)
+        frameLayout.addWidget(self._settings) 
         centralWidget = QWidget()
         centralWidget.setLayout(frameLayout)
         self.setCentralWidget(centralWidget)
+        
+        
+        self.setWindowTitle("OCT Tools App - Tools Menu")
+        
         
         #  self.panelPrincipal.addWidget(self.tabs)
     
@@ -201,38 +265,81 @@ class IOT_GUI_ToolsWindow(QMainWindow):
         
 
 
+    #Properties getters/setters
+    #
+    # Remember: Sphinx ignores docstrings on property setters so all
+    #documentation for a property must be on the @property method
+    @property
+    def documentWindow(self): #documentWindow getter
+        """
+        The main window of OCTapp.
+
+        :getter: Gets the main app window.
+        :setter: Sets the main app window.
+        :type: class:`IOT_GUI_DocumentWindow`
+        """
+        return self.__documentWindow
+
+    @documentWindow.setter
+    def documentWindow(self,newDocWindow): #documentWindow setter
+        if newDocWindow is None:
+            warnMsg = self.getClassName() + ':documentWindow: Main documentWindow not found.'
+            warnings.warn(warnMsg,SyntaxWarning)
+            newDocWindow = IOT_GUI_DocumentWindow() #Initialize a documentWindow
+        if (type(newDocWindow) is IOT_GUI_DocumentWindow):
+            self.__documentWindow = newDocWindow
+        else:
+            warnMsg = self.getClassName() + ':documentWindow: Unexpected documentWindow type.'
+            warnings.warn(warnMsg,SyntaxWarning)
+        return None
+       
+
         
     #Public methods
     def connectDocumentWindow(self,theDocWindow):
-        self._docWindow = theDocWindow
-        self._groupEditSegmentation.connectDocumentWindow(self._docWindow)
+        """Connects this tools window with the document main window.
+        
+        :returns: None
+        """
+        self.documentWindow = theDocWindow
+        self._groupEditSegmentation.connectDocumentWindow(self.documentWindow)
+        return
     
     
-    def abrir(self):
-        #Open an OCT image to work on.
-        if self._docWindow is not None:
-            tmp=self._docWindow.abrir()
+    def openDocument(self):
+        """Open an class:`IOT_Document` on the main window to work on.
+        
+        :returns: None
+        """
+        if self.documentWindow is not None:
+            tmp=self.documentWindow.openDocument()
             if tmp is not None:
                 buttonList  = self._menuTools.children();
                 for b in buttonList:
                     b.setEnabled(True)
+        self.documentWindow.refresh()
         return
 
 
      
-    def editSegmentar(self):
-        #Starts/Stops manual segmentation step
-        if self._docWindow is not None:
+    def editSegmentation(self):
+        """Starts/Stops manual segmentation step
+        
+        :returns: None
+        """
+        if self.documentWindow is not None:
             #If there is no current segmentation, generate a dummy one
             seg = IOT_OperationEditSegmentation()
-            theDoc = self._docWindow.getDocument()
-            im = theDoc.getStudy()
-            imSegmented = theDoc.getScanSegmentation()
+            theDoc = self.documentWindow.document
+            im = theDoc.study
+            imSegmented = theDoc.segmentation
             imSegmented = seg.initEditSegmentation(im,imSegmented) #This in turn
                                         #will call the ._generateDummySegmentation
                                         #if needed.
-            theDoc.setScanSegmentation(imSegmented)
-            self._docWindow.setDocument(theDoc)
+
+            theDoc.segmentation = imSegmented
+            self.documentWindow.document = theDoc
+            self.documentWindow.refresh()
                
             #Enable/Disable the edit segmentation tools
             buttonList  = self._menuTools.parentWidget().findChildren(QPushButton)
@@ -249,31 +356,61 @@ class IOT_GUI_ToolsWindow(QMainWindow):
                     self._groupEditSegmentation.setEnable(False)
         return                                        
   
-    def rectificar(self):
-        #Flattens cureent study
-        if self._docWindow is not None:
-            self._docWindow.rectificar()
+    def flatten(self):
+        """Calls for flatenning operation to be executed.
+        
+        :returns: None
+        """
+        if self.documentWindow is not None:
+            self.documentWindow.flatten()
         return
         
-    def segmentar(self):
-        #Applies the segmentation step
-        if self._docWindow is not None:
-            self._docWindow.segmentar()
+    # def measureThickness(self):
+    #     """Calls for measuring thickness operation to be executed.
+    #     
+    #     :returns: None
+    #     """
+    #     if self.documentWindow is not None:
+    #         self.documentWindow.measureThickness()
+    #     return
+        
+    def segment(self):
+        """Calls for segmentation operation to be executed.
+        
+        :returns: None
+        """
+        if self.documentWindow is not None:
+            self.documentWindow.segment()
         return
         
         
-    def stitching(self):
-        #Selects a second image and applies the stitching step
-        if self._docWindow is not None:
-            self._docWindow.stitching()
+    def stitch(self):
+        """Calls for stitching operation to be executed.
+        
+        :returns: None
+        """
+        if self.documentWindow is not None:
+            self.documentWindow.stitch()
         return
 
-
+    def updateSettings(self):
+        """Refreshes the document window following a parameter setting update.
+        
+        :returns: None
+        """
+        #Some of the settings may have change. Refresh the document window
+        if self.documentWindow is not None:
+            self.documentWindow.refresh()
+        return
 
     def closeEvent(self,ev):
-    #Capture the closing event 
-        if self._docWindow is not None:
-            tmp = self._docWindow.close()
+        """Closes the main window.
+        
+        :returns: None
+        """
+        #Capture the closing event 
+        if self.documentWindow is not None:
+            tmp = self.documentWindow.close()
             print(tmp)
         #self.close()
      

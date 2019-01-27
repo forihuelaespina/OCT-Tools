@@ -31,16 +31,27 @@ Operation EditSegmentation
 | 23-Sep-2018 | FOE    | - Updated comments and added Sphinx documentation to |
 |             |        |   the class.                                         |
 +-------------+--------+------------------------------------------------------+
+| 15-Nov-2018 | FOE    | - Dummy segmentation now results in a full           |
+|             |        |   segmentation and returns an IOT_OCTscanSegmentation|
++-------------+--------+------------------------------------------------------+
+|  1-Dec-2018 | FOE    | - Adapted to IOT_Operation becoming abstract and new |
+|             |        |   capabilities. Added method .execute, integration of|
+|             |        |   operands, given operation name, deprecated method  |
+|             |        |   initEditSegmentation.                              |
+|             |        | - Updated attributes activeROI and activeCOI to      |
+|             |        |   properties.                                        |
+|             |        | - ROISelect method now searches for a labelled ROI   |
+|             |        |   within a neighobourhood.                           |
++-------------+--------+------------------------------------------------------+
+|  9-Jan-2019 | FOE    | - Bug detected. Variable imgin in method execute had |
+|             |        |   not been set.                                      |
++-------------+--------+------------------------------------------------------+
 
 .. seealso:: None
 .. note:: None
 .. todo:: None
 
     
-
-@dateCreated: Feb-2018
-@dateModified: 23-Sep-2018
-
 .. sectionauthor:: Felipe Orihuela-Espina <f.orihuela-espina@inaoep.mx>
 .. codeauthor:: Arlem Aleida Castillo Avila <acastillo@inaoep.mx>
 .. codeauthor:: Felipe Orihuela-Espina <f.orihuela-espina@inaoep.mx>
@@ -48,6 +59,10 @@ Operation EditSegmentation
 """
 
 ## Import
+
+import warnings
+from deprecated import deprecated
+
 
 import numpy as np
 #from skimage import feature, color
@@ -57,24 +72,9 @@ import numpy as np
 from scipy import ndimage
 from skimage import io, color, morphology
 
-
-
-# #So that the FigureCanvas is also a Qt object where Events can be listenes
-# #Make it valid for Qt4 or Qt5
-# from matplotlib.backends.qt_compat import QtCore, QtWidgets, is_pyqt5
-# if is_pyqt5():
-#     from matplotlib.backends.backend_qt5agg import (
-#         FigureCanvas, NavigationToolbar2QT as NavigationToolbar)
-# else:
-#     from matplotlib.backends.backend_qt4agg import (
-#         FigureCanvas, NavigationToolbar2QT as NavigationToolbar)
-# from matplotlib.figure import Figure
-# 
-# #from PyQt5.QtCore import Qt
-# from PyQt5.QtGui import QKeyEvent, QMouseEvent
-
-
 from IOT_Operation import IOT_Operation
+from IOT_OCTscan import IOT_OCTscan
+from IOT_OCTscanSegmentation import IOT_OCTscanSegmentation
 from IOT_RetinalLayers import IOT_RetinalLayers
 
 
@@ -100,9 +100,11 @@ class IOT_OperationEditSegmentation(IOT_Operation):
     before applying an operation.
     
     
-    .. seealso:: 
-    .. note:: 
-    .. todo:: 
+    .. seealso:: None
+    .. note:: Operand is an class:`IOT_OCTscanSegmentation`, but a reference
+        image can be hold as the class:`IOT_OCTscanSegmentation` attribute
+        :py:attr:`scan`
+    .. todo:: None
         
     """
 
@@ -111,83 +113,244 @@ class IOT_OperationEditSegmentation(IOT_Operation):
     
     #Class constructor
     def __init__(self):
+        """The class constructor.
+
+        The class constructor.
+
+        tmp = IOT_OperationEditSegmentation() - Creates an empty EditSegmentation operation
+        
+
+        :param img: The scan image
+        :type img: numpy.ndarray
+        :param type: The scan type ('A' -default-, 'B' or 'C')
+        :type type: char
+        
+        """
         #Call superclass constructor
-        super().__init__(1) #Set operation arity to 1.
+        super().__init__()
+
+        #Set the operation name
+        self.name = "EditSegmentation"
+
         #Initialize private attributes unique to this instance
-        self._imgin = np.zeros(shape = (0,0,0), dtype = np.uint8 ); #Input image
-        self._imgout = np.zeros(shape = (0,0,0), dtype = np.uint8 ); #The segmented image
-        #self._fig = None #The figure canvas
-        #self._flagListening = False #Flag for listening to mouse events
-        self._activeROI = None #Currently active ROI. The ROI is identified by
-                                #a position tuple [x,y[,z]] indicating any pixel
-                                #ROI. The ROI itself is all the connected
-                                #of the component to this pixel. The class of
-                                #the ROI corresponds the label at [x,y[,z]]
-        self._activeCOI = IOT_OperationEditSegmentation.BACKGROUND #Currently active COI. The COI is identified by
-                                #its class ID.
+
+        self.activeROI = (0,0) #Currently active ROI.
+        self.activeCOI = IOT_OperationEditSegmentation.BACKGROUND #Currently active COI. 
     
-    
+        return
+        
+        
+        
+    #Properties getters/setters
+    #
+    # Remember: Sphinx ignores docstrings on property setters so all
+    #documentation for a property must be on the @property method
+    @property
+    def activeROI(self): #activeROI getter
+        """
+        Currently active ROI.
+        
+        The ROI is identified by a position
+        tuple (x,y[,z]) indicating any pixel ROI. The ROI itself is
+        all the connected of the component to this pixel. The class
+        of the ROI corresponds the label at (x,y[,z])
+        
+        :getter: Gets the active ROI
+        :setter: Sets the active ROI to (x,y[,z]).
+        :type: tuple
+        """
+        return self.__activeROI
+
+    @activeROI.setter
+    def activeROI(self,newROI): #activeROI setter
+        if type(newROI) is tuple and len(newROI) >= 2 and len(newROI) <= 3:
+            #It might be more correct to also check for the internal type to be
+            #scalars.
+            self.__activeROI = newROI
+        elif type(newROI) is list and len(newROI) >= 2 and len(newROI) <= 3: #Unexpected case. Return warning
+            warnMsg = self.getClassName() + ':activeROI: List [x,y[,z]] will be recasted to tuple (x,y[,z]).'
+            warnings.warn(warnMsg,SyntaxWarning)
+            self.__activeROI = tuple(newROI)            
+        else: #Unexpected case. Return warning
+            warnMsg = self.getClassName() + ':activeROI: Value must be a tuple (x,y[,z]).'
+            warnings.warn(warnMsg,SyntaxWarning)
+        return None
+
+    @property
+    def activeCOI(self): #activeCOI getter
+        """
+        Currently active COI.
+        
+        The COI is identified by its class ID.
+        
+        :getter: Gets the active COI
+        :setter: Sets the active COI
+        :type: tuple
+        """
+        return self.__activeCOI
+
+    @activeCOI.setter
+    def activeCOI(self,newCOI): #activeCOI setter
+        self.__activeCOI = newCOI
+        return None
+
+
     #Private methods
 
 
 
     def _generateDummySegmentation(self,height,width):
-    #Define a dummy segmentation
+        """Define a dummy segmentation.
+        
+        Generates a dummy segmentation.
+        
+        :returns: An OCT scan segmentation
+        :rtype: :class:`IOT_OCTscanSegmentation`.
+        """
+        #Define a dummy segmentation
         #print(self.getClassName(),": _generateDummySegmentation: Generating dummy segmentation.")
         r= IOT_RetinalLayers()
         nLayers = r.getNumLayers()
         tmp = r.getAllLayersIndexes()
         
+        #Generate a dummy refImage of the appropiate size
+        refImage = IOT_OCTscan(np.zeros(shape = (height,width), dtype = np.uint8 ));
+        
         
         #Define a default output -simple nLayers lines (one per layer)
         imageSegmented = IOT_OperationEditSegmentation.BACKGROUND * np.ones((height,width), dtype = np.uint8 )
-        stepHeight = round(0.9*(height/(nLayers+1)))
-        offset = round((0.1*height/(nLayers+1))/2)
-        for ii in range(1,nLayers):
+        stepHeight = round(0.7*(height/(nLayers+1)))
+        offset = round((0.3*height/(nLayers+1))/2)
+        for ii in range(1,nLayers+1):
+            #print ('Layer' + str(ii))
             kk = offset + ii*stepHeight
-            imageSegmented[kk-2:kk+2,:] = tmp[ii-1] #5 pixels thick
+            #imageSegmented[kk-2:kk+2,:] = tmp[ii-1] #5 pixels thick
                 #Watch out! Lines thinner than 3-5 pixels thick may not
                 #be visible when rendered on the screen (depending on
                 #the resolution).
+            imageSegmented[kk:kk+stepHeight,:] = tmp[ii-1] #Segment the full
+                #band until the next layer.
             #print(kk, ii)
-        return imageSegmented
+        
+        #Encapsulate
+        dummySegmentation = IOT_OCTscanSegmentation(refImage)
+        dummySegmentation.data = imageSegmented 
+        
+        #print(dummySegmentation.data)
+        
+        return dummySegmentation
 
 
     
 
     #Public methods 
+    def execute(self,*args,**kwargs):
+        """Executes the operation on the :py:attr:`operands`.
+        
+        Executes the operation on the :py:attr:`operands` and stores the 
+        outcome in :py:attr:`result`. Preload operands using
+        :func:`IOT:Operation.addOperand()`.
+        
+        :param editType: A string indicating the type of edition
+        :type editType: String
+        :returns: Result of executing the operation.
+        :rtype: :class:`IOT_OCTscanSegmentation`
+        """
+        #print(self._getClasName(),": editSegmentation: Starting edit segmentation")
+        
+        #Define a default result
+        self.result = self._generateDummySegmentation(480,640);
+        
+        #Ensure the operand has been set.
+        if (self.arity() <1):
+            warnMsg = self.getClassName() + ':execute: Operand not set.'
+            warnings.warn(warnMsg,SyntaxWarning)
+            return self.result
+
+        imgin = self.operands[0]
+        self.result = imgin; #Start by copying operand into result
+        
+        # if isinstance(imgin,(IOT_OCTscanSegmentation,)):
+        #     imgin=imgin.data
+
+        #Indirect call to the operation
+        #See: https://stackoverflow.com/questions/3061/calling-a-function-of-a-module-by-using-its-name-a-string    
+        theOperationName = args[0]
+        params = [args[1:],kwargs]
+        theOp = getattr(self, theOperationName) 
+        if params is None:
+            imSegmented = theOp()
+        else:
+            imSegmented = theOp(*params)
+
+            
+        #if isinstance(imgin,(IOT_OCTscan,)):
+        if type(imgin) is IOT_OCTscan:
+            self.result=IOT_OCTscanSegmentation(imgin)
+        else:
+            self.result=IOT_OCTscanSegmentation(IOT_OCTscan(imgin))
+        self.result.data = imSegmented
+        
+        return self.result   
     
     # See: https://pypi.org/project/pynput/
-    def initEditSegmentation(self,image,imageSegmented = None):
-        #Initialize segmentation for editing
+    @deprecated(version='0.2', reason="Deprecated. Use method addOperand() and add reference image as scan property of class:`IOT_OCTscanSegmentation`.")
+    def initEditSegmentation(self,refImage,imageSegmented = None):
+        """Initialize segmentation for editing from reference :class:`IOT_OCTscan`.
         
-        #self._fig = figCanvas
+        :param refImage: A reference OCT scan
+        :type refImage: :class:`IOT_OCTscan`
+        :param imageSegmented: The operand. A segmentation over parameter refImage.
+        :type imageSegmented: :class:`IOT_OCTscanSegmentation`
+        :returns: An initialized edit segmentation operation.
+        :rtype: :class:`IOT_OCTscanSegmentation`
+        """
         
+        #if not isinstance(refImage,(IOT_OCTscan,)):
+        if type(refImage) is not IOT_OCTscan:
+            #Encapsulate
+            refImage=IOT_OCTscan(refImage)
+            
+        #Operand is the image to be segmented
+
         #print("OCT-Tools: IOT_operationSegmentation: Starting manual editing of retinal layer segmentation")
-        self._imgin = image
+        tmp=IOT_OCTscanSegmentation(refImage)
         
+        #Second parameter is a seed segmentation. If none provided, generate a dummy one on the fly.
         if imageSegmented is None:
             #print("OCT-Tools: IOT_operationSegmentation: Segmentation not found.")
-            tmpImgSize = image.shape
+            tmpImgSize = refImage.shape
             imageSegmented = self._generateDummySegmentation(tmpImgSize[0],tmpImgSize[1])
-
-        self._imgout = imageSegmented
-        return self._imgout    
+            #Update the segmentation but keep the reference image in tmp. In
+            #other words, ignore the dummy "reference" image.
+            tmp.data = imageSegmented.data
+        elif type(imageSegmented) is IOT_OCTscanSegmentation:
+            tmp = imageSegmented
+        else:
+            warnMsg = self.getClassName() + ':initEditSegmentation: Unexpected type for imageSegmented.'
+            warnings.warn(warnMsg,SyntaxWarning)
+            
+        self.addOperand(tmp)
+        return tmp    
 
 
     #Manipulation of ROI
     def getROIPixels(self):
-    #Retrieves the indexes of all the pixels in the connected component of
-    #the current ROI
+        """Retrieves the indexes of all the pixels in the connected component of the current ROI.
+
+        :returns: Indexes of connected pixels in the ROI
+        :rtype: np.array
+        """
+        tmpOperand = self.operands[0] #Access operand
         
         #skimage.morphology.label does not split BG regions. So start
         #checking whether the active region is in the background
         
-        imSegmented = self._imgout
-        isBG = self._imgout[self._activeROI] == IOT_OperationEditSegmentation.BACKGROUND
+        imSegmented = tmpOperand
+        isBG = tmpOperand.data[self.activeROI] == IOT_OperationEditSegmentation.BACKGROUND
         if isBG:
             #Trick skimage.morphology.label into believing the background is NOT the backgrond
-            tmpDummy = imSegmented==IOT_OperationEditSegmentation.BACKGROUND
+            tmpDummy = tmpOperand.data==IOT_OperationEditSegmentation.BACKGROUND
             imSegmented = tmpDummy.astype(np.int) #Now change from boolean to integers
 
         
@@ -197,112 +360,227 @@ class IOT_OperationEditSegmentation(IOT_Operation):
                     background=IOT_OperationEditSegmentation.BACKGROUND,
                     return_num=True)
         #Find component index associated to active ROI
-        cIdx=tmpConnectedComponents[self._activeROI]
+        cIdx=tmpConnectedComponents[self.activeROI]
         #Retrieve the indexes of pixels in the connected component to the active ROI
         idx = np.nonzero(tmpConnectedComponents == cIdx)
         return idx
 
     def getCOIPixels(self,coi=None):
-    #Retrieves the indexes of all the pixels of the current COI
+        """Retrieves the indexes of all the pixels of the current COI
+
+        :returns: Indexes of pixels in the COI
+        :rtype: np.array
+        """
+        tmpOperand = self.operands[0]; #Access operand
+        
         idx=None
         if coi is None:
             #Check active COI
-            idx = nd.nonzero(self._imgout == self_activeCOI)
+            idx = nd.nonzero(tmpOperand.data == self.activeCOI)
         elif coi==IOT_OperationEditSegmentation.BACKGROUND:
-            idx = not nd.nonzero(self._imgout)
+            idx = not nd.nonzero(tmpOperand.data)
         else:
-            idx = nd.nonzero(self._imgout == coi)
+            idx = nd.nonzero(tmpOperand.data == coi)
         return idx
 
     
     def getROILabel(self):
-    #Retrieves the class or label of the current ROI
-        return self._imgout[self._activeROI]
+        """Retrieves the class or label of the current ROI.
+        
+        :returns: The class or label of the current ROI
+        :rtype: int
+        """
+        tmpOperand = self.operands[0]; #Access operand
+        return tmpOperand.data[self.activeROI]
     
-    def ROISelect(self,pos):
-    #Select the closest ROI within some radius (in pixel). Return True if a ROI has been found or False otherwise
-    #
-    # pos: A pixel/voxel of the ROI; (x,y) or (x,y,z)
-        print(self.getClassName(),":ROISelect: Selecting ROI connected to pixel ",pos)
-        self._activeROI = pos
+    def ROISelect(self,pos,radius = 10):
+        """Select the closest labelled ROI within some radius (in pixels) of pos.
+        
+        Select the closest labelled ROI within some radius (in pixels) of pos
+        or the BACKGROUND if no labelled region is found.
+        
+        If pos correspond to a labelled region, then it becomes the 
+        py:attr:`activeROI`, and True is returned.
+        
+        If pos is in the BACKGROUND, and it is at the same distance
+        of more than one labelled regions, then the selected ROI is pick
+        at random (actually it selects the first found from the top left)
+        and True is returned.
+        
+        If pos is in the BACKGROUND, and no labelled region is found in the
+        neighbourhood, then pos becomes the new py:attr:`activeROI` and
+        False is returned.
+        
+        ..note: To select a specific ROI regardless of its class ID (e.g.
+            enforce selection of a BACKGROUND pixel), simply assign some
+            value to property py:attr:`activeROI`
+        
+        :param pos: A pixel/voxel of the ROI; (x,y) or (x,y,z)
+        :type pos: tuple or list
+        :param radius: Radius in pixels. Default value is 10 pixels
+        :type radius: uint
+        :returns: True if a labelled ROI has been found or False otherwise
+        :rtype: bool
+        """
+        tmpOperand = self.operands[0]; #Access operand
+                        
+        #print(self.getClassName(),":ROISelect: Selecting ROI connected to pixel ",pos)
+        flagFound = False
         #Check whether there is some region in the area
-        return True
+        if tmpOperand.data[pos] == IOT_OperationEditSegmentation.BACKGROUND:
+            #pos is in BACKGROUND. Look for nearby labelled regions
+            r=0
+            while r <= radius and not flagFound:
+                r += 1
+                #Extract squared subimage around pos (without exceeding borders).
+                xmin = max(tmpOperand.shape[0],pos[0]-r)
+                xmax = min(tmpOperand.shape[0],pos[0]+r+1)
+                ymin = max(tmpOperand.shape[1],pos[1]-r)
+                ymax = min(tmpOperand.shape[1],pos[1]+r+1)
+                ixgrid = np.ix_(np.arange(xmin,xmax),
+                                np.arange(ymin,ymax))
+                if len(pos)>2:
+                    zmin = max(tmpOperand.shape[2],pos[2]-r)
+                    zmax = min(tmpOperand.shape[2],pos[2]+r+1)
+                    ixgrid = np.ix_(np.arange(xmin,xmax),
+                                    np.arange(ymin,ymax),
+                                    np.arange(zmin,zmax))
+                tmpRegion = tmpOperand.data[ixgrid]
+                labelledRegions = tmpRegion != IOT_OperationEditSegmentation.BACKGROUND
+                if (labelledRegions).any():
+                    #Update pos to nearest labelled region
+                    tmp = np.where(labelledRegions==True) #Indexes pairs
+                    pos = (tmp[0][0],tmp[1][0]) #Choose the first index pair
+                    if len(tmp) == 3:
+                        pos = (tmp[0][0],tmp[1][0],tmp[2][0]) #Choose the first index pair
+                    flagFound = True
+        else:
+            #pos is in a labelled region
+            flagFound = True
+        
+        self.activeROI = pos
+        return flagFound
 
     def ROIChangeLabel(self, newClassID, pos=None):
-    #Updates the label of the current active ROI or the selected COI (if
-    #argument pos is provided).
-    #
-    #The newClassID becomes the new updated ROI.
-    #
-    #Note that this actually removes the current active ROI from the
-    #segmentation, since no pixel with the current label will remain in
-    #the segmentation.
-    #If you only want to affect some ROI, then use ROIChangeLabel instead
-    
-        if pos is not None:
-            self.ROISelect(pos)
+        """Updates the label of the current active ROI
         
-        if self._activeROI is None: #This may occur if trying to call the
+        Updates the label of the current active ROI or the selected ROI (if
+        argument pos is provided).
+        
+        If provided, pos becomes the new py:attr:`activeROI`
+        
+        ..note: This removes the current active ROI from the segmentation, 
+            since no pixel with the current label will remain in
+            the segmentation. If you only want to affect some ROI, then
+            use ROIChangeLabel instead.
+
+        :param newClassID: A reference OCT scan
+        :type newClassID: :class:`IOT_OCTscan`
+        :param pos: A pixel/voxel of the ROI; (x,y) or (x,y,z). Default None.
+        :type pos: tuple or list
+        :returns: The modified segmentation.
+        :rtype: :class:`IOT_OCTscanSegmentation`
+        """
+
+        self.result = self.operands[0]; #Start by copying operand into result
+        
+        if pos is not None:
+            self.activeROI = pos
+        
+        if self.activeROI is None: #This may occur if trying to call the
                                    #operation right after creating this
                                    #object instance (when activeROI is None),
                                    #but still calling to execute operation
                                    #without parameters
             print(self.getClassName(),":ROIChangeLabel: No ROI selected. Passing...")
         else:
-            print(self.getClassName(),":ROIChangeLabel: activeROI: ", self._activeROI," with class ", self.getROILabel(),"; newClassID:",newClassID)
+            print(self.getClassName(),":ROIChangeLabel: activeROI: ",
+                    self.activeROI," with class ", self.getROILabel(),"; newClassID:",newClassID)
             idx = self.getROIPixels()
-            print(idx)
-            self._imgout[idx] = newClassID
-            self._activeROI = newClassID
-        return self._imgout
+            #print(idx)
+            self.result.data[idx] = newClassID
+        return self.result
 
 
         
-    def ROIDelete(self, roiID = None):
-    #Deletes the current active COI. Sets it to BACKGROUND
-        if roiID is not None:
-            self.ROISelect(roiID)
+    def ROIDelete(self, pos = None):
+        """Deletes the current active ROI and sets it to BACKGROUND
+       
+        Sets the label of the current active ROI or the selected ROI (if
+        argument pos is provided) to BACKGROUND.
+        
+        If provided, pos becomes the new py:attr:`activeROI`
+
+        :param pos: A pixel/voxel of the ROI; (x,y) or (x,y,z). Default None.
+        :type pos: tuple or list
+        :returns: The modified segmentation.
+        :rtype: :class:`IOT_OCTscanSegmentation`
+        """
+        self.result = self.operands[0]; #Start by copying operand into result
+        
+        if pos is not None:
+            self.activeROI = pos
             
-        if self._activeROI is None: #This may occur if trying to call the
+        if self.activeROI is None: #This may occur if trying to call the
                                    #operation right after creating this
                                    #object instance (when activeROI is None),
                                    #but still calling to execute operation
                                    #without parameters
             print(self.getClassName(),":ROIDelete: No ROI selected. Passing...")
         else:
-            print(self.getClassName(),":ROIDelete: Deleting activeROI: ", self._activeROI," with class ", self.getROILabel())
+            print(self.getClassName(),":ROIDelete: Deleting activeROI: ",
+                    self.activeROI," with class ", self.getROILabel())
             idx = self.getROIPixels()
             #print(idx)
-            self._imgout[idx] = IOT_OperationEditSegmentation.BACKGROUND
-            self._activeROI = None
-        return self._imgout
+            self.result.data[idx] = IOT_OperationEditSegmentation.BACKGROUND
+        return self.result
         
 
 
 
     #Manipulation of COI
     def COISelect(self,classID):
-    #Select a COI by its label. If the classID is not found in the 
-    #segmentation, then the BACKGROUND is selected
+        """Select a COI by its label.
+        
+        Select a COI by its label. If the classID is not found in the
+        segmentation, then the BACKGROUND is selected.
+                
+        :param classID: A class ID.
+        :type classID: int
+        :returns: True if the class ID is present in the segmentation or False
+            otherwise (BACKGROUND selected).
+        :rtype: bool
+        """
         print(self.getClassName(),":COISelect: Selecting layer ", classID)
         
-        self._activeCOI = IOT_OperationEditSegmentation.BACKGROUND
-        idx = np.nonzero(self._imgout == classID)
+        tmpOperand = self.operands[0]; #Access operand
+        
+        self.activeCOI = IOT_OperationEditSegmentation.BACKGROUND
+        idx = np.nonzero(tmpOperand.data == classID)
         if len(idx) != 0:
-            self._activeCOI = classID
+            self.activeCOI = classID
         
         return len(idx) != 0
         
     def COIDelete(self, classID = None):
-    #Deletes the COI identified by classID. Sets the COI to BACKGROUND
-    #If classID is None, then it works over the current active COI. 
-    
+        """Deletes the COI identified by classID.
+        
+        Deletes the COI identified by classID. Sets the COI to BACKGROUND
+        If classID is None, then it works over the current active COI.
+                
+        :param classID: A class ID. Default None
+        :type classID: int
+        :returns: The modified segmentation.
+        :rtype: :class:`IOT_OCTscanSegmentation`
+        """    
+        self.result = self.operands[0]; #Start by copying operand into result
+        
         if classID is None:
             #Operate over current active COI
-            idx = np.nonzero(self._imgout == self._activeCOI)
+            idx = np.nonzero(self.result.data == self.activeCOI)
                 #WATCH OUT!
                 #Distinctly from MATLAB, here I do not get a "list" of locations
-                #indexing the array form 1 to numel(self._imgout). Instead,
+                #indexing the array form 1 to numel(self.result). Instead,
                 #a "coupled" pair of lists for the xIdx and yIdx are obtained.
                 #
                 #So to check whether it is "empty" I cannot do:
@@ -311,35 +589,47 @@ class IOT_OperationEditSegmentation(IOT_Operation):
                 #I must question "along a single dimension; e.g. len(idx[0])
                 
             if len(idx[0]) == 0:
-                print(self.getClassName(),":COIDelete: Layer ", self._activeCOI," not found. Skipping.")
+                print(self.getClassName(),":COIDelete: Layer ", self.activeCOI," not found. Skipping.")
             else:
-                print(self.getClassName(),":COIDelete: Layer ", self._activeCOI," found. Deleting layer ", self._activeCOI)
-                self._imgout[idx] = IOT_OperationEditSegmentation.BACKGROUND
-                self._activeCOI = IOT_OperationEditSegmentation.BACKGROUND
+                print(self.getClassName(),":COIDelete: Layer ", self.activeCOI," found. Deleting layer ", self.activeCOI)
+                self.result.data[idx] = IOT_OperationEditSegmentation.BACKGROUND
+                self.activeCOI = IOT_OperationEditSegmentation.BACKGROUND
         else:
             self.COISelect(classID)
             self.COIDelete()
-        return self._imgout
+        return self.result
         
     def COIChangeLabel(self, newClassID, coi=None):
-    #Updates the label of the current active COI or the selected COI (if
-    #argument coi is provided).
-    #
-    #The newClassID becomes the new updated COI.
-    #
-    #Note that this actually removes the current active COI from the
-    #segmentation, since no pixel with the current label will remain in
-    #the segmentation.
-    #If you only want to affect some ROI, then use ROIChangeLabel instead
+        """Updates the label of the current active COI
+        
+        Updates the label of the current active COI or the selected COI (if
+        argument coi is provided).
+        
+        The newClassID becomes the new updated COI.
+        
+        ..note: This removes the current active COI from the segmentation, 
+            since no pixel with the current label will remain in
+            the segmentation. If you only want to affect some ROI, then use
+            func:`ROIChangeLabel` instead
+                
+        :param newClassID: The new class ID.
+        :type newClassID: int
+        :param coi: The class ID to be changed. Default None
+        :type coi: int
+        :returns: The modified segmentation.
+        :rtype: :class:`IOT_OCTscanSegmentation`
+        """    
     
+        self.result = self.operands[0]; #Start by copying operand into result
+        
         if coi is not None:
             self.COISelect(coi)
             
-        print(self.getClassName(),":COIChangeLabel: activeCOI:", self._activeCOI,"; newClassID:",newClassID)
-        idx = np.nonzero(self._imgout == self._activeCOI)
-        self._imgout[idx] = newClassID
-        self._activeCOI = newClassID
-        return self._imgout
+        print(self.getClassName(),":COIChangeLabel: activeCOI:", self.activeCOI,"; newClassID:",newClassID)
+        idx = np.nonzero(self.result.data == self.activeCOI)
+        self.result.data[idx] = newClassID
+        self.activeCOI = newClassID
+        return self.result
         
         
         

@@ -34,15 +34,37 @@ The main document window for OCT-Tools. This is where the current document
 | 23-Sep-2018 | FOE    | - Updated comments and added Sphinx documentation to |
 |             |        |   the class                                          |
 +-------------+--------+------------------------------------------------------+
+| 24-Sep-2018 | FOE    | - Adjusted to accept all scans from the Amira but    |
+|             |        |   contained to the first scan while I enable a       |
+|             |        |   scan selector.                                     |
++-------------+--------+------------------------------------------------------+
+| 14-Nov-2018 | FOE    | - New method connectToolsWindow so that this class   |
+|             |        |   can now "know" the tools window.                   |
++-------------+--------+------------------------------------------------------+
+| 16-Nov-2018 | FOE    | - Canvas navigation toolbar (for zooming, panning    |
+|             |        |   saving has been enabled)                           |
++-------------+--------+------------------------------------------------------+
+|  2-Dec-2018 | FOE    | - Encapsulated the document properties and deprecated|
+|             |        |   get/set pair for that property.                    |
+|             |        | - Minor debugging                                    |
++-------------+--------+------------------------------------------------------+
+| 12-Dec-2018 | FOE    | - Internal methods are now named in English          |
+|             |        |   e.g. 'openDocument' instead of 'abrir'             |
+|             |        | - Added method measureThickness to call for the      |
+|             |        |   corresponding operation to be executed.            |
+|             |        | - Minor debugging                                    |
++-------------+--------+------------------------------------------------------+
+| 20-Jan-2019 | FOE    | - Added support for the class:`IOT_OperationBrush`   |
+|             |        |   operation.                                         |
++-------------+--------+------------------------------------------------------+
+
 
 .. seealso:: None
 .. note:: None
-.. todo:: None
+.. todo:: 
+    * Add a scan selector
+    * Encapsulate remaining attributes as properties
 
-
-
-@dateCreated: 21-Aug-2018
-@dateModified: 23-Sep-2018
 
 .. sectionauthor:: Felipe Orihuela-Espina <f.orihuela-espina@inaoep.mx>
 .. codeauthor:: Arlem Aleida Castillo Avila <acastillo@inaoep.mx>
@@ -54,6 +76,9 @@ The main document window for OCT-Tools. This is where the current document
 ## Import
 import os
 
+import warnings
+from deprecated import deprecated
+
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
@@ -62,6 +87,7 @@ from matplotlib.backend_bases import KeyEvent, MouseEvent
 from skimage import io
 
 
+from PyQt5.QtCore import Qt #Imports constants
 from PyQt5.QtWidgets import QWidget, QMainWindow, QFileDialog
 from PyQt5.QtGui import QMouseEvent
 
@@ -76,14 +102,18 @@ else:
 
 from AmiraReader import AmiraReader 
 from IOT_Document import IOT_Document
+from IOT_OCTscan import IOT_OCTscan
 
 from IOT_OperationPerfilometer import IOT_OperationPerfilometer
+from IOT_OperationMeasureLayerThickness import IOT_OperationMeasureLayerThickness
+from IOT_OperationBrush import IOT_OperationBrush
 from IOT_OperationEditSegmentation import IOT_OperationEditSegmentation
 from IOT_OperationFlattening import IOT_OperationFlattening
 from IOT_OperationSegmentation import IOT_OperationSegmentation
 from IOT_OperationStitch import IOT_OperationStitch
 from IOT_RetinalLayers import IOT_RetinalLayers
 
+from IOT_GUI_UtilitiesDock import IOT_GUI_UtilitiesDock
 
 
 
@@ -95,9 +125,9 @@ class IOT_GUI_DocumentWindow(QMainWindow):
     The main document window for OCT-Tools. This is where the current document
     (i.e. the OCT image) is displayed.
     
-    .. seealso:: 
-    .. note:: 
-    .. todo:: 
+    .. seealso:: None
+    .. note:: None
+    .. todo:: None
         
     """
      
@@ -106,13 +136,15 @@ class IOT_GUI_DocumentWindow(QMainWindow):
 
     #Class constructor
     def __init__(self):
+        """Class constructor"""
         #Call superclass constructor
         #QDockWidget.__init__(self)
         QMainWindow.__init__(self)
         
+        self._toolsWindow = None
         
         #Initialize private attributes unique to this instance
-        self._document = None #The current document. Initialize a document
+        self.document = None #The current document. Initialize a document
         #self._perfil = None #The perfilometer image
         
         #Prepare the matplotlib figure area to render the current OCT scan
@@ -171,9 +203,14 @@ class IOT_GUI_DocumentWindow(QMainWindow):
         tmpCid = self._fig.canvas.mpl_connect('scroll_event', self.mouseWheelEvent)
         self._cid.append(tmpCid)
         
-        #And add it to the QMainWindow
+        
+        #Utilities dock
+        self._utilDock = IOT_GUI_UtilitiesDock()
+        
+        #And add them to the QMainWindow
         self.setCentralWidget(self._canvas)
-        #self.addToolBar(NavigationToolbar(self._canvas, self))
+        self.addDockWidget(Qt.BottomDockWidgetArea,self._utilDock)
+        self.addToolBar(NavigationToolbar(self._canvas, self))
         #self.layout().addWidget(self._canvas)
         self.statusBar()
         
@@ -181,16 +218,49 @@ class IOT_GUI_DocumentWindow(QMainWindow):
         self._lastMouseEvent = None
         #self.setMouseTracking(True)
         
+        self.setWindowTitle("OCT Tools App")
+        self._utilDock.show()
+        
         return
         
         
-        
+    #Properties getters/setters
+    #
+    # Remember: Sphinx ignores docstrings on property setters so all
+    #documentation for a property must be on the @property method
+    @property
+    def document(self): #document getter
+        """
+        The current open document.
+
+        :getter: Gets the current document
+        :setter: Sets the current document 
+        :type: class:`IOT_Document`
+        """
+        return self.__document
+
+    @document.setter
+    def document(self,newDoc): #document setter
+        if newDoc is None:
+            newDoc = IOT_Document() #Initialize a document
+        if (type(newDoc) is IOT_Document):
+            self.__document = newDoc
+        else:
+            warnMsg = self.getClassName() + ':document: Unexpected document type.'
+            warnings.warn(warnMsg,SyntaxWarning)
+        return None
+       
     #Private methods
         
         
-    def _getSemiTransparentColormap(self, nLayers = 10):
-    #Creates semi-transparent colormap
-        N=nLayers
+    def _getSemiTransparentColormap(self, N = 10):
+        """Creates a semi-transparent colormap.
+        
+        :param N: Number of elements in the colormap.
+        :type N: int
+        :returns: A colormap
+        :rtype: ndarray
+        """
         base = plt.cm.get_cmap('jet')
         color_list = base(np.linspace(0, 1, N+1))
         cmap_name = base.name + str(N+1)
@@ -212,7 +282,7 @@ class IOT_GUI_DocumentWindow(QMainWindow):
         #Se captura el nombre del archivo a abrir
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
-        fileName, _ = QFileDialog.getOpenFileName(self,"Abrir OCT image", self.workingDir, "All Files (*);;Amira Files (*.am)", options=options)
+        fileName, _ = QFileDialog.getOpenFileName(self,"Open OCT scan", self.workingDir, "All Files (*);;Amira Files (*.am)", options=options)
         self.workingDir, _ = os.path.split(fileName)
         print(fileName)        
         return fileName
@@ -224,13 +294,24 @@ class IOT_GUI_DocumentWindow(QMainWindow):
         ext = fileName.split(".")
         extension = ext[-1] #Gets the last piece (that's the extension)
         if extension == "am":
-            #carpeta = AmiraReader(fileName).carpeta
-            #fileName = (carpeta+"scan1.png") #THIS IS A BUG!!!! We should be reading the AMIRA file!
-            #self._img = np.zeros(0);
             amr = AmiraReader()
             img = amr.readAmiraImage(fileName)
+                #Reads all scans!
+
         else:
             img = io.imread(fileName)
+
+
+        imWidth = img.shape[0]
+        imHeight = img.shape[1]
+        nScans = img.shape[2]
+        print(self.getClassName(),':_openImageFile: Read ',nScans, \
+                'sized [w,h]=[', imWidth,',',imHeight,']')
+        
+        #Intentionally keep only first scan by now.
+        if (nScans > 1):
+            img = img[:,:,0];
+            print(self.getClassName(),':_openImageFile: Keeping just 1st scan.')
 
         return img
             
@@ -253,38 +334,67 @@ class IOT_GUI_DocumentWindow(QMainWindow):
     #Public methods
     
     def getClassName(self):
+        """Get the class name as a string.
+
+        Get the class name as a string.
+
+        :returns: The class name.
+        :rtype: string
+        """
         return type(self).__name__
     
+    def connectToolsWindow(self,theToolsWindow):
+        self._toolsWindow = theToolsWindow
     
     
     
     def closeEvent(self, event):
+        """Closes the document window and the application."""
         print('Closing OCT-Tools')
         #This is not yet working
         #self._docWindow.closeEvent(event)
         self.close()
         event.accept()
         
+    @deprecated(version='0.2', reason="Deprecated. Acess property .document instead.")
     def getDocument(self):
-        return self._document
+        """Gets the current document.
+        
+        :returns: The current document
+        :rtype: :class:`IOT_Document`
+        """
+        return self.document
 
+    @deprecated(version='0.2', reason="Deprecated. Acess property .document instead.")
     def setDocument(self,d):
-        if d is None:
-            d = IOT_Document() #Initialize a document
-        self._document = d;
-        self.refresh()
+        """Sets the current document.
+        
+        :param d: The new document
+        :type d: :class:`IOT_Document`
+        """
+        self.document = d;
         return
 
 
-    def perfilometro(self):
-        #Renders the perfilometer
-        perf = IOT_OperationPerfilometer()
-        return perf.perfilometry(self._document.getStudy())
+    def perfilometer(self):
+        """Renders the perfilometer"""
+        octScan = self.document.study
+        if octScan is not None:
+            tmp = IOT_OperationPerfilometer()
+            tmp.addOperand(octScan)
+            if (self._toolsWindow is not None):
+                settingsGUI = self._toolsWindow._settingsOperationPerfilometer
+                tmp.pixelColumn = settingsGUI.getPixelColumnValue()
+                tmp.windowHalfWidth = settingsGUI.getWidthValue()
+            return tmp.execute()
+        else:
+            #Return a flat line
+            return np.array([0]);
 
     def refresh(self):
-    #Visualizes the selected scan, its perfilometer and its segmentation
-        octScan = self._document.getStudy()
-        octScanSegmentation = self._document.getScanSegmentation()
+        """Visualizes the selected scan, its perfilometer and its segmentation"""
+        octScan = self.document.study
+        octScanSegmentation = self.document.segmentation
         
         #The following is a bug. It should be capture "on the fly" and
         #clearing axes rather than reset, but I cannot make it work :(
@@ -294,17 +404,17 @@ class IOT_GUI_DocumentWindow(QMainWindow):
         #Plot 1: The image
         ax[0].clear()
         if octScan is not None:
-            ax[0].imshow(octScan, cmap = plt.get_cmap('gray'))
+            ax[0].imshow(octScan.data, cmap = plt.get_cmap('gray'))
         
         #Overlay segmentation if available (with a semitransparent colormap)
         if octScanSegmentation is not None:
             r= IOT_RetinalLayers()
-            mycmap = self._getSemiTransparentColormap(nLayers = r.getNumLayers())
-            ax[0].imshow(octScanSegmentation, cmap=mycmap)
+            mycmap = self._getSemiTransparentColormap(N = r.getNumLayers())
+            ax[0].imshow(octScanSegmentation.data, cmap=mycmap)
         
         
         #Plot 2: The perfilometer
-        perfil = self.perfilometro()  #Updates the perfilometer
+        perfil = self.perfilometer()  #Updates the perfilometer
         ax[1].clear()
         ax[1].plot(perfil, np.arange(0,len(perfil)))
 
@@ -313,6 +423,10 @@ class IOT_GUI_DocumentWindow(QMainWindow):
         #self._fig.draw()
         self._fig.canvas.draw()
         self._fig.canvas.flush_events()
+        
+        #Refresh the Docked widgets
+        self._utilDock.layerThicknesses = self.measureThickness()
+        self._utilDock.refresh()
 
         return
         
@@ -321,10 +435,14 @@ class IOT_GUI_DocumentWindow(QMainWindow):
     
 
     #Operation methods
-    def abrir(self):
-        #Open an OCT image to work on.
+    def openDocument(self):
+        """Initializes an :class:`IOT_Document` and opens a OCT image to work on.
         
-        tmp = self._document #Capture current document
+        :returns: An new document
+        :rtype: :class:`IOT_Document`
+        """
+        
+        tmp = self.document #Capture current document
         if tmp is None:
             tmp = IOT_Document() #Initialize an empty document
         
@@ -336,88 +454,191 @@ class IOT_GUI_DocumentWindow(QMainWindow):
             img = self._openImageFile(fileName)
             
             tmp = IOT_Document() #Forget current document and initialize a new empty document
-            tmp.setName(fileName)
-            tmp.setFolderName(self.workingDir)
-            tmp.setFileName(fileName)
-            tmp.setStudy(img)
+            tmp.name = fileName
+            tmp.folderName = self.workingDir
+            tmp.fileName = fileName
+            tmp.study = IOT_OCTscan(img)
                         
         else:
             #continue with current document
             pass
             
         
-        self._document = tmp
+        self.document = tmp
         #self.show() #Ensure it is visible. Pressing the close button in the document window, only hides the document window
         self.refresh()
         
-        return self._document
+        return self.document
 
 
-    def stitching(self):
-        #Selects a second image and applies the stitching step
-        #self.abrir() overwrites self._img so I need to make a copy of the current self._img
-        image1 = self._document.getStudy()
-        image2 = self.abrir()
-        st = IOT_OperationStitch()
-        image3 = st.stitch(image1, image2)
-        self._document.setStudy(image3)
-        #self._docWindow.setDocument(self._document)
-        #self._docWindow.refresh()
+    def brush(self):
+        """Applies the brush operation over the segmentation.
+                
+        :returns: The document segmentation 
+        :rtype: class:`IOT_OCTscanSegmentation`
+        """
+        if self.document.segmentation is None:
+            warnMsg = self.getClassName() + ':brush: Scan segmentation not initialized.'
+            warnings.warn(warnMsg,SyntaxWarning)
+        else:
+            tmp = IOT_OperationBrush()
+            tmp.addOperand(self.document.segmentation)
+            if (self._toolsWindow is not None):
+                settingsGUI = self._toolsWindow._settingsOperationBrush
+                tmp.color = settingsGUI.getColorValue()
+                tmp.radius = settingsGUI.getRadiusValue()
+            
+            print(self.getClassName(),": brush: Left click on main canvas to " \
+                    + "start brushing. Right click to stop.")
+            mEvent = self.waitForMouseButtonPress()    
+            
+            #while mEvent.name != 'button_release_event':
+                #NOT WORKING; Not all release events are captured
+            while mEvent.button != 3: #While not right click
+                #print(mEvent.name)
+                #print(mEvent.button)
+                
+                #MousePos holds the coordinates relative to the window
+                #MouseCoords holds the coordinates relative to the canvas
+                # try:
+                #     #mousePos = (int(mEvent.x), int(mEvent.y))
+                #     mouseCoords = (int(mEvent.xdata), int(mEvent.ydata))
+                # except:
+                #     warnMsg = self.getClassName() + ':execute: Unable to convert ' \
+                #                 + 'mouse coordinates. Setting coordinates to (0,0).'
+                #     warnings.warn(warnMsg,SyntaxWarning)
+                #     #mousePos = (0,0)
+                #     mouseCoords = (0,0)
+                mouseCoords = (int(mEvent.xdata), int(mEvent.ydata))
+                #Assign the new segmentation label
+                newVoxel = (mouseCoords[1],mouseCoords[0])
+                    #IMPORTANT: Note the "invertion" of indexing of coordinates
+                    #this is because in screen coordinates the convention is to
+                    #associate x to the abscissa, which is the column in an array
+                VOIlist = list()
+                VOIlist.append(newVoxel)
+                tmp.setOperand(self.document.segmentation,0) #Update the first (0-th) operand
+                self.document.segmentation = tmp.execute(VOIlist)
+                    #Although in this case only 1 voxel is passed at a time,
+                    #the nesting into voxel list facilitates generalization
+                self.refresh()
+                mEvent = self.getLastMouseEvent()
+                
+        return self.document.segmentation
+        
+
+    def stitch(self):
+        """Selects a second image and applies the stitching step to the study.
+        
+        .. todo:
+            Return an OCT volume
+        
+        :returns: The image resulting from the stitching
+        :rtype: class:`IOT_OCTscan`
+        """
+        tmp = IOT_OperationStitch()
+        tmp.addOperand(self.document.study)
+        image2 = self.openDocument()
+        tmp.addOperand(image2.study)
+
+        self.document.study = tmp.execute()
         self.refresh()
-        return image3
+        return self.document.study
     
      
      
-    def rectificar(self):
-        #Applies the flattening step
-        fl = IOT_OperationFlattening()
-        im= self._document.getStudy()
-        im = fl.flattening(im)
-        self._document.setStudy(im)
-        #self._docWindow.setDocument(self._document)
+    def flatten(self):
+        """Applies the flattening step to the study.
+        
+        .. todo:
+            Return an OCT volume
+        
+        :returns: The flattened image
+        :rtype: class:`IOT_OCTscan`
+        """
+        tmp = IOT_OperationFlattening()
+        tmp.addOperand(self.document.study)
+        self.document.study = tmp.execute()
         self.refresh()
-        return im
+        return self.document.study
         
      
-     
-    def segmentar(self):
-        #Applies the segmentation step
+    def measureThickness(self):
+        """Renders layer thicknesses
+        
+        :returns: List of layers thicknesses
+        :rtype: list
+        """
+        theSegmentation = self.document.segmentation
+        if theSegmentation is not None:
+            tmp = IOT_OperationMeasureLayerThickness()
+            tmp.addOperand(theSegmentation)
+            if (self._toolsWindow is not None):
+                settingsGUI = self._toolsWindow._settingsOperationMeasureThickness
+                tmp.pixelColumn = settingsGUI.getPixelColumnValue()
+                tmp.windowHalfWidth = settingsGUI.getWindowHalfWidthValue()
+                tmp.pixelWidth = settingsGUI.getPixelWidthValue()
+                tmp.pixelHeight = settingsGUI.getPixelHeightValue()
+            thicknesses = tmp.execute()
+        else:
+            #Return a list of thickness<es of 0.
+            r= IOT_RetinalLayers()
+            layers = r.getAllLayersIndexes()
+            thicknesses = [0 for elem in layers]
+        return thicknesses
+
+    
+    def segment(self):
+        """Applies the segmentation step.
+        
+        .. todo:
+            Return an OCT volume
+        
+        :returns: The segmentation
+        :rtype: class:`IOT_OCTscanSegmentation`
+        """
         seg = IOT_OperationSegmentation()
-        im = self._document.getStudy()
-        imSegmented = seg.segmentar(im)
-        self._document.setScanSegmentation(imSegmented)
+        tmp.addOperand(self.document.study)
+        self.document.segmentation = tmp.execute()
         self.refresh()
-        return imSegmented
+        return self.document.segmentation
         
         
 
     def opEditSegmentation(self,theOperation, params = None):
-        #Applies some editSegmentation step
-        #
-        # theOperation: A string with the edit operation name. e.g. 'COIDelete'
-        # params: The params to be passed to the operation
+        """Applies some editSegmentation step.
+        
+        .. todo:
+            Return an OCT volume
+
+        :param theOperation: The edit operation name. e.g. 'COIDelete'
+        :type theOperation: string
+        :param params: The params to be passed to the operation
+        
+        :returns: The segmentation
+        :rtype: class:`IOT_OCTscanSegmentation`
+        """
         
         #Catch current OCT scan
-        seg = IOT_OperationEditSegmentation()
-        im = self._document.getStudy()
-        imSegmented = self._document.getScanSegmentation()
-        imSegmented = seg.initEditSegmentation(im,imSegmented)
-        self._document.setScanSegmentation(imSegmented) #Sync, in case a dummy
-                                                        #one has been generated.
+        tmp = IOT_OperationEditSegmentation()
+        im = self.document.study
+        imSegmented = tmp.initEditSegmentation(im,self.document.segmentation)
+        self.document.segmentation = imSegmented #Sync, in case a dummy
+                                                 #one has been generated.
 
         #Indirect call to the operation
         #See: https://stackoverflow.com/questions/3061/calling-a-function-of-a-module-by-using-its-name-a-string    
-        theOp = getattr(seg, theOperation) 
+        theOp = getattr(tmp, theOperation) 
         if params is None:
             imSegmented = theOp()
         else:
             imSegmented = theOp(*params)
         
         if not isinstance(imSegmented,bool):
-            self._document.setScanSegmentation(imSegmented)
+            self.document.segmentation = imSegmented
         self.refresh()
             
-        return self._document.getScanSegmentation()
+        return self.document.segmentation
         
 
 
@@ -436,7 +657,7 @@ class IOT_GUI_DocumentWindow(QMainWindow):
         #     # mouseInAxes= event.inaxes
         #     # print(self.getClassName(),": MouseMoveEvent: ", mousePos)
         # 
-        #     # self._document.setScanSegmentation(imSegmented)
+        #     # self.document.setScanSegmentation(imSegmented)
         #     # self.refresh()
         #     
         #     self._lastMouseEvent = event
@@ -472,7 +693,7 @@ class IOT_GUI_DocumentWindow(QMainWindow):
         # mouseCoords = [event.xdata, event.ydata]
         # mouseButton = event.button #1 -Left, 2 - Middle, 3 - Right
     
-        #self._document.setScanSegmentation(imSegmented)
+        #self.document.setScanSegmentation(imSegmented)
         #self.refresh()
         
         #print(self.getClassName(),": MouseReleaseEvent: Saving current event.")
@@ -490,7 +711,7 @@ class IOT_GUI_DocumentWindow(QMainWindow):
         # consume the event so it will do nothing
         #pass
     
-        #self._document.setScanSegmentation(imSegmented)
+        #self.document.setScanSegmentation(imSegmented)
         #self.refresh()
         
         #print(self.getClassName(),": MouseWheelEvent: Saving current event.")

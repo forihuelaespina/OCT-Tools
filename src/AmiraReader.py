@@ -23,6 +23,9 @@ then "translated" to Python between Felipe and Arlem.
 | 23-Sep-2018 | FOE    | - Updated comments and added Sphinx                  |
 |             |        |   documentation to the class                         |
 +-------------+--------+------------------------------------------------------+
+| 24-Sep-2018 | FOE    | - Updated comments                                   |
+|             |        | - Removed filter of single scan.                     |
++-------------+--------+------------------------------------------------------+
 
 .. seealso:: None
 .. note:: None
@@ -35,26 +38,26 @@ then "translated" to Python between Felipe and Arlem.
 """
 
 
+## Import
+import warnings
+
+
+
 import numpy as np
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 import os
 
 
-
+## Class definition
 class AmiraReader(object):
     #Sphinx documentation
     """A class to read Amira formatted files.
 
     A class to read Amira formatted files.
 
-
-    :Known issues:
-
-    * Currently it only returns the first scan
-
-    .. seealso::
-    .. note::
-    .. todo::
+    .. seealso:: None
+    .. note:: None
+    .. todo:: Return an class:`IOT_OCTvolume` instead of a set of scans as an ndarray
 
     """
 
@@ -64,6 +67,7 @@ class AmiraReader(object):
 
     #Class constructor
     def __init__(self):
+        """Class constructor"""
         #Initialize private attributes unique to this instance
         self._filename = "" #File name
         #self._fileFolder = "" #File folder
@@ -84,6 +88,7 @@ class AmiraReader(object):
 
 
     def _findField(self,file, fieldName):
+        """Parses the Amira file to find a field name"""
         k = -1
         lineString = '';
         while isinstance(lineString, str) and k == -1:
@@ -94,6 +99,7 @@ class AmiraReader(object):
 
 
     def _findStruct(self,file, structName):
+        """Parses the Amira file to find a struct"""
         lineString = self._findField(file, structName+" {")
         parameters = []
         if len(lineString.strip("\n"))>0:
@@ -111,6 +117,30 @@ class AmiraReader(object):
 
     #Public methods
     def readAmiraImage(self,filename):
+        """Reads a set of OCT images from an Amira file.
+
+        The function does not check whether the file is formatted as an
+        Amira file. It is simply assumed to be so.
+        
+        :Example:
+        ..
+
+            from AmiraReader import AmiraReader
+            r=AmiraReader()
+            fileName = 'imageFolder\\FileName.am'
+            img = r.readAmiraImage(fileName)
+            
+            
+        :Raises:
+            TypeError: When data is neither 2D or 3D, or format is not binary.
+
+
+        :param filename: The Amira formatted file name including the path.
+        :type filename: string
+        :returns: A set of (equally shaped) OCT scans
+        :rtype: An ndarray shaped [width, height, nScans]
+        
+        """
         self._filename = filename
         nDims = 0
         formatFile = ''
@@ -118,7 +148,7 @@ class AmiraReader(object):
         parameters = []
         dataType = []
 
-        #abrimos el archivo
+        #Open the file
         with open(filename, 'r') as file:
             lineString = self._findField(file,'AmiraMesh');
             #Encuentra el número de dimensiones
@@ -132,19 +162,19 @@ class AmiraReader(object):
                     nDims = 3
                     lineString = lineString.lstrip("3D ")
                 else:
-                    raise ValueError('Unexpected Data Type')
+                    raise TypeError('Unexpected Data Type')
 
-            #Encuentra el formato del archivo
+            #Find file format
             k = lineString.find('BINARY')
             if k != -1:
                 formatFile = 'binary'
                 lineString = lineString.lstrip('BINARY ')
             else:
-                raise ValueError('Unexpected Data Type')
+                raise TypeError('Unexpected Data Type')
 
             version = lineString
 
-            #Definiciones
+            #Definitions
             lineString = self._findField(file,'define')
             lineString = lineString.lstrip("Lattice ")
             sizes = lineString.split(" ")
@@ -172,20 +202,5 @@ class AmiraReader(object):
 
 
 
-        #By now return just the first scan. THIS IS A BUG
-        return A[:,:,1]
-
-
-#             nRows=2;
-#             nCols=sizes[2]/nRows;
-#             for kk in range(1,sizes[2]+1):
-# #                plt.subplot(nRows,int(nCols), kk);
-# #                im = plt.imshow(np.rot90(A[:,:,kk-1], 3), aspect='auto', interpolation='none', origin='upper');
-#                 plt.imsave('D:\Documentos\OCT\expedientes\\new\\scan'+str(kk)+'.png', np.rot90(A[:,:,kk-1], 3) , format ='png')
-#
-#             self.fileFolder = 'D:\\Documentos\\OCT\\expedientes\\new\\'
-
-            #plt.title(gca,['Plane z=' num2str(kk)]);
-
-#expediente = AmiraReader('D:\Documentos\OCT\git\src\code\OCT\MMH48_20170817_115332_3DOCT00_L_01.am')
-#carpeta = expediente.carpeta
+        #return A[:,:,1] #Return justone scan
+        return A

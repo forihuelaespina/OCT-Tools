@@ -1,0 +1,321 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>src.IOT_GUI_EditSegmentationTools &#8212; OCT-Tools 0.1 documentation</title>
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">OCT-Tools 0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for src.IOT_GUI_EditSegmentationTools</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">-*- coding: utf-8 -*-</span>
+
+<span class="sd">File: IOT_GUI_EditSegmentationTools.py</span>
+
+<span class="sd">Class IOT_GUI_EditSegmentationTools</span>
+
+<span class="sd">A frame (QGroupBox) for accessing the editing segmentation tools (IOT_OperationEditSegmentation)</span>
+
+<span class="sd">IOT stands for INAOE OCT Tools</span>
+
+<span class="sd">:Log:</span>
+
+<span class="sd">+-------------+--------+------------------------------------------------------+</span>
+<span class="sd">| Date        | Author | Description                                          |</span>
+<span class="sd">+=============+========+======================================================+</span>
+<span class="sd">| 27-Aug-2018 | FOE    | - Class created.                                     |</span>
+<span class="sd">|             |        | - Added initial groups for COI and ROI based         |</span>
+<span class="sd">|             |        |   manipulations.                                     |</span>
+<span class="sd">|             |        | - Added buttons for initial operations; Delete and   |</span>
+<span class="sd">|             |        |   ChangeLabel                                        |</span>
+<span class="sd">+-------------+--------+------------------------------------------------------+</span>
+<span class="sd">| 30-Aug-2018 | FOE    | - Incorporated buttons other editing operations.     |</span>
+<span class="sd">+-------------+--------+------------------------------------------------------+</span>
+<span class="sd">| 23-Sep-2018 | FOE    | - Updated comments and added Sphinx documentation to |</span>
+<span class="sd">|             |        |   the class                                          |</span>
+<span class="sd">+-------------+--------+------------------------------------------------------+</span>
+
+<span class="sd">.. seealso:: None</span>
+<span class="sd">.. note:: None</span>
+<span class="sd">.. todo:: None</span>
+
+<span class="sd">.. sectionauthor:: Felipe Orihuela-Espina &lt;f.orihuela-espina@inaoep.mx&gt;</span>
+<span class="sd">.. codeauthor:: Felipe Orihuela-Espina &lt;f.orihuela-espina@inaoep.mx&gt;</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<span class="c1">## Import</span>
+<span class="c1">#import sys</span>
+
+<span class="kn">from</span> <span class="nn">PyQt5.QtWidgets</span> <span class="k">import</span> <span class="n">QGroupBox</span><span class="p">,</span> <span class="n">QPushButton</span><span class="p">,</span> <span class="n">QVBoxLayout</span><span class="p">,</span> <span class="n">QInputDialog</span><span class="p">,</span> <span class="n">QMessageBox</span>
+
+<span class="kn">from</span> <span class="nn">IOT_OperationEditSegmentation</span> <span class="k">import</span> <span class="n">IOT_OperationEditSegmentation</span>
+<span class="kn">from</span> <span class="nn">IOT_RetinalLayers</span> <span class="k">import</span> <span class="n">IOT_RetinalLayers</span>
+
+<span class="kn">from</span> <span class="nn">matplotlib.backend_bases</span> <span class="k">import</span> <span class="n">KeyEvent</span><span class="p">,</span> <span class="n">MouseEvent</span>
+
+
+
+<span class="c1">## Class description</span>
+<div class="viewcode-block" id="IOT_GUI_EditSegmentationTools"><a class="viewcode-back" href="../../src.IOT_GUI_EditSegmentationTools.html#src.IOT_GUI_EditSegmentationTools.IOT_GUI_EditSegmentationTools">[docs]</a><span class="k">class</span> <span class="nc">IOT_GUI_EditSegmentationTools</span><span class="p">(</span><span class="n">QGroupBox</span><span class="p">):</span>
+    <span class="c1">#Sphinx documentation</span>
+    <span class="sd">&quot;&quot;&quot;A base class for operations on :class:`IOT_OCTvolumes` and :class:`IOT_OCTscans`.</span>
+<span class="sd">    </span>
+<span class="sd">    A base class for operations on :class:`IOT_OCTvolumes` and</span>
+<span class="sd">    class:`IOT_OCTscans`.</span>
+<span class="sd">    </span>
+
+<span class="sd">    .. seealso:: :class:`IOT_OperationEditSegmentation`</span>
+<span class="sd">    .. note:: None</span>
+<span class="sd">    .. todo:: None</span>
+<span class="sd">        </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+ 
+    <span class="c1">#Private class attributes shared by all instances</span>
+
+    <span class="c1">#Class constructor</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1">#Call superclass constructor</span>
+        <span class="n">QGroupBox</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">_docWindow</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lastEvent</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1">#To temporally store mouse events</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_seg</span> <span class="o">=</span> <span class="n">IOT_OperationEditSegmentation</span><span class="p">()</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">_buttonList</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        
+        <span class="c1">#Group for COI based manipulation operations</span>
+        <span class="n">COIframe</span> <span class="o">=</span> <span class="n">QGroupBox</span><span class="p">(</span><span class="s2">&quot;COI based manipulation&quot;</span><span class="p">)</span>
+        
+        <span class="n">bCOIDelete</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s2">&quot;Delete&quot;</span><span class="p">)</span>
+        <span class="n">bCOIDelete</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">opCOIDelete</span><span class="p">)</span>
+        <span class="n">bCOIDelete</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">bCOIChangeLabel</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s2">&quot;Change Label&quot;</span><span class="p">)</span>
+        <span class="n">bCOIChangeLabel</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">opCOIChangeLabel</span><span class="p">)</span>
+        <span class="n">bCOIChangeLabel</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">COIframeLayout</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">();</span>
+        <span class="n">COIframeLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">bCOIDelete</span><span class="p">);</span>
+        <span class="n">COIframeLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">bCOIChangeLabel</span><span class="p">);</span>
+        <span class="n">COIframe</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">COIframeLayout</span><span class="p">);</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_buttonList</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bCOIDelete</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_buttonList</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bCOIChangeLabel</span><span class="p">)</span>
+
+        <span class="c1">#Group for ROI based manipulation operations</span>
+        <span class="n">ROIframe</span> <span class="o">=</span> <span class="n">QGroupBox</span><span class="p">(</span><span class="s2">&quot;ROI based manipulation&quot;</span><span class="p">)</span>
+        
+        <span class="n">bROIDelete</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s2">&quot;Delete&quot;</span><span class="p">)</span>
+        <span class="n">bROIDelete</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">opROIDelete</span><span class="p">)</span>
+        <span class="n">bROIDelete</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">bROIChangeLabel</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s2">&quot;Change Label&quot;</span><span class="p">)</span>
+        <span class="n">bROIChangeLabel</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">opROIChangeLabel</span><span class="p">)</span>
+        <span class="n">bROIChangeLabel</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        
+        <span class="n">ROIframeLayout</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">();</span>
+        <span class="n">ROIframeLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">bROIDelete</span><span class="p">);</span>
+        <span class="n">ROIframeLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">bROIChangeLabel</span><span class="p">);</span>
+        <span class="n">ROIframe</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">ROIframeLayout</span><span class="p">);</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">_buttonList</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bROIDelete</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_buttonList</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bROIChangeLabel</span><span class="p">)</span>
+
+        <span class="c1">#Add subgroups to the main group</span>
+        <span class="n">frameLayout</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">();</span>
+        <span class="n">frameLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">COIframe</span><span class="p">);</span>
+        <span class="n">frameLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">ROIframe</span><span class="p">);</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">frameLayout</span><span class="p">);</span>
+        
+        
+        
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">setEnable</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        
+        <span class="k">return</span>
+
+
+    <span class="c1">#Public methods</span>
+<div class="viewcode-block" id="IOT_GUI_EditSegmentationTools.getClassName"><a class="viewcode-back" href="../../src.IOT_GUI_EditSegmentationTools.html#src.IOT_GUI_EditSegmentationTools.IOT_GUI_EditSegmentationTools.getClassName">[docs]</a>    <span class="k">def</span> <span class="nf">getClassName</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span></div>
+
+<div class="viewcode-block" id="IOT_GUI_EditSegmentationTools.connectDocumentWindow"><a class="viewcode-back" href="../../src.IOT_GUI_EditSegmentationTools.html#src.IOT_GUI_EditSegmentationTools.IOT_GUI_EditSegmentationTools.connectDocumentWindow">[docs]</a>    <span class="k">def</span> <span class="nf">connectDocumentWindow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">theDocWindow</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_docWindow</span> <span class="o">=</span> <span class="n">theDocWindow</span></div>
+    
+    
+    
+
+<div class="viewcode-block" id="IOT_GUI_EditSegmentationTools.opCOIDelete"><a class="viewcode-back" href="../../src.IOT_GUI_EditSegmentationTools.html#src.IOT_GUI_EditSegmentationTools.IOT_GUI_EditSegmentationTools.opCOIDelete">[docs]</a>    <span class="k">def</span> <span class="nf">opCOIDelete</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="c1">#Execute a COI deletion operation</span>
+        <span class="c1">#Get parameters</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">IOT_RetinalLayers</span><span class="p">()</span>
+        <span class="n">items</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">getAllLayersNames</span><span class="p">()</span>
+        <span class="n">lName</span><span class="p">,</span> <span class="n">flagOKPressed</span> <span class="o">=</span> <span class="n">QInputDialog</span><span class="o">.</span><span class="n">getItem</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;Input parameter&quot;</span><span class="p">,</span> <span class="s2">&quot;Layer name:&quot;</span><span class="p">,</span> <span class="n">items</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">flagOKPressed</span><span class="p">:</span>
+            <span class="n">params</span><span class="o">=</span><span class="nb">list</span><span class="p">()</span>
+            <span class="n">params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">getLayerIndex</span><span class="p">(</span><span class="n">lName</span><span class="p">))</span>
+            <span class="c1">#...and simply pass the command.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_docWindow</span><span class="o">.</span><span class="n">opEditSegmentation</span><span class="p">(</span><span class="s1">&#39;COIDelete&#39;</span><span class="p">,</span><span class="n">params</span><span class="p">)</span>
+        <span class="k">return</span></div>
+
+<div class="viewcode-block" id="IOT_GUI_EditSegmentationTools.opCOIChangeLabel"><a class="viewcode-back" href="../../src.IOT_GUI_EditSegmentationTools.html#src.IOT_GUI_EditSegmentationTools.IOT_GUI_EditSegmentationTools.opCOIChangeLabel">[docs]</a>    <span class="k">def</span> <span class="nf">opCOIChangeLabel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="c1">#Execute a COI deletion operation</span>
+        <span class="c1">#Get parameters</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">IOT_RetinalLayers</span><span class="p">()</span>
+        <span class="n">items</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">getAllLayersNames</span><span class="p">()</span>
+        <span class="n">lName</span><span class="p">,</span> <span class="n">flagOKPressed</span> <span class="o">=</span> <span class="n">QInputDialog</span><span class="o">.</span><span class="n">getItem</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;Input parameter&quot;</span><span class="p">,</span> <span class="s2">&quot;Layer name:&quot;</span><span class="p">,</span> <span class="n">items</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">flagOKPressed</span><span class="p">:</span>
+            <span class="n">newLName</span><span class="p">,</span> <span class="n">flagOKPressed</span> <span class="o">=</span> <span class="n">QInputDialog</span><span class="o">.</span><span class="n">getItem</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;Input parameter&quot;</span><span class="p">,</span> <span class="s2">&quot;New layer name:&quot;</span><span class="p">,</span> <span class="n">items</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">flagOKPressed</span><span class="p">:</span>
+            <span class="n">params</span><span class="o">=</span><span class="nb">list</span><span class="p">()</span>
+            <span class="n">params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">getLayerIndex</span><span class="p">(</span><span class="n">newLName</span><span class="p">))</span>
+            <span class="n">params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">getLayerIndex</span><span class="p">(</span><span class="n">lName</span><span class="p">))</span>
+    
+            <span class="c1">#...and simply pass the command.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_docWindow</span><span class="o">.</span><span class="n">opEditSegmentation</span><span class="p">(</span><span class="s1">&#39;COIChangeLabel&#39;</span><span class="p">,</span><span class="n">params</span><span class="p">)</span>
+            
+        <span class="k">return</span></div>
+
+
+
+<div class="viewcode-block" id="IOT_GUI_EditSegmentationTools.opROIDelete"><a class="viewcode-back" href="../../src.IOT_GUI_EditSegmentationTools.html#src.IOT_GUI_EditSegmentationTools.IOT_GUI_EditSegmentationTools.opROIDelete">[docs]</a>    <span class="k">def</span> <span class="nf">opROIDelete</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="c1">#Execute a ROI deletion operation</span>
+        <span class="c1">#Get parameters</span>
+        <span class="c1">#Select ROI</span>
+        <span class="n">tmp</span><span class="o">=</span><span class="n">QMessageBox</span><span class="p">(</span><span class="n">QMessageBox</span><span class="o">.</span><span class="n">Information</span><span class="p">,</span><span class="s2">&quot;Select ROI&quot;</span><span class="p">,</span><span class="s2">&quot;Please click on figure to select ROI.&quot;</span><span class="p">)</span>
+        <span class="n">tmp</span><span class="o">.</span><span class="n">exec_</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">getClassName</span><span class="p">(),</span><span class="s2">&quot;: opROIDelete: Please click to select ROI.&quot;</span><span class="p">)</span>
+        <span class="n">mEvent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_docWindow</span><span class="o">.</span><span class="n">waitForMouseButtonPress</span><span class="p">()</span>
+        <span class="c1">#print(mEvent)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">mousePos</span> <span class="o">=</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">mEvent</span><span class="o">.</span><span class="n">x</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">mEvent</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
+            <span class="n">mouseCoords</span> <span class="o">=</span> <span class="p">(</span><span class="n">mEvent</span><span class="o">.</span><span class="n">xdata</span><span class="p">,</span> <span class="n">mEvent</span><span class="o">.</span><span class="n">ydata</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">mousePos</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">mouseCoords</span> <span class="o">=</span> <span class="p">(</span><span class="n">mEvent</span><span class="o">.</span><span class="n">xdata</span><span class="p">,</span> <span class="n">mEvent</span><span class="o">.</span><span class="n">ydata</span><span class="p">)</span>
+        <span class="n">mouseButton</span> <span class="o">=</span> <span class="n">mEvent</span><span class="o">.</span><span class="n">button</span> 
+        
+        <span class="n">params</span><span class="o">=</span><span class="nb">list</span><span class="p">()</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mousePos</span><span class="p">)</span>
+        
+        <span class="c1">#...and simply pass the command.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_docWindow</span><span class="o">.</span><span class="n">opEditSegmentation</span><span class="p">(</span><span class="s1">&#39;ROIDelete&#39;</span><span class="p">,</span><span class="n">params</span><span class="p">)</span>
+        <span class="k">return</span></div>
+
+<div class="viewcode-block" id="IOT_GUI_EditSegmentationTools.opROIChangeLabel"><a class="viewcode-back" href="../../src.IOT_GUI_EditSegmentationTools.html#src.IOT_GUI_EditSegmentationTools.IOT_GUI_EditSegmentationTools.opROIChangeLabel">[docs]</a>    <span class="k">def</span> <span class="nf">opROIChangeLabel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="c1">#Execute a ROI deletion operation</span>
+        <span class="c1">#Get parameters</span>
+        <span class="c1">#Select ROI</span>
+        <span class="n">tmp</span><span class="o">=</span><span class="n">QMessageBox</span><span class="p">(</span><span class="n">QMessageBox</span><span class="o">.</span><span class="n">Information</span><span class="p">,</span><span class="s2">&quot;Select ROI&quot;</span><span class="p">,</span><span class="s2">&quot;Please click on figure to select ROI.&quot;</span><span class="p">)</span>
+        <span class="n">tmp</span><span class="o">.</span><span class="n">exec_</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">getClassName</span><span class="p">(),</span><span class="s2">&quot;: opROIChangeLabel: Please click to select ROI.&quot;</span><span class="p">)</span>
+        <span class="n">mEvent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_docWindow</span><span class="o">.</span><span class="n">waitForMouseButtonPress</span><span class="p">()</span>
+        <span class="c1">#print(mEvent)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">mousePos</span> <span class="o">=</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">mEvent</span><span class="o">.</span><span class="n">x</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">mEvent</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
+            <span class="n">mouseCoords</span> <span class="o">=</span> <span class="p">(</span><span class="n">mEvent</span><span class="o">.</span><span class="n">xdata</span><span class="p">,</span> <span class="n">mEvent</span><span class="o">.</span><span class="n">ydata</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">mousePos</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">mouseCoords</span> <span class="o">=</span> <span class="p">(</span><span class="n">mEvent</span><span class="o">.</span><span class="n">xdata</span><span class="p">,</span> <span class="n">mEvent</span><span class="o">.</span><span class="n">ydata</span><span class="p">)</span>
+        <span class="n">mouseButton</span> <span class="o">=</span> <span class="n">mEvent</span><span class="o">.</span><span class="n">button</span> 
+       
+        <span class="c1">#Select new layer</span>
+        <span class="n">flagOKPressed</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="n">flagOKPressed</span><span class="p">:</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="n">IOT_RetinalLayers</span><span class="p">()</span>
+            <span class="n">items</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">getAllLayersNames</span><span class="p">()</span>
+            <span class="n">lName</span><span class="p">,</span> <span class="n">flagOKPressed</span> <span class="o">=</span> <span class="n">QInputDialog</span><span class="o">.</span><span class="n">getItem</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;Input parameter&quot;</span><span class="p">,</span> <span class="s2">&quot;New layer name:&quot;</span><span class="p">,</span> <span class="n">items</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">flagOKPressed</span><span class="p">:</span>
+            <span class="n">params</span><span class="o">=</span><span class="nb">list</span><span class="p">()</span>
+            <span class="n">params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">getLayerIndex</span><span class="p">(</span><span class="n">lName</span><span class="p">))</span>
+            <span class="n">params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mousePos</span><span class="p">)</span>
+            <span class="c1">#...and simply pass the command</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_docWindow</span><span class="o">.</span><span class="n">opEditSegmentation</span><span class="p">(</span><span class="s1">&#39;ROIChangeLabel&#39;</span><span class="p">,</span><span class="n">params</span><span class="p">)</span>
+        <span class="k">return</span></div>
+
+
+<div class="viewcode-block" id="IOT_GUI_EditSegmentationTools.setEnable"><a class="viewcode-back" href="../../src.IOT_GUI_EditSegmentationTools.html#src.IOT_GUI_EditSegmentationTools.IOT_GUI_EditSegmentationTools.setEnable">[docs]</a>    <span class="k">def</span> <span class="nf">setEnable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">b</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">theButton</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buttonList</span><span class="p">:</span>
+            <span class="n">theButton</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+        <span class="k">return</span></div></div>
+
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">OCT-Tools 0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017-8, Felipe Orihuela-Espina.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
+    </div>
+  </body>
+</html>

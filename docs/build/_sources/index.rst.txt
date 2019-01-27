@@ -15,6 +15,7 @@ Welcome to OCT-Tools's documentation!
    installation
    sciMethFileFormatSpec
    technical
+   logOfProgress
 
 
 Indices and tables

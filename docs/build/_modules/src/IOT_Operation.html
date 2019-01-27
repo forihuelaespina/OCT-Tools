@@ -56,6 +56,8 @@
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">-*- coding: utf-8 -*-</span>
 
+<span class="sd">.. currentmodule: src</span>
+
 <span class="sd">File: IOT_Operation.py</span>
 
 <span class="sd">Class IOT_Operation</span>
@@ -82,6 +84,18 @@
 <span class="sd">+-------------+--------+------------------------------------------------------+</span>
 <span class="sd">| 23-Sep-2018 | FOE    | - Updated comments and added Sphinx documentation to |</span>
 <span class="sd">|             |        |   the class.                                         |</span>
+<span class="sd">|             |        | - _arity attribute &quot;upgraded&quot; from attribute to      |</span>
+<span class="sd">|             |        |   property arity and property getter/setter added    |</span>
+<span class="sd">|             |        | - _arity get/set methods deprecated.                 |</span>
+<span class="sd">+-------------+--------+------------------------------------------------------+</span>
+<span class="sd">| 26-Sep-2018 | FOE    | - The class becomes abstract and a new abstract      |</span>
+<span class="sd">|             |        |   method execute is provided.                        |</span>
+<span class="sd">|             |        | - Added support to hold operands.                    |</span>
+<span class="sd">|             |        | - Arity now becomes only the number of the operands. |</span>
+<span class="sd">|             |        |   get/setArity methods are now deprecated            |</span>
+<span class="sd">+-------------+--------+------------------------------------------------------+</span>
+<span class="sd">|  1-Dec-2018 | FOE    | - Signature of execute() method now accepts          |</span>
+<span class="sd">|             |        |   parameters and return result instead of None.      |</span>
 <span class="sd">+-------------+--------+------------------------------------------------------+</span>
 
 <span class="sd">.. seealso:: None</span>
@@ -97,29 +111,40 @@
 
 <span class="c1">## Import</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">abc</span> <span class="k">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
 
 
 
 <span class="c1">## Class definition</span>
-<div class="viewcode-block" id="IOT_Operation"><a class="viewcode-back" href="../../src.IOT_Operation.html#src.IOT_Operation.IOT_Operation">[docs]</a><span class="k">class</span> <span class="nc">IOT_Operation</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="IOT_Operation"><a class="viewcode-back" href="../../src.IOT_Operation.html#src.IOT_Operation.IOT_Operation">[docs]</a><span class="k">class</span> <span class="nc">IOT_Operation</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
     <span class="c1">#Sphinx documentation</span>
-    <span class="sd">&quot;&quot;&quot;A base class for operations on IOT_OCTvolumes and IOT_OCTscans.</span>
+    <span class="sd">&quot;&quot;&quot;An abstract base class for operations on :class:`IOT_OCTvolume`s and :class:`IOT_OCTscan`s.</span>
 
-<span class="sd">    A base class for operations on IOT_OCTvolumes and IOT_OCTscans.</span>
-
+<span class="sd">    An abstract base class for operations on :class:`IOT_OCTvolume`s and</span>
+<span class="sd">    :class:`IOT_OCTscan`s.</span>
+<span class="sd">    </span>
+<span class="sd">    :Example:</span>
+<span class="sd">    ::</span>
+<span class="sd">    </span>
+<span class="sd">        tmp = IOT_OCTscan(img)</span>
+<span class="sd">        o = IOT_OperationFlattening()</span>
+<span class="sd">        o.addOperand(tmp)</span>
+<span class="sd">        o.arity() #return 1</span>
+<span class="sd">        o.execute() #Flattens the image</span>
 
 
 <span class="sd">    :Known subclasses:</span>
-<span class="sd">    * IOT_OperationEditSegmentation</span>
-<span class="sd">    * IOT_OperationFlattening</span>
-<span class="sd">    * IOT_OperationMeasureLayerThickness</span>
-<span class="sd">    * IOT_OperationPerfilometer</span>
-<span class="sd">    * IOT_OperationSegmentation</span>
-<span class="sd">    * IOT_OperationStitch</span>
+<span class="sd">    * :class:`IOT_OperationEditSegmentation`</span>
+<span class="sd">    * :class:`IOT_OperationFlattening`</span>
+<span class="sd">    * :class:`IOT_OperationMeasureLayerThickness`</span>
+<span class="sd">    * :class:`IOT_OperationPerfilometer`</span>
+<span class="sd">    * :class:`IOT_OperationSegmentation`</span>
+<span class="sd">    * :class:`IOT_OperationStitch`</span>
 
-<span class="sd">    .. seealso::</span>
-<span class="sd">    .. note::</span>
-<span class="sd">    .. todo::</span>
+<span class="sd">    .. seealso:: None</span>
+<span class="sd">    .. note:: None</span>
+<span class="sd">    .. todo:: </span>
+<span class="sd">        * Support to hold operand names.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -130,66 +155,107 @@
 
     <span class="c1">#Class constructor</span>
     <span class="c1">#</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;The class constructor.</span>
 
-<span class="sd">        The IOT_Operation class constructor</span>
-
-<span class="sd">        tmp = IOT_Operation() - Creates an operation of arity 1.</span>
-<span class="sd">        tmp = IOT_Operation(n) - Creates an operation of arity n.</span>
-
-<span class="sd">        :param n: the arity of the operation</span>
+<span class="sd">        The class constructor. Creates an empty operation</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">):</span>
-            <span class="n">warnMsg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getClassName</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;:__init__: Unexpected number of input arguments.&#39;</span>
-            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">warnMsg</span><span class="p">,</span><span class="ne">SyntaxWarning</span><span class="p">)</span>
-
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        
         <span class="c1">#Initialize attributes (without decorator @property)</span>
 
         <span class="c1">#Initialize properties (with decorator @property)</span>
-        <span class="n">n</span><span class="o">=</span><span class="mi">1</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">):</span>
-            <span class="n">n</span><span class="o">=</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">arity</span> <span class="o">=</span> <span class="n">n</span> <span class="c1">#Set arity of the operation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;Operation&#39;</span> <span class="c1">#The operation name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">operands</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span> <span class="c1">#Operands</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1">#Operation outputs (a list in case it is multivalued).</span>
+                           <span class="c1">#None until executed or cleared.</span>
 
-
-    <span class="c1">#Properties getters/setters</span>
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">arity</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="c1">#arity getter</span>
-        <span class="sd">&quot;&quot;&quot;Gets the operation arity.</span>
-
-<span class="sd">        Property arity getter. Gets the operation arity.</span>
-
-<span class="sd">        :returns: The operation arity.</span>
-<span class="sd">        :rtype: int</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__arity</span>
-
-    <span class="nd">@arity</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">arity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">d</span><span class="p">):</span> <span class="c1">#arity setter</span>
-        <span class="sd">&quot;&quot;&quot;Sets the operation arity.</span>
-
-<span class="sd">        Property arity setter. Sets the operation arity. Arity of the operation</span>
-<span class="sd">        has to be bigger or equal than 1.</span>
-
-<span class="sd">        :param d: Operation arity</span>
-<span class="sd">        :type d: int</span>
-<span class="sd">        :returns: None</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">d</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">d</span> <span class="o">=</span> <span class="mi">1</span>
-        <span class="k">elif</span> <span class="n">d</span><span class="o">&lt;</span><span class="mi">1</span><span class="p">:</span>
-            <span class="n">warnMsg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getClassName</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;:getArity: &#39;</span> \
-                      <span class="o">+</span> <span class="s1">&#39;Arity must be a positive integer. Setting it to 1.&#39;</span>
-            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">warnMsg</span><span class="p">,</span><span class="ne">SyntaxWarning</span><span class="p">)</span>
-            <span class="n">d</span> <span class="o">=</span> <span class="mi">1</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">__arity</span> <span class="o">=</span> <span class="n">d</span><span class="p">;</span>
+        <span class="k">if</span> <span class="n">kwargs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">key</span><span class="o">==</span><span class="s1">&#39;name&#39;</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">value</span>
+                    
         <span class="k">return</span>
 
+    <span class="c1">#Properties getters/setters</span>
+    <span class="c1">#</span>
+    <span class="c1"># Remember: Sphinx ignores docstrings on property setters so all</span>
+    <span class="c1">#documentation for a property must be on the @property method</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">operands</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="c1">#operands getter</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The list of operands.</span>
+
+<span class="sd">        :getter: Gets the list of operands</span>
+<span class="sd">        :setter: Sets the list of operands.</span>
+<span class="sd">        :type: list</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__operands</span>
+
+
+    <span class="nd">@operands</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">operands</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">opList</span><span class="p">):</span> <span class="c1">#operands setter</span>
+        <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">opList</span><span class="p">,(</span><span class="nb">list</span><span class="p">,))):</span>
+            <span class="n">warnMsg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getClassName</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;:operands: Unexpected type. &#39;</span> \
+                            <span class="s1">&#39;Please provide operands as a list.&#39;</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">warnMsg</span><span class="p">,</span><span class="ne">SyntaxWarning</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__operands</span> <span class="o">=</span> <span class="n">opList</span><span class="p">;</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="c1">#name getter</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The operation name</span>
+
+<span class="sd">        :getter: Gets the operation name</span>
+<span class="sd">        :setter: Sets the operation name.</span>
+<span class="sd">        :type: string</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__name</span>
+
+    <span class="nd">@name</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">opName</span><span class="p">):</span> <span class="c1">#name setter</span>
+        <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">opName</span><span class="p">,(</span><span class="nb">str</span><span class="p">,))):</span>
+            <span class="n">warnMsg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getClassName</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;:name: Unexpected type. &#39;</span> \
+                            <span class="s1">&#39;Operations name must be a string.&#39;</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">warnMsg</span><span class="p">,</span><span class="ne">SyntaxWarning</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__name</span> <span class="o">=</span> <span class="n">opName</span><span class="p">;</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">result</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="c1">#result getter</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The list of results.</span>
+<span class="sd">        </span>
+<span class="sd">        This is a read only property. There is no setter method.</span>
+
+<span class="sd">        :getter: Gets the list of results</span>
+<span class="sd">        :setter: Sets the list of results</span>
+<span class="sd">        :type: list</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__result</span>
+
+
+    <span class="nd">@result</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">rList</span><span class="p">):</span> <span class="c1">#result setter</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__result</span> <span class="o">=</span> <span class="n">rList</span><span class="p">;</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+
     <span class="c1">#Private methods</span>
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="s1">&#39;[&#39;</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">operands</span><span class="p">:</span>
+            <span class="n">tmp</span> <span class="o">+=</span> <span class="nb">format</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;,&#39;</span>
+        <span class="n">tmp</span><span class="o">+=</span><span class="s1">&#39;]&#39;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;&lt;&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">getClassName</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;([&#39;</span> \
+            <span class="o">+</span> <span class="s1">&#39;name: &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;;&#39;</span> \
+            <span class="o">+</span> <span class="s1">&#39; operands: &#39;</span> <span class="o">+</span> <span class="n">tmp</span> <span class="o">+</span> <span class="s1">&#39;])&gt;&#39;</span>
+        <span class="k">return</span> <span class="n">s</span>
 
     <span class="c1">#Public methods</span>
 <div class="viewcode-block" id="IOT_Operation.getClassName"><a class="viewcode-back" href="../../src.IOT_Operation.html#src.IOT_Operation.IOT_Operation.getClassName">[docs]</a>    <span class="k">def</span> <span class="nf">getClassName</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -202,34 +268,54 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span></div>
 
-<div class="viewcode-block" id="IOT_Operation.getArity"><a class="viewcode-back" href="../../src.IOT_Operation.html#src.IOT_Operation.IOT_Operation.getArity">[docs]</a>    <span class="k">def</span> <span class="nf">getArity</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Get the operation arity.</span>
-
-<span class="sd">        Get the operation arity.</span>
-
-
-<span class="sd">        .. deprecated:: 0.2</span>
-<span class="sd">           Use property .arity instead.</span>
+<div class="viewcode-block" id="IOT_Operation.addOperand"><a class="viewcode-back" href="../../src.IOT_Operation.html#src.IOT_Operation.IOT_Operation.addOperand">[docs]</a>    <span class="k">def</span> <span class="nf">addOperand</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">op</span><span class="p">,</span><span class="n">i</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add a new operand.</span>
+<span class="sd">        </span>
+<span class="sd">        :param op: The operand.</span>
+<span class="sd">        :type op: object</span>
+<span class="sd">        :param i: (optional) The operand order. If given it may shift the</span>
+<span class="sd">            order of other operands already set. If not given, the operand</span>
+<span class="sd">            is appended at the end of the list of operands.</span>
+<span class="sd">        :type op: int</span>
+<span class="sd">        :return: None</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">warnMsg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getClassName</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;:getArity: Deprecated. &#39;</span> \
-                 <span class="o">+</span> <span class="s1">&#39;Use &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">getClassName</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;.arity instead.&#39;</span>
-        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">warnMsg</span><span class="p">,</span><span class="ne">DeprecationWarning</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arity</span></div>
-
-<div class="viewcode-block" id="IOT_Operation.setArity"><a class="viewcode-back" href="../../src.IOT_Operation.html#src.IOT_Operation.IOT_Operation.setArity">[docs]</a>    <span class="k">def</span> <span class="nf">setArity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">d</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Set the operation arity.</span>
-
-<span class="sd">        Set the operation arity.</span>
-
-
-<span class="sd">        .. deprecated:: 0.2</span>
-<span class="sd">           Use property .arity instead.</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__operands</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">op</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__operands</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">op</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+        
+<div class="viewcode-block" id="IOT_Operation.arity"><a class="viewcode-back" href="../../src.IOT_Operation.html#src.IOT_Operation.IOT_Operation.arity">[docs]</a>    <span class="k">def</span> <span class="nf">arity</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Gets the operation arity (number of operands).</span>
+<span class="sd">        </span>
+<span class="sd">        :return: The operation arity</span>
+<span class="sd">        :rtype: int</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">warnMsg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getClassName</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;:getArity: Deprecated. &#39;</span> \
-                 <span class="o">+</span> <span class="s1">&#39;Use &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">getClassName</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;.arity instead.&#39;</span>
-        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">warnMsg</span><span class="p">,</span><span class="ne">DeprecationWarning</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">arity</span> <span class="o">=</span> <span class="n">d</span>
-        <span class="k">return</span></div></div>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__operands</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="IOT_Operation.clear"><a class="viewcode-back" href="../../src.IOT_Operation.html#src.IOT_Operation.IOT_Operation.clear">[docs]</a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Clears the operands; Removes all operands.</span>
+<span class="sd">        </span>
+<span class="sd">        :return: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__operands</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+    
+    <span class="c1">#@abstractmethod</span>
+<div class="viewcode-block" id="IOT_Operation.execute"><a class="viewcode-back" href="../../src.IOT_Operation.html#src.IOT_Operation.IOT_Operation.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">*</span><span class="n">args</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Executes the operation on the operands.</span>
+<span class="sd">        </span>
+<span class="sd">        This is an abstract method. Executes the operation on the .operands</span>
+<span class="sd">        and stores the outcome in .result</span>
+<span class="sd">        </span>
+<span class="sd">        Operation meta-parameters may be also passed.</span>
+<span class="sd">        </span>
+<span class="sd">        :returns: Result of executing the operation.</span>
+<span class="sd">        :rtype: Type of result -depends on subclass implementation-.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div></div>
 </pre></div>
 
           </div>
@@ -251,7 +337,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2017, Felipe Orihuela-Espina.
+        &#169; Copyright 2017-8, Felipe Orihuela-Espina.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
     </div>
   </body>

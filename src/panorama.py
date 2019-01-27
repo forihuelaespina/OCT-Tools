@@ -3,6 +3,7 @@
 #
 # Copyright belongs to the original developer; Hamilton Urbano (GitHub username: haurbano)
 
+
 # import the necessary packages
 import numpy as np
 import imutils
@@ -52,6 +53,7 @@ class Stitcher:
 	def detectAndDescribe(self, image):
 		# convert the image to grayscale
 		gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+			
 
 		# check to see if we are using OpenCV 3.X
 		if self.isv3:

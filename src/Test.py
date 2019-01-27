@@ -94,43 +94,78 @@ def myPaint(theFig,doc):
 
 
 ##MAIN
-print("Init testing...")        
-print("Loading image.")        
-fileName = '../image3.png'
-img = io.imread(fileName)
 
-print("Creating document.")        
-doc = IOT_Document() #Initialize a document
-doc.setName(fileName)
-tmp, _ = os.path.split(fileName)
-doc.setFolderName(tmp)
-doc.setFileName(fileName)
-doc.setStudy(img)
+#Test the AmiraReader
+from AmiraReader import AmiraReader
+import random
+r=AmiraReader()
+#fileName = 'C:\\Users\\Felipe\\OneDrive\\Documentos\\Research\\OCT\\experimentalData\\Triton\\wetransfer-f56351\\TUV86_20180214_133911_3DOCT00_R_01.am'
+fileName = 'E:\\Felipe\\OneDrive\\Documentos\\Research\\OCT\\experimentalData\\Triton\\wetransfer-f56351\\TUV86_20180214_133911_3DOCT00_R_01.am'
+img = r.readAmiraImage(fileName)
+print(img.shape)
+theScan = IOT_OCTscan(img)
+theSegmentation =IOT_OCTscanSegmentation(theScan)
 
-print("Plot raw document.")        
-#Catch current OCT scan
-im = doc.getStudy()
-imSegmented = doc.getScanSegmentation()
-
-seg = IOT_OperationEditSegmentation()
-imSegmented = seg.initEditSegmentation(im,imSegmented)
-doc.setScanSegmentation(imSegmented)
-
-
-hFig = myInitFigure()
-myPaint(hFig,doc) #Plot raw with dummy segmentation
-
-#Apply here some segmentation edit operation
-
-pos=(3,35)
-#seg.ROISelect(pos)
-#imSegmented2 = seg.ROIChangeLabel(4)
-imSegmented2 = seg.ROIChangeLabel(4,pos)
-doc.setScanSegmentation(imSegmented2)
+# imWidth = img.shape[0]
+# imHeight = img.shape[1]
+# nScans = img.shape[2]
+# rnd = list()
+# 
+# tmpScans = 10
+# for x in range(tmpScans):
+#   print(x)
+#   rnd.append(random.randint(0,nScans))
+# rnd.sort() #Watch out! this modifies the list itself. If I want to keep the list, use sorted(rnd) instead
+# print(rnd)
+# 
+# theFig = plt.figure()
+# gs = gridspec.GridSpec(int(round(tmpScans/2)), 2, width_ratios=[1, 1])
+# for i in range(tmpScans):
+#     plt.subplot(gs[i])
+#     ax = theFig.axes
+#     ax[i].imshow(img[:,:,rnd[i]], cmap = plt.get_cmap('gray'))
+# plt.show()    
 
 
-myPaint(myInitFigure(),doc) #Plot edited
 
+
+# print("Init testing...")        
+# print("Loading image.")        
+# fileName = '../image3.png'
+# img = io.imread(fileName)
+# 
+# print("Creating document.")        
+# doc = IOT_Document() #Initialize a document
+# doc.setName(fileName)
+# tmp, _ = os.path.split(fileName)
+# doc.setFolderName(tmp)
+# doc.setFileName(fileName)
+# doc.setStudy(img)
+# 
+# print("Plot raw document.")        
+# #Catch current OCT scan
+# im = doc.getStudy()
+# imSegmented = doc.getScanSegmentation()
+# 
+# seg = IOT_OperationEditSegmentation()
+# imSegmented = seg.initEditSegmentation(im,imSegmented)
+# doc.setScanSegmentation(imSegmented)
+# 
+# 
+# hFig = myInitFigure()
+# myPaint(hFig,doc) #Plot raw with dummy segmentation
+# 
+# #Apply here some segmentation edit operation
+# 
+# pos=(3,35)
+# #seg.ROISelect(pos)
+# #imSegmented2 = seg.ROIChangeLabel(4)
+# imSegmented2 = seg.ROIChangeLabel(4,pos)
+# doc.setScanSegmentation(imSegmented2)
+# 
+# 
+# myPaint(myInitFigure(),doc) #Plot edited
+# 
 
 
 

@@ -123,6 +123,14 @@ documentation to the class</li>
 </ul>
 </td>
 </tr>
+<tr class="row-even"><td>24-Sep-2018</td>
+<td>FOE</td>
+<td><ul class="first last simple">
+<li>Updated comments</li>
+<li>Removed filter of single scan.</li>
+</ul>
+</td>
+</tr>
 </tbody>
 </table>
 <div class="admonition seealso">
@@ -143,21 +151,52 @@ documentation to the class</li>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>A class to read Amira formatted files.</p>
 <p>A class to read Amira formatted files.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">None</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">None</p>
+</div>
+<div class="admonition-todo admonition" id="index-1">
+<p class="first admonition-title">Todo</p>
+<p class="last">Return an class:<cite>IOT_OCTvolume</cite> instead of a set of scans as an ndarray</p>
+</div>
+<dl class="method">
+<dt id="src.AmiraReader.AmiraReader.readAmiraImage">
+<code class="descname">readAmiraImage</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/AmiraReader.html#AmiraReader.readAmiraImage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.AmiraReader.AmiraReader.readAmiraImage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads a set of OCT images from an Amira file.</p>
+<p>The function does not check whether the file is formatted as an
+Amira file. It is simply assumed to be so.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Known issues:</th><td class="field-body"></td>
+<tr class="field-odd field"><th class="field-name">Example:</th><td class="field-body"></td>
 </tr>
 </tbody>
 </table>
-<ul class="simple">
-<li>Currently it only returns the first scan</li>
-</ul>
-<dl class="method">
-<dt id="src.AmiraReader.AmiraReader.readAmiraImage">
-<code class="descname">readAmiraImage</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/AmiraReader.html#AmiraReader.readAmiraImage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.AmiraReader.AmiraReader.readAmiraImage" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<blockquote>
+<div>from AmiraReader import AmiraReader
+r=AmiraReader()
+fileName = ‘imageFolderFileName.am’
+img = r.readAmiraImage(fileName)</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body">TypeError: When data is neither 2D or 3D, or format is not binary.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> (<em>string</em>) – The Amira formatted file name including the path.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A set of (equally shaped) OCT scans</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">An ndarray shaped [width, height, nScans]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 </dd></dl>
 
@@ -191,7 +230,7 @@ documentation to the class</li>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2017, Felipe Orihuela-Espina.
+        &#169; Copyright 2017-8, Felipe Orihuela-Espina.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
     </div>
   </body>

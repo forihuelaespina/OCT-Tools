@@ -27,6 +27,17 @@ Initial code isolated from previous file segment.py
 | 23-Sep-2018 | FOE    | - Updated comments and added Sphinx                  |
 |             |        |   documentation to the class                         |
 +-------------+--------+------------------------------------------------------+
+| 17-Oct-2018 | FOE    | - Adapted to IOT_Operation becoming abstract and new |
+|             |        |   capabilities. Added method .execute, integration of|
+|             |        |   operands, given operation name, deprecated method  |
+|             |        |   segmentar.                                         |
++-------------+--------+------------------------------------------------------+
+| 18-Oct-2018 | FOE    | - Now using the classes class:`IOT_OCTscan` and      |
+|             |        |   class:`IOT_OCTscanSegmentation`.                   |
++-------------+--------+------------------------------------------------------+
+|  1-Dec-2018 | FOE    | - Adapted to new signature of inherited execute()    |
+|             |        |   method to accept parameters.                       |
++-------------+--------+------------------------------------------------------+
 
 .. seealso:: None
 .. note:: None
@@ -41,6 +52,9 @@ Initial code isolated from previous file segment.py
 
 ## Import
 from IOT_Operation import IOT_Operation
+
+import warnings
+from deprecated import deprecated
 
 import numpy as np
 from skimage import feature, color
@@ -57,9 +71,12 @@ class IOT_OperationSegmentation(IOT_Operation):
     
     A class for automatic segmentation of retinal layers from an OCT scan.
     
-    .. seealso:: 
-    .. note:: 
-    .. todo:: 
+    The operation represented by this class generates a new
+    :class:`IOT_OCTscanSegmentation` for a :class:`IOT_OCTscan`.
+
+    .. seealso:: None
+    .. note:: None
+    .. todo:: None
         
     """
 
@@ -69,18 +86,40 @@ class IOT_OperationSegmentation(IOT_Operation):
     def __init__(self):
         #Call superclass constructor
         super().__init__(1) #Set operation arity to 1.
+
+        #Set the operation name
+        self.name = "Segmentation"
+        
         #Initialize private attributes unique to this instance
-        self._imgin = np.zeros(shape = (0,0,0), dtype = np.uint8 ); #Input image
-        self._imgout = np.zeros(shape = (0,0,0), dtype = np.uint8 ); #The segmented image
+        #self._imgin = np.zeros(shape = (0,0,0), dtype = np.uint8 ); #Input image
+        #self._imgout = np.zeros(shape = (0,0,0), dtype = np.uint8 ); #The segmented image
     
     
     #Private methods
         
 
     #Public methods
-    def segmentar(self,image):
-        #print("OCT-Tools: IOT_operationSegmentation: segmentar: Initiating retinal layer segmentation")
-        self._imgin = image
+    def execute(self,*args,**kwargs):
+        """Executes the operation on the :py:attr:`operands`.
+        
+        Executes the operation on the :py:attr:`operands` and stores the outcome
+        in :py:attr:`result`. Preload operands using
+        :func:`IOT:Operation.addOperand()`.
+        
+        :returns: Result of executing the operation.
+        :rtype: :class:`IOT_OCTscanSegmentation`
+        """
+        #Ensure the operand has been set.
+        if (len(self.operands <1)):
+            warnMsg = self.getClassName() + ':execute: Operand not set.'
+            warnings.warn(warnMsg,SyntaxWarning)
+            return None
+        
+        #print("OCT-Tools: IOT_operationSegmentation: execute: Initiating retinal layer segmentation")
+        imgin = self.operands[0]
+        if isinstance(imgin,(IOT_OCTscan,)):
+            imgin=imgin.data
+
         #Define a default output
         segmentedImage = np.zeros(shape = (0,0,0), dtype = np.uint8 );
         
@@ -88,16 +127,15 @@ class IOT_OperationSegmentation(IOT_Operation):
         #Check whether the image is in RGB (ndim=3) or in grayscale (ndim=2)
         #and convert to grayscale if necessary
         #img = cv2.cvtColor(self._imgin, cv2.COLOR_BGR2GRAY)
-        if self._imgin.ndim == 2:
+        if imgin.ndim == 2:
             #Dimensions are only width and height. The image is already in grayscale.
-            img=self._imgin
-        elif self._imgin.ndim == 3:
+            img=imgin
+        elif imgin.ndim == 3:
             #Image is in RGB. Convert.
-            img=color.rgb2gray(self._imgin);
+            img=color.rgb2gray(imgin);
         else: #Unexpected case. Return warning
             print(self.getClassName(),": Unexpected image shape.")
-            return segmentedImage
-        #segmentationUtils.mostrar_imagen(img)
+            return None
         
         
         
@@ -134,60 +172,62 @@ class IOT_OperationSegmentation(IOT_Operation):
 
         #Elimina ruido
         img = segmentationUtils.ejecuta_close(img,4,4)
-        #segmentationUtils.mostrar_imagen(img)
         
         #Amplifica capas
         img = segmentationUtils.ejecuta_dilate(img,5,20,1)
-        #segmentationUtils.mostrar_imagen(img)
         
         #Tensor
         Axx, Axy, Ayy = feature.structure_tensor(img)
-        #segmentationUtils.mostrar_imagen(Ayy)
         
         #Elimina mas ruido
         Ayy = segmentationUtils.ejecuta_close(Ayy,6,1)
-        #segmentationUtils.mostrar_imagen(Ayy)
         
         #Resalta las capas que sean mayores a la media
         Ayy = segmentationUtils.resalta_bordes(Ayy,True,0)
-        #segmentationUtils.mostrar_imagen(Ayy)
         
         #Elimina aun mas ruido
         Ayy = segmentationUtils.ejecuta_open(Ayy,1,1)
-        #segmentationUtils.mostrar_imagen(Ayy)
         
         #Binarizacion
         binary = segmentationUtils.ejecuta_OTSU(Ayy)
-        #segmentationUtils.mostrar_imagen(binary)
         
         #elimina ruido del posible borde superior
         binary = segmentationUtils.ejecuta_elimina_ruido_extremos(True,0,0,binary)
-        #segmentationUtils.mostrar_imagen(binary)
         
         #elimina ruido del posible borde inferior
         binary = segmentationUtils.ejecuta_elimina_ruido_extremos(False,0,0,binary)
-        #segmentationUtils.mostrar_imagen(binary)
         
         #obtiene bordes exteriores
         arraySuperior, arrayInferior = segmentationUtils.obten_bordes_externos(binary)
         
         #elimina ruido a la imagen original
         img2 = segmentationUtils.elimina_desde_arreglos(img2, arraySuperior, arrayInferior)
-        #segmentationUtils.mostrar_imagen(img2)
-        
         img2 = segmentationUtils.ejecuta_close(img2,2,1)
-        #segmentationUtils.mostrar_imagen(img2)
-        
         img2 = feature.canny(img2,sigma = 2.5)
-        #segmentationUtils.mostrar_imagen(img2)
-        
         img2 = segmentationUtils.elimina_ruido_canny(img2,1)
-        #segmentationUtils.mostrar_imagen(img2)
         
                 
-        print(self.getClassName(),": segmentar: Finishing retinal layer segmentation")
+        print(self.getClassName(),": execute: Finishing retinal layer segmentation")
         
         
-        
-        self._imgout = img2
-        return self._imgout    
+        if isinstance(imgin,(IOT_OCTscan,)):
+            self.result=IOT_OCTscanSegmentation(imgin)
+        else:
+            self.result=IOT_OCTscanSegmentation(IOT_OCTscan(imgin))
+        self.result.data = img2
+
+        return self.result    
+
+
+
+
+    @deprecated(version='0.2', reason="Deprecated. Use method execute() instead.")
+    def segmentar(self,image):
+        #Encapsulate the image as an IOT_OCTscan
+        tmp=IOT_OCTscan(image)
+        self.clear()
+        self.addOperand(tmp)
+        #Execute
+        self.execute()
+        return None
+

@@ -1,0 +1,450 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>src.IOT_OperationMeasureLayerThickness &#8212; OCT-Tools 0.1 documentation</title>
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">OCT-Tools 0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for src.IOT_OperationMeasureLayerThickness</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">-*- coding: utf-8 -*-</span>
+
+<span class="sd">File: IOT_OperationMeasureLayerThickness.py</span>
+
+<span class="sd">Class IIOT_OperationMeasureLayerThickness</span>
+
+<span class="sd">A class for measuring class:ÌOT_RetinalLayers` thicknesses on</span>
+<span class="sd">class:`IOT_OCTscanSegmentation`.</span>
+
+
+<span class="sd">:Log:</span>
+
+<span class="sd">+-------------+--------+------------------------------------------------------+</span>
+<span class="sd">| Date        | Author | Description                                          |</span>
+<span class="sd">+=============+========+======================================================+</span>
+<span class="sd">| 4-Aug-2018  | FOE    | - Isolated minimal solution.                         |</span>
+<span class="sd">|             |        | - Encapsulated in class.                             |</span>
+<span class="sd">+-------------+--------+------------------------------------------------------+</span>
+<span class="sd">| 21-Aug-2018 | FOE    | - Enhanced measurement.                              |</span>
+<span class="sd">+-------------+--------+------------------------------------------------------+</span>
+<span class="sd">| 22-Aug-2018 | FOE    | - Rebranded to capital &quot;O&quot; in operation;             |</span>
+<span class="sd">|             |        |   IOT_Operation                                      |</span>
+<span class="sd">|             |        | - Improved verbosity; now using class name           |</span>
+<span class="sd">+-------------+--------+------------------------------------------------------+</span>
+<span class="sd">| 26-Aug-2018 | FOE    | - Retinal layers are now referenced from class       |</span>
+<span class="sd">|             |        |   RetinalLayers.                                     |</span>
+<span class="sd">+-------------+--------+------------------------------------------------------+</span>
+<span class="sd">| 23-Sep-2018 | FOE    | - Updated comments and added Sphinx                  |</span>
+<span class="sd">|             |        |   documentation to the class                         |</span>
+<span class="sd">+-------------+--------+------------------------------------------------------+</span>
+<span class="sd">|  2-Dec-2018 | FOE    | - Adapted to IOT_Operation becoming abstract and new |</span>
+<span class="sd">|             |        |   capabilities. Added method .execute, integration of|</span>
+<span class="sd">|             |        |   operands, given operation name, deprecated method  |</span>
+<span class="sd">|             |        |   perfilometry.                                      |</span>
+<span class="sd">|             |        | - Operation meta-parameters are now encapsulated as  |</span>
+<span class="sd">|             |        |   properties.                                        |</span>
+<span class="sd">|             |        | - Improved methods documentation.                    |</span>
+<span class="sd">|             |        | - Improved measuring algorithm                       |</span>
+<span class="sd">+-------------+--------+------------------------------------------------------+</span>
+<span class="sd">| 12-Dec-2018 | FOE    | - Deprecated property layerIndex.                    |</span>
+<span class="sd">|             |        | - New property layers                                |</span>
+<span class="sd">|             |        | - More than one layer can now be measured at once.   |</span>
+<span class="sd">+-------------+--------+------------------------------------------------------+</span>
+
+<span class="sd">.. seealso:: None</span>
+<span class="sd">.. note:: None</span>
+<span class="sd">.. todo:: None</span>
+
+
+<span class="sd">.. sectionauthor:: Felipe Orihuela-Espina &lt;f.orihuela-espina@inaoep.mx&gt;</span>
+<span class="sd">.. codeauthor:: Arlem Aleida Castillo Avila &lt;acastillo@inaoep.mx&gt;</span>
+<span class="sd">.. codeauthor:: Felipe Orihuela-Espina &lt;f.orihuela-espina@inaoep.mx&gt;</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1">## Import</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">deprecated</span> <span class="k">import</span> <span class="n">deprecated</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">matplotlib.image</span> <span class="k">as</span> <span class="nn">mpimg</span>
+<span class="kn">from</span> <span class="nn">skimage</span> <span class="k">import</span> <span class="n">io</span><span class="p">,</span> <span class="n">color</span>
+
+<span class="kn">from</span> <span class="nn">IOT_OCTscanSegmentation</span> <span class="k">import</span> <span class="n">IOT_OCTscanSegmentation</span>
+<span class="kn">from</span> <span class="nn">IOT_Operation</span> <span class="k">import</span> <span class="n">IOT_Operation</span>
+<span class="kn">from</span> <span class="nn">IOT_RetinalLayers</span> <span class="k">import</span> <span class="n">IOT_RetinalLayers</span>
+
+
+
+<span class="c1">## Class definition</span>
+<div class="viewcode-block" id="IOT_OperationMeasureLayerThickness"><a class="viewcode-back" href="../../src.IOT_OperationMeasureLayerThickness.html#src.IOT_OperationMeasureLayerThickness.IOT_OperationMeasureLayerThickness">[docs]</a><span class="k">class</span> <span class="nc">IOT_OperationMeasureLayerThickness</span><span class="p">(</span><span class="n">IOT_Operation</span><span class="p">):</span>
+    <span class="c1">#Sphinx documentation</span>
+    <span class="sd">&quot;&quot;&quot;A class for measuring layer thicknesses on OCT segmentations.</span>
+
+<span class="sd">    This class estimates the thickness of layers from a segmented OCT image.</span>
+
+<span class="sd">    .. seealso:: None</span>
+<span class="sd">    .. note:: None</span>
+<span class="sd">    .. todo:: None</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1">#Private class attributes shared by all instances</span>
+
+    <span class="c1">#Class constructor</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The class constructor.</span>
+
+<span class="sd">        The class constructor.</span>
+
+<span class="sd">        tmp = IOT_OperationMeasureLayerThickness() - Creates an empty MeasureLayerThickness operation</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1">#Call superclass constructor</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="c1">#Initialize private attributes unique to this instance</span>
+
+        <span class="c1">#Set the operation name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;MeasureLayerThickness&quot;</span>
+     
+        <span class="bp">self</span><span class="o">.</span><span class="n">pixelWidth</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">#Pixel width in [mm]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pixelHeight</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">#Pixel height in [mm]</span>
+        <span class="c1">#self.layerIndex = -1; #Retinal layer index</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layers</span> <span class="o">=</span> <span class="n">IOT_RetinalLayers</span><span class="p">()</span><span class="o">.</span><span class="n">getAllLayersIndexes</span><span class="p">();</span>
+            <span class="c1">#Retinal layers to be measured. By default, ALL layers are chosen.</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">pixelColumn</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="c1">#Where to measure</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">windowHalfWidth</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1">#Width of measuring window</span>
+        
+        <span class="k">return</span>
+
+
+
+
+    <span class="c1">#Properties getters/setters</span>
+    <span class="c1">#</span>
+    <span class="c1"># Remember: Sphinx ignores docstrings on property setters so all</span>
+    <span class="c1">#documentation for a property must be on the @property method</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">pixelWidth</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="c1">#pixelWidth getter</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Pixel width in [mm].</span>
+
+<span class="sd">        :getter: Gets the pixel width.</span>
+<span class="sd">        :setter: Sets the pixel width.</span>
+<span class="sd">        :type: double</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__pixelWidth</span>
+
+    <span class="nd">@pixelWidth</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">pixelWidth</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">w</span><span class="p">):</span> <span class="c1">#pixelWidth setter</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">w</span><span class="o">&lt;=</span><span class="mi">0</span><span class="p">):</span>
+            <span class="n">warnMsg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getClassName</span><span class="p">()</span> \
+                        <span class="o">+</span> <span class="s1">&#39;:pixelWidth: Width must be bigger than 0 [mm]. &#39;</span> \
+                        <span class="o">+</span> <span class="s1">&#39;Value &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; will be ignored.&#39;</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">warnMsg</span><span class="p">,</span><span class="ne">SyntaxWarning</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__pixelWidth</span> <span class="o">=</span> <span class="n">w</span><span class="p">;</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">pixelHeight</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="c1">#pixelHeight getter</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Pixel height in [mm].</span>
+
+<span class="sd">        :getter: Gets the pixel height.</span>
+<span class="sd">        :setter: Sets the pixel height.</span>
+<span class="sd">        :type: double</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__pixelWidth</span>
+
+    <span class="nd">@pixelHeight</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">pixelHeight</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">h</span><span class="p">):</span> <span class="c1">#pixelHeight setter</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">h</span><span class="o">&lt;=</span><span class="mi">0</span><span class="p">):</span>
+            <span class="n">warnMsg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getClassName</span><span class="p">()</span> \
+                            <span class="o">+</span> <span class="s1">&#39;:pixelHeight: Height must be bigger than 0 [mm]. &#39;</span> \
+                            <span class="o">+</span> <span class="s1">&#39;Value &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">h</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; will be ignored.&#39;</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">warnMsg</span><span class="p">,</span><span class="ne">SyntaxWarning</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__pixelHeight</span> <span class="o">=</span> <span class="n">h</span><span class="p">;</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+
+    <span class="nd">@property</span>
+    <span class="nd">@deprecated</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="s1">&#39;0.2&#39;</span><span class="p">,</span> <span class="n">reason</span><span class="o">=</span><span class="s2">&quot;Deprecated. Use property layers instead.&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">layerIndex</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="c1">#layerIndex getter</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Selected retinal layer index(es) for being measured.</span>
+<span class="sd">        </span>
+<span class="sd">        ..note: Layers may be indicated by their index or by their names</span>
+
+<span class="sd">        :getter: Gets the retinal layer index.</span>
+<span class="sd">        :setter: Sets the retinal layer index. For selecting just one, an int</span>
+<span class="sd">            or a string, may be indicated.</span>
+<span class="sd">        :type: list</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span>
+
+    <span class="nd">@layerIndex</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">layerIndex</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">i</span><span class="p">):</span> <span class="c1">#layerIndex setter</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">str</span><span class="p">:</span> <span class="c1">#layerName provided?</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="n">IOT_RetinalLayers</span><span class="p">()</span><span class="o">.</span><span class="n">getLayerIndex</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layers</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">layers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="c1">#layers getter</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Selected set retinal layers for being measured.</span>
+<span class="sd">        </span>
+<span class="sd">        By default, all layers are selected.</span>
+<span class="sd">        </span>
+<span class="sd">        Layers may be indicated by their index (see</span>
+<span class="sd">        :class:`IOT_RetinalLaers`, by their names, or by their acronyms.</span>
+<span class="sd">        </span>
+<span class="sd">        ..note: This attribute supersedes py:attr:`layerIndex`</span>
+
+<span class="sd">        :getter: Gets the set retinal layers for being measured.</span>
+<span class="sd">        :setter: Sets the set retinal layers for being measured.</span>
+<span class="sd">            For selecting just one, a single int or a string, may be provided</span>
+<span class="sd">            instead of a list.</span>
+<span class="sd">            For selecting all, either provide the full list, or just -1.</span>
+<span class="sd">        :type: list</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__layers</span>
+
+    <span class="nd">@layers</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">layers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">theLayers</span><span class="p">):</span> <span class="c1">#layers setter</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">theLayers</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">list</span><span class="p">:</span>
+            <span class="c1">#Encapsulate as list</span>
+            <span class="n">tmp</span><span class="o">=</span><span class="nb">list</span><span class="p">()</span>
+            <span class="n">tmp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">theLayers</span><span class="p">)</span>
+            <span class="n">theLayers</span> <span class="o">=</span> <span class="n">tmp</span>
+        
+            
+        <span class="c1">#Check that elements of the list are retinal layers and &quot;translate&quot; to</span>
+        <span class="c1">#internal representation as layer indexes.</span>
+        <span class="c1">#Correctly identified layers are temporally saved to a new list.</span>
+        <span class="n">allLayerIndexes</span> <span class="o">=</span> <span class="n">IOT_RetinalLayers</span><span class="p">()</span><span class="o">.</span><span class="n">getAllLayersIndexes</span><span class="p">();</span>
+        <span class="n">tmp</span><span class="o">=</span><span class="nb">list</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">theLayers</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">elem</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">str</span><span class="p">:</span> <span class="c1">#layerName provided?</span>
+                <span class="n">elem</span> <span class="o">=</span> <span class="n">IOT_RetinalLayers</span><span class="p">()</span><span class="o">.</span><span class="n">getLayerIndex</span><span class="p">(</span><span class="n">elem</span><span class="p">)</span>
+                <span class="n">tmp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">elem</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">elem</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">int</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">allLayerIndexes</span><span class="p">:</span>
+                    <span class="n">tmp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">elem</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">warnMsg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getClassName</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;:layers: Unrecognized layer index.&#39;</span>
+                    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">warnMsg</span><span class="p">,</span><span class="ne">SyntaxWarning</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">warnMsg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getClassName</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;:layers: Unexpected list element for layers.&#39;</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">warnMsg</span><span class="p">,</span><span class="ne">SyntaxWarning</span><span class="p">)</span>
+            
+        <span class="bp">self</span><span class="o">.</span><span class="n">__layers</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">;</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">pixelColumn</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="c1">#pixelColumn getter</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The pixel column around which to calculate the layers thicknesses.</span>
+<span class="sd">        For global calculations, set py:attr:`pixelColumn` to -1.</span>
+<span class="sd">        </span>
+<span class="sd">        .. note:: If py:attr:`pixelColumn` exceeds the number of columns in the</span>
+<span class="sd">            current :class:`IOT_OCTscan` operand, then a warning is issued and </span>
+<span class="sd">            py:attr:`pixelColumn` will be set to -1 for global calculations.</span>
+<span class="sd">            If the operand has not yet been set, will be set to -1 for global</span>
+<span class="sd">            calculations.</span>
+
+<span class="sd">        :getter: Gets the pixel column</span>
+<span class="sd">        :setter: Sets the pixel column. </span>
+<span class="sd">        :type: int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__pixelColumn</span>
+
+    <span class="nd">@pixelColumn</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">pixelColumn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">pCol</span><span class="p">):</span> <span class="c1">#pixelColumn setter</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__pixelColumn</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">arity</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">tmpScan</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">operands</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">theScanWidth</span> <span class="o">=</span> <span class="n">tmpScan</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">pCol</span> <span class="o">&gt;=</span> <span class="o">-</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">pCol</span> <span class="o">&lt;</span> <span class="n">theScanWidth</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__pixelColumn</span> <span class="o">=</span> <span class="n">pCol</span>
+            <span class="k">else</span><span class="p">:</span> <span class="c1">#Unexpected case. Return warning</span>
+                <span class="n">warnMsg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getClassName</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;:pixelColumn: Value outside range.&#39;</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">warnMsg</span><span class="p">,</span><span class="ne">SyntaxWarning</span><span class="p">)</span>
+                <span class="c1">#Note that if operands change afterwards, currently this does</span>
+                <span class="c1">#not update, and may be beyond the range. This needs to be</span>
+                <span class="c1">#re-check again at execution.</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">windowHalfWidth</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="c1">#windowHalfWidth getter</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The half width of the window around the py:attr:`pixelColumn` used to</span>
+<span class="sd">        calculate the layers thicknesses.</span>
+<span class="sd">        </span>
+<span class="sd">        :getter: Gets the window half width.</span>
+<span class="sd">        :setter: Sets the window half width.</span>
+<span class="sd">        :type: int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__windowHalfWidth</span>
+
+    <span class="nd">@windowHalfWidth</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">windowHalfWidth</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">w</span><span class="p">):</span> <span class="c1">#windowHalfWidth setter</span>
+        <span class="k">if</span> <span class="n">w</span><span class="o">&gt;=</span><span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__windowHalfWidth</span> <span class="o">=</span> <span class="n">w</span>
+        <span class="k">else</span><span class="p">:</span> <span class="c1">#Unexpected case. Return warning</span>
+            <span class="n">warnMsg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getClassName</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;:windowHalfWidth: Window size must be a positive integer.&#39;</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">warnMsg</span><span class="p">,</span><span class="ne">SyntaxWarning</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+
+    <span class="c1">#Private methods</span>
+
+    <span class="c1">#Public methods</span>
+
+<div class="viewcode-block" id="IOT_OperationMeasureLayerThickness.execute"><a class="viewcode-back" href="../../src.IOT_OperationMeasureLayerThickness.html#src.IOT_OperationMeasureLayerThickness.IOT_OperationMeasureLayerThickness.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">*</span><span class="n">args</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Executes the operation on the :py:attr:`operands`.</span>
+<span class="sd">        </span>
+<span class="sd">        Executes the operation on the :py:attr:`operands` and stores the outcome</span>
+<span class="sd">        in :py:attr:`result`. Preload operands using</span>
+<span class="sd">        :func:`IOT:Operation.addOperand()`.</span>
+<span class="sd">        </span>
+<span class="sd">        :returns: Result of executing the operation.</span>
+<span class="sd">        :rtype: list of thicknesses for selected layers (see :py:attr:`layers`)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="c1">#Ensure the operand has been set.</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">operands</span><span class="p">)</span> <span class="o">&lt;</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">warnMsg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getClassName</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;:execute: Operand not set.&#39;</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">warnMsg</span><span class="p">,</span><span class="ne">SyntaxWarning</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        
+        <span class="n">imgin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">operands</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">imgin</span><span class="p">)</span> <span class="ow">is</span> <span class="n">IOT_OCTscanSegmentation</span><span class="p">:</span>
+            <span class="n">imgin</span><span class="o">=</span><span class="n">imgin</span><span class="o">.</span><span class="n">data</span>
+
+        <span class="c1">#Define a default output</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+        <span class="c1">#Check whether an image has been provided</span>
+        <span class="k">if</span> <span class="n">imgin</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">getClasName</span><span class="p">(),</span><span class="s2">&quot;: Image not selected. Generating a default empty profile.&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1">#Normal behaviour of the function</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pixelColumn</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="c1">#Sobre toda la imagen</span>
+                <span class="n">xmin</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">xmax</span> <span class="o">=</span> <span class="n">imgin</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="c1">#Image width</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1">#Sobre una ventana (o incluso un unico pixel)  </span>
+                <span class="n">xmin</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">pixelColumn</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">windowHalfWidth</span><span class="p">)</span>
+                <span class="n">xmax</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">I2</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">pixelColumn</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">windowHalfWidth</span><span class="p">)</span>
+                
+            <span class="c1">#Extract window of interest</span>
+            <span class="n">imgin</span> <span class="o">=</span> <span class="n">imgin</span><span class="p">[</span><span class="n">xmin</span><span class="p">:</span><span class="n">xmax</span><span class="p">,:]</span>
+            
+            <span class="n">tmpThicknesses</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">:</span>
+                <span class="c1">#Count pixels corresponding to layers by column</span>
+                <span class="c1">#tmpPixelCount = [sum(x) for x in zip(*imgin==elem)] #This works but it is very slow</span>
+                <span class="n">tmpPixelCount</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">imgin</span><span class="o">==</span><span class="n">elem</span><span class="p">)</span>
+                <span class="c1">#Calculate thickness</span>
+                <span class="n">tmpLayerThickness</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">tmpPixelCount</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">pixelHeight</span>
+                <span class="n">tmpThicknesses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tmpLayerThickness</span><span class="p">)</span>
+                
+            <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="o">=</span> <span class="n">tmpThicknesses</span>
+        
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">result</span></div>
+
+
+
+
+<div class="viewcode-block" id="IOT_OperationMeasureLayerThickness.getLayerThickness"><a class="viewcode-back" href="../../src.IOT_OperationMeasureLayerThickness.html#src.IOT_OperationMeasureLayerThickness.IOT_OperationMeasureLayerThickness.getLayerThickness">[docs]</a>    <span class="nd">@deprecated</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="s1">&#39;0.2&#39;</span><span class="p">,</span> <span class="n">reason</span><span class="o">=</span><span class="s2">&quot;Deprecated. Use method execute() instead.&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">getLayerThickness</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">segmentedImage</span><span class="p">,</span> <span class="n">layerName</span><span class="p">,</span> <span class="n">pixel</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="c1">#Encapsulate the image as an IOT_OCTscan</span>
+        <span class="n">tmp</span><span class="o">=</span><span class="n">IOT_OCTscan</span><span class="p">(</span><span class="n">segmentedImage</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">addOperand</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layerIndex</span> <span class="o">=</span> <span class="n">layerName</span> <span class="c1">#The setter will transform into an idx</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pixelColumn</span> <span class="o">=</span> <span class="n">pixel</span>
+        <span class="c1">#Execute</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span></div></div>
+
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">OCT-Tools 0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017-8, Felipe Orihuela-Espina.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
+    </div>
+  </body>
+</html>

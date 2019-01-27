@@ -19,8 +19,9 @@
 import os
 import sys
 #sys.path.insert(0, os.path.abspath('.'))
-sys.path.insert(0, os.path.abspath('.\src'))
+#sys.path.insert(0, os.path.abspath('.\src'))
 sys.path.insert(0, os.path.abspath('..\..'))
+sys.path.insert(0, os.path.abspath('..\..\src'))
 
 
 # -- General configuration ------------------------------------------------
@@ -56,7 +57,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'OCT-Tools'
-copyright = '2017, Felipe Orihuela-Espina'
+copyright = '2017-8, Felipe Orihuela-Espina'
 author = 'Felipe Orihuela-Espina'
 
 # The version info for the project you're documenting, acts as replacement for

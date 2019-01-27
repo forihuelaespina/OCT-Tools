@@ -1,6 +1,8 @@
 """
 -*- coding: utf-8 -*-
 
+.. currentmodule: src
+
 File: IOT_Operation.py
 
 Class IOT_Operation
@@ -27,6 +29,20 @@ IOT stands for INAOE OCT Tools
 +-------------+--------+------------------------------------------------------+
 | 23-Sep-2018 | FOE    | - Updated comments and added Sphinx documentation to |
 |             |        |   the class.                                         |
+|             |        | - _arity attribute "upgraded" from attribute to      |
+|             |        |   property arity and property getter/setter added    |
+|             |        | - _arity get/set methods deprecated.                 |
++-------------+--------+------------------------------------------------------+
+| 26-Sep-2018 | FOE    | - The class becomes abstract and a new abstract      |
+|             |        |   method execute is provided.                        |
+|             |        | - Added support to hold operands.                    |
+|             |        | - Arity now becomes only the number of the operands. |
+|             |        |   get/setArity methods are now deprecated            |
++-------------+--------+------------------------------------------------------+
+|  1-Dec-2018 | FOE    | - Signature of execute() method now accepts          |
+|             |        |   parameters and return result instead of None.      |
++-------------+--------+------------------------------------------------------+
+| 20-Jan-2018 | FOE    | - Added method setOperand.                           |
 +-------------+--------+------------------------------------------------------+
 
 .. seealso:: None
@@ -42,29 +58,40 @@ IOT stands for INAOE OCT Tools
 
 ## Import
 import warnings
+from abc import ABC, abstractmethod
 
 
 
 ## Class definition
-class IOT_Operation(object):
+class IOT_Operation(ABC):
     #Sphinx documentation
-    """A base class for operations on IOT_OCTvolumes and IOT_OCTscans.
+    """An abstract base class for operations on :class:`IOT_OCTvolume`s and :class:`IOT_OCTscan`s.
 
-    A base class for operations on IOT_OCTvolumes and IOT_OCTscans.
-
+    An abstract base class for operations on :class:`IOT_OCTvolume`s and
+    :class:`IOT_OCTscan`s.
+    
+    :Example:
+    ::
+    
+        tmp = IOT_OCTscan(img)
+        o = IOT_OperationFlattening()
+        o.addOperand(tmp)
+        o.arity() #return 1
+        o.execute() #Flattens the image
 
 
     :Known subclasses:
-    * IOT_OperationEditSegmentation
-    * IOT_OperationFlattening
-    * IOT_OperationMeasureLayerThickness
-    * IOT_OperationPerfilometer
-    * IOT_OperationSegmentation
-    * IOT_OperationStitch
+    * :class:`IOT_OperationEditSegmentation`
+    * :class:`IOT_OperationFlattening`
+    * :class:`IOT_OperationMeasureLayerThickness`
+    * :class:`IOT_OperationPerfilometer`
+    * :class:`IOT_OperationSegmentation`
+    * :class:`IOT_OperationStitch`
 
-    .. seealso::
-    .. note::
-    .. todo::
+    .. seealso:: None
+    .. note:: None
+    .. todo:: 
+        * Support to hold operand names.
 
     """
 
@@ -75,66 +102,107 @@ class IOT_Operation(object):
 
     #Class constructor
     #
-    def __init__(self,*args):
+    def __init__(self,**kwargs):
         """The class constructor.
 
-        The IOT_Operation class constructor
-
-        tmp = IOT_Operation() - Creates an operation of arity 1.
-        tmp = IOT_Operation(n) - Creates an operation of arity n.
-
-        :param n: the arity of the operation
+        The class constructor. Creates an empty operation
 
         """
-        if (len(args)>1):
-            warnMsg = self.getClassName() + ':__init__: Unexpected number of input arguments.'
-            warnings.warn(warnMsg,SyntaxWarning)
-
+        super().__init__()
+        
         #Initialize attributes (without decorator @property)
 
         #Initialize properties (with decorator @property)
-        n=1
-        if (len(args)>0):
-            n=args[0]
-        self.arity = n #Set arity of the operation
+        self.name = 'Operation' #The operation name
+        self.operands = list() #Operands
+        self.result = None #Operation outputs (a list in case it is multivalued).
+                           #None until executed or cleared.
 
-
-    #Properties getters/setters
-    @property
-    def arity(self): #arity getter
-        """Gets the operation arity.
-
-        Property arity getter. Gets the operation arity.
-
-        :returns: The operation arity.
-        :rtype: int
-        """
-        return self.__arity
-
-    @arity.setter
-    def arity(self,d): #arity setter
-        """Sets the operation arity.
-
-        Property arity setter. Sets the operation arity. Arity of the operation
-        has to be bigger or equal than 1.
-
-        :param d: Operation arity
-        :type d: int
-        :returns: None
-
-        """
-        if d is None:
-            d = 1
-        elif d<1:
-            warnMsg = self.getClassName() + ':getArity: ' \
-                      + 'Arity must be a positive integer. Setting it to 1.'
-            warnings.warn(warnMsg,SyntaxWarning)
-            d = 1
-
-        self.__arity = d;
+        if kwargs is not None:
+            for key, value in kwargs.items():
+                if (key=='name'):
+                    self.name = value
+                    
         return
 
+    #Properties getters/setters
+    #
+    # Remember: Sphinx ignores docstrings on property setters so all
+    #documentation for a property must be on the @property method
+    @property
+    def operands(self): #operands getter
+        """
+        The list of operands.
+
+        :getter: Gets the list of operands
+        :setter: Sets the list of operands.
+        :type: list
+        """
+        return self.__operands
+
+
+    @operands.setter
+    def operands(self,opList): #operands setter
+        if (not isinstance(opList,(list,))):
+            warnMsg = self.getClassName() + ':operands: Unexpected type. ' \
+                            'Please provide operands as a list.'
+            warnings.warn(warnMsg,SyntaxWarning)
+        else:
+            self.__operands = opList;
+        return None
+
+    @property
+    def name(self): #name getter
+        """
+        The operation name
+
+        :getter: Gets the operation name
+        :setter: Sets the operation name.
+        :type: string
+        """
+        return self.__name
+
+    @name.setter
+    def name(self,opName): #name setter
+        if (not isinstance(opName,(str,))):
+            warnMsg = self.getClassName() + ':name: Unexpected type. ' \
+                            'Operations name must be a string.'
+            warnings.warn(warnMsg,SyntaxWarning)
+        else:
+            self.__name = opName;
+        return None
+
+
+    @property
+    def result(self): #result getter
+        """
+        The list of results.
+        
+        This is a read only property. There is no setter method.
+
+        :getter: Gets the list of results
+        :setter: Sets the list of results
+        :type: list
+        """
+        return self.__result
+
+
+    @result.setter
+    def result(self,rList): #result setter
+        self.__result = rList;
+        return None
+
+
     #Private methods
+    def __str__(self):
+        tmp = '['
+        for x in self.operands:
+            tmp += format(x) + ','
+        tmp+=']'
+        s = '<' + self.getClassName() + '([' \
+            + 'name: ' + self.name + ';' \
+            + ' operands: ' + tmp + '])>'
+        return s
 
     #Public methods
     def getClassName(self):
@@ -147,31 +215,68 @@ class IOT_Operation(object):
         """
         return type(self).__name__
 
-    def getArity(self):
-        """Get the operation arity.
-
-        Get the operation arity.
-
-
-        .. deprecated:: 0.2
-           Use property .arity instead.
+    def addOperand(self,op,i=None):
         """
-        warnMsg = self.getClassName() + ':getArity: Deprecated. ' \
-                 + 'Use ' + self.getClassName() + '.arity instead.'
-        warnings.warn(warnMsg,DeprecationWarning)
-        return self.arity
-
-    def setArity(self,d):
-        """Set the operation arity.
-
-        Set the operation arity.
-
-
-        .. deprecated:: 0.2
-           Use property .arity instead.
+        Add a new operand.
+        
+        :param op: The operand.
+        :type op: object
+        :param i: (optional) The operand order. If given it may shift the
+            order of other operands already set. If not given, the operand
+            is appended at the end of the list of operands.
+        :type op: int
+        :return: None
         """
-        warnMsg = self.getClassName() + ':getArity: Deprecated. ' \
-                 + 'Use ' + self.getClassName() + '.arity instead.'
-        warnings.warn(warnMsg,DeprecationWarning)
-        self.arity = d
-        return
+        if (i is None):
+            self.__operands.append(op)
+        else:
+            self.__operands.insert(i,op)
+        return None
+        
+    def setOperand(self,op,i):
+        """
+        Set an operand; substitutes an existing operand with a new one.
+        
+        Calling setOperand when the :py:attr:`i`-th operand has not been
+        previously set will result in an out-of-range error.
+        
+        :param op: The new operand.
+        :type op: object
+        :param i: The operand order. Operand index is zero-base i.e. the
+            first operand occupies i=0
+        :type op: int
+        :return: None
+        """
+        self.__operands[i] = op
+        return None
+
+    def arity(self):
+        """Gets the operation arity (number of operands).
+        
+        :return: The operation arity
+        :rtype: int
+        """
+        return len(self.__operands)
+
+    def clear(self):
+        """
+        Clears the operands; Removes all operands.
+        
+        :return: None
+        """
+        self.__operands = list()
+        return None
+    
+    #@abstractmethod
+    def execute(self,*args,**kwargs):
+        """Executes the operation on the operands.
+        
+        This is an abstract method. Executes the operation on the .operands
+        and stores the outcome in .result
+        
+        Operation meta-parameters may be also passed.
+        
+        :returns: Result of executing the operation.
+        :rtype: Type of result -depends on subclass implementation-.
+        """
+        pass

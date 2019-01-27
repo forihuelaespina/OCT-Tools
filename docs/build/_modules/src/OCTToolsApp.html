@@ -1,0 +1,198 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>src.OCTToolsApp &#8212; OCT-Tools 0.1 documentation</title>
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">OCT-Tools 0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for src.OCTToolsApp</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">-*- coding: utf-8 -*-</span>
+
+<span class="sd">File: OCTToolsApp.py</span>
+
+<span class="sd">Class OCTToolsApp</span>
+
+<span class="sd">Application entrance point.</span>
+
+<span class="sd">:Log:</span>
+
+<span class="sd">+-------------+--------+------------------------------------------------------+   </span>
+<span class="sd">| Date        | Author | Description                                          |</span>
+<span class="sd">+=============+========+======================================================+</span>
+<span class="sd">| Feb-2018    | AACA   | - File created as run.py                             |</span>
+<span class="sd">+-------------+--------+------------------------------------------------------+   </span>
+<span class="sd">| 4-Aug-2018  | FOE    | - Isolated minimal solution.                         |</span>
+<span class="sd">+-------------+--------+------------------------------------------------------+   </span>
+<span class="sd">| 21-Aug-2018 | FOE    | - Updated main window class from OCTToolsMainWindow  |</span>
+<span class="sd">|             |        |   to IOT_GUI_MainWindow (later rebranded as          |</span>
+<span class="sd">|             |        |   IOT_GUI_ToolsWindow                                |</span>
+<span class="sd">+-------------+--------+------------------------------------------------------+   </span>
+<span class="sd">| 22-Aug-2018 | FOE    | - Run is now a class. File rebranded to OCTToolsApp  |</span>
+<span class="sd">|             |        |   from run.py                                        |</span>
+<span class="sd">|             |        | - The application main window is no longer the tools |</span>
+<span class="sd">|             |        |   menu window (IOT_GUI_ToolsWindow), but the document|</span>
+<span class="sd">|             |        |   window (IOT_GUI_DocumentWindow).                   |</span>
+<span class="sd">+-------------+--------+------------------------------------------------------+   </span>
+<span class="sd">| 9-Sep-2018  | FOE    | - &quot;Separated&quot; the entry points as a script, from the |</span>
+<span class="sd">|             |        |   entry point as an installed program.               |</span>
+<span class="sd">|             |        | - Added &quot;src&quot; to the path for &quot;installed&quot; execution. |</span>
+<span class="sd">+-------------+--------+------------------------------------------------------+</span>
+<span class="sd">| 23-Sep-2018 | FOE    | - Updated comments and added Sphinx                  |</span>
+<span class="sd">|             |        |   documentation to the class                         |</span>
+<span class="sd">+-------------+--------+------------------------------------------------------+</span>
+<span class="sd">| 14-Nov-2018 | FOE    | - Connected the tools window to the document window. |</span>
+<span class="sd">+-------------+--------+------------------------------------------------------+   </span>
+
+<span class="sd">.. seealso:: None</span>
+<span class="sd">.. note:: None</span>
+<span class="sd">.. todo:: None</span>
+<span class="sd">    </span>
+<span class="sd"> </span>
+<span class="sd">.. sectionauthor:: Felipe Orihuela-Espina &lt;f.orihuela-espina@inaoep.mx&gt;</span>
+<span class="sd">.. codeauthor:: Arlem Aleida Castillo Avila &lt;acastillo@inaoep.mx&gt;</span>
+<span class="sd">.. codeauthor:: Felipe Orihuela-Espina &lt;f.orihuela-espina@inaoep.mx&gt;</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<span class="c1">## Import</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="c1">#Add paths</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;src&#39;</span><span class="p">)</span> <span class="c1">#This line is not needed while</span>
+                    <span class="c1">#working in the interpreter, as the main file is in the</span>
+                    <span class="c1">#same directory. However, it is needed by pynsist when</span>
+                    <span class="c1">#it creates the installer, so that it &quot;sees&quot; the src</span>
+                    <span class="c1">#folder.</span>
+
+<span class="kn">from</span> <span class="nn">PyQt5.QtWidgets</span> <span class="k">import</span> <span class="n">QApplication</span>
+<span class="c1">#, QMainWindow, QWidget, QHBoxLayout, QTabWidget, QPushButton, QGraphicsView, QLabel, QAction, QFileDialog</span>
+<span class="c1">#from PyQt5.QtGui import QIcon, QPixmap</span>
+<span class="c1">#from PyQt5 import uic</span>
+
+
+<span class="kn">from</span> <span class="nn">IOT_GUI_DocumentWindow</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">IOT_GUI_ToolsWindow</span> <span class="k">import</span> <span class="o">*</span>
+
+
+<span class="c1">## Class definition</span>
+<div class="viewcode-block" id="OCTToolsApp"><a class="viewcode-back" href="../../src.OCTToolsApp.html#src.OCTToolsApp.OCTToolsApp">[docs]</a><span class="k">class</span> <span class="nc">OCTToolsApp</span><span class="p">():</span>
+    <span class="c1">#Sphinx documentation</span>
+    <span class="sd">&quot;&quot;&quot;Application entrance point.</span>
+<span class="sd">    </span>
+<span class="sd">    Application entrance point.</span>
+<span class="sd">    </span>
+<span class="sd">    .. seealso:: None</span>
+<span class="sd">    .. note:: None</span>
+<span class="sd">    .. todo:: None</span>
+<span class="sd">        </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1">#Private class attributes shared by all instances</span>
+
+    <span class="c1">#Class constructor</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1">#Crear un objeto de la clase OCTToolsMainWindow</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_toolsWindow</span> <span class="o">=</span> <span class="n">IOT_GUI_ToolsWindow</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_docWindow</span> <span class="o">=</span> <span class="n">IOT_GUI_DocumentWindow</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_toolsWindow</span><span class="o">.</span><span class="n">connectDocumentWindow</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_docWindow</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_docWindow</span><span class="o">.</span><span class="n">connectToolsWindow</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_toolsWindow</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="OCTToolsApp.show"><a class="viewcode-back" href="../../src.OCTToolsApp.html#src.OCTToolsApp.OCTToolsApp.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_toolsWindow</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_docWindow</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div></div>
+        
+
+<span class="c1">#This is the application entrance point. Note that it is NOT a method of the OCTToolsApp class</span>
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../src.OCTToolsApp.html#src.OCTToolsApp.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;OCT-Tools: Initiating...&quot;</span><span class="p">)</span>
+    <span class="c1">#Instancia para iniciar una aplicación</span>
+    <span class="n">app</span> <span class="o">=</span> <span class="n">QApplication</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
+    
+    <span class="c1">#Show the windows</span>
+    <span class="n">tmp</span> <span class="o">=</span> <span class="n">OCTToolsApp</span><span class="p">()</span>
+    <span class="n">tmp</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    
+    <span class="c1">#Ejecutar la aplicación y salir al terminar</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">exec_</span><span class="p">())</span></div>
+
+<span class="c1"># The following two lines, allow me to run the program from the interpreter</span>
+<span class="c1">#&quot;as a script&quot;, while the above method main() allow me to have an entrance</span>
+<span class="c1">#point so that it is possible to call the method from an installed version</span>
+<span class="c1">#of the application</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">OCT-Tools 0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017-8, Felipe Orihuela-Espina.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
+    </div>
+  </body>
+</html>

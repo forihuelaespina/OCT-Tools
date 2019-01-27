@@ -37,7 +37,7 @@ Initial code isolated from previous file segment.py
 
 
 ## Class definition
-class IOT_RetinalLayers():
+class IOT_RetinalLayers(object):
     #Sphinx documentation
     """A collection of constants for identifying retinal layers.
     
@@ -63,9 +63,9 @@ class IOT_RetinalLayers():
     
     * Choroid
 
-    .. seealso:: 
-    .. note:: 
-    .. todo:: 
+    .. seealso:: None
+    .. note:: None
+    .. todo:: None
         
     """
     
@@ -78,7 +78,7 @@ class IOT_RetinalLayers():
         #Initialize attributes
 
         #Layer constants
-        self.layerIndex = {'Inner Limiting Membrane': 1, 
+        self.layers = {'Inner Limiting Membrane': 1, 
             'Nerve Fiber Layer': 2, 
             'Ganglion Cell Layer': 3, 
             'Inner Plexiform Layer': 4, 
@@ -91,40 +91,40 @@ class IOT_RetinalLayers():
             'Choroid': 20}
             
         #...and so that one can have different names for each layer
-        self.layerNames = {'ilm': self.layerIndex['Inner Limiting Membrane'],
-            'innerlimitingmembrane': self.layerIndex['Inner Limiting Membrane'],
-            'nfl': self.layerIndex['Nerve Fiber Layer'],
-            'nervefiberlayer': self.layerIndex['Nerve Fiber Layer'],
-            'gcl': self.layerIndex['Ganglion Cell Layer'],
-            'ganglioncelllayer': self.layerIndex['Ganglion Cell Layer'],
-            'ipl': self.layerIndex['Inner Plexiform Layer'],
-            'innerplexiformlayer': self.layerIndex['Inner Plexiform Layer'],
-            'inl': self.layerIndex['Inner Nuclear Layer'],
-            'innernuclearlayer': self.layerIndex['Inner Nuclear Layer'],
-            'opl': self.layerIndex['Outer Plexiform Layer'],
-            'outerplexiformlayer': self.layerIndex['Outer Plexiform Layer'],
-            'onl': self.layerIndex['Outer Nuclear Layer'],
-            'outernuclearlayer': self.layerIndex['Outer Nuclear Layer'],
-            'elm': self.layerIndex['External Limiting Membrane'],
-            'externallimitingmembrane': self.layerIndex['External Limiting Membrane'],
-            'rcl': self.layerIndex['Rods and Cones Layers'],
-            'rodsandconeslayers': self.layerIndex['Rods and Cones Layers'],
-            'rpe': self.layerIndex['Retinal Pigment Epithelium'],
-            'retinalpigmentepithelium': self.layerIndex['Retinal Pigment Epithelium'],
-            'choroid': self.layerIndex['Choroid']}
+        self.layerNames = {'ilm': self.layers['Inner Limiting Membrane'],
+            'innerlimitingmembrane': self.layers['Inner Limiting Membrane'],
+            'nfl': self.layers['Nerve Fiber Layer'],
+            'nervefiberlayer': self.layers['Nerve Fiber Layer'],
+            'gcl': self.layers['Ganglion Cell Layer'],
+            'ganglioncelllayer': self.layers['Ganglion Cell Layer'],
+            'ipl': self.layers['Inner Plexiform Layer'],
+            'innerplexiformlayer': self.layers['Inner Plexiform Layer'],
+            'inl': self.layers['Inner Nuclear Layer'],
+            'innernuclearlayer': self.layers['Inner Nuclear Layer'],
+            'opl': self.layers['Outer Plexiform Layer'],
+            'outerplexiformlayer': self.layers['Outer Plexiform Layer'],
+            'onl': self.layers['Outer Nuclear Layer'],
+            'outernuclearlayer': self.layers['Outer Nuclear Layer'],
+            'elm': self.layers['External Limiting Membrane'],
+            'externallimitingmembrane': self.layers['External Limiting Membrane'],
+            'rcl': self.layers['Rods and Cones Layers'],
+            'rodsandconeslayers': self.layers['Rods and Cones Layers'],
+            'rpe': self.layers['Retinal Pigment Epithelium'],
+            'retinalpigmentepithelium': self.layers['Retinal Pigment Epithelium'],
+            'choroid': self.layers['Choroid']}
  
         #Layer acronyms
-        self.layerAcronyms = {self.layerIndex['Inner Limiting Membrane']: 'ILM',
-            self.layerIndex['Nerve Fiber Layer']: 'NFL',
-            self.layerIndex['Ganglion Cell Layer']: 'GCL',
-            self.layerIndex['Inner Plexiform Layer']: 'IPL',
-            self.layerIndex['Inner Nuclear Layer']: 'INL',
-            self.layerIndex['Outer Plexiform Layer']: 'OPL',
-            self.layerIndex['Outer Nuclear Layer']: 'ONL',
-            self.layerIndex['External Limiting Membrane']: 'ELM',
-            self.layerIndex['Rods and Cones Layers']: 'RCL',
-            self.layerIndex['Retinal Pigment Epithelium']: 'RPE',
-            self.layerIndex['Choroid']: 'Choroid'}
+        self.layerAcronyms = {self.layers['Inner Limiting Membrane']: 'ILM',
+            self.layers['Nerve Fiber Layer']: 'NFL',
+            self.layers['Ganglion Cell Layer']: 'GCL',
+            self.layers['Inner Plexiform Layer']: 'IPL',
+            self.layers['Inner Nuclear Layer']: 'INL',
+            self.layers['Outer Plexiform Layer']: 'OPL',
+            self.layers['Outer Nuclear Layer']: 'ONL',
+            self.layers['External Limiting Membrane']: 'ELM',
+            self.layers['Rods and Cones Layers']: 'RCL',
+            self.layers['Retinal Pigment Epithelium']: 'RPE',
+            self.layers['Choroid']: 'Choroid'}
   
         return
         
@@ -136,11 +136,11 @@ class IOT_RetinalLayers():
     
     def getAllLayersIndexes(self):
     #Retrieves a list of layer indexes
-        return list(self.layerIndex.values())
+        return list(self.layers.values())
 
     def getAllLayersNames(self):
     #Retrieves a list of layer keys
-        return list(self.layerIndex.keys())
+        return list(self.layers.keys())
 
     def getLayerAcronym(self,idx):
     #Return the acronym of a layer idenfied by its index
@@ -168,7 +168,7 @@ class IOT_RetinalLayers():
         lname = 'Default'
         try:
             #There is no 'direct' method to access the keys given the value.
-            lname= list(self.layerIndex.keys())[list(self.layerIndex.values()).index(idx)]
+            lname= list(self.layers.keys())[list(self.layers.values()).index(idx)]
         except:
             lname='Unknown'
             print(self.getClassName(),':getLayerName: Unexpected layer index. Returning name "',lname,'"')
@@ -177,7 +177,7 @@ class IOT_RetinalLayers():
         
     def getNumLayers(self):
     #Return the number of known layers (please note that this also include known non-retinal layers like the choroid)
-        return len(self.layerIndex)
+        return len(self.layers)
         
         
        

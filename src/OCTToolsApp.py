@@ -33,6 +33,8 @@ Application entrance point.
 | 23-Sep-2018 | FOE    | - Updated comments and added Sphinx                  |
 |             |        |   documentation to the class                         |
 +-------------+--------+------------------------------------------------------+
+| 14-Nov-2018 | FOE    | - Connected the tools window to the document window. |
++-------------+--------+------------------------------------------------------+   
 
 .. seealso:: None
 .. note:: None
@@ -72,9 +74,9 @@ class OCTToolsApp():
     
     Application entrance point.
     
-    .. seealso:: 
-    .. note:: 
-    .. todo:: 
+    .. seealso:: None
+    .. note:: None
+    .. todo:: None
         
     """
 
@@ -86,6 +88,7 @@ class OCTToolsApp():
         self._toolsWindow = IOT_GUI_ToolsWindow()
         self._docWindow = IOT_GUI_DocumentWindow()
         self._toolsWindow.connectDocumentWindow(self._docWindow)
+        self._docWindow.connectToolsWindow(self._toolsWindow)
 
 
     def show(self):

@@ -15,7 +15,13 @@ Submodules
    src.IOT_Document
    src.IOT_GUI_DocumentWindow
    src.IOT_GUI_EditSegmentationTools
+   src.IOT_GUI_MeasureThicknessParameterSettings
+   src.IOT_GUI_PerfilometerParameterSettings
    src.IOT_GUI_ToolsWindow
+   src.IOT_GUI_UtilitiesDock
+   src.IOT_OCTscan
+   src.IOT_OCTscanSegmentation
+   src.IOT_OCTvolume
    src.IOT_Operation
    src.IOT_OperationEditSegmentation
    src.IOT_OperationFlattening

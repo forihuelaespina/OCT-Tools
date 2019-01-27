@@ -92,7 +92,7 @@
 
 
 <span class="c1">## Class definition</span>
-<div class="viewcode-block" id="IOT_RetinalLayers"><a class="viewcode-back" href="../../src.IOT_RetinalLayers.html#src.IOT_RetinalLayers.IOT_RetinalLayers">[docs]</a><span class="k">class</span> <span class="nc">IOT_RetinalLayers</span><span class="p">():</span>
+<div class="viewcode-block" id="IOT_RetinalLayers"><a class="viewcode-back" href="../../src.IOT_RetinalLayers.html#src.IOT_RetinalLayers.IOT_RetinalLayers">[docs]</a><span class="k">class</span> <span class="nc">IOT_RetinalLayers</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="c1">#Sphinx documentation</span>
     <span class="sd">&quot;&quot;&quot;A collection of constants for identifying retinal layers.</span>
 <span class="sd">    </span>
@@ -118,9 +118,9 @@
 <span class="sd">    </span>
 <span class="sd">    * Choroid</span>
 
-<span class="sd">    .. seealso:: </span>
-<span class="sd">    .. note:: </span>
-<span class="sd">    .. todo:: </span>
+<span class="sd">    .. seealso:: None</span>
+<span class="sd">    .. note:: None</span>
+<span class="sd">    .. todo:: None</span>
 <span class="sd">        </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
@@ -133,7 +133,7 @@
         <span class="c1">#Initialize attributes</span>
 
         <span class="c1">#Layer constants</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">layerIndex</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Inner Limiting Membrane&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">layers</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Inner Limiting Membrane&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> 
             <span class="s1">&#39;Nerve Fiber Layer&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> 
             <span class="s1">&#39;Ganglion Cell Layer&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> 
             <span class="s1">&#39;Inner Plexiform Layer&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> 
@@ -146,40 +146,40 @@
             <span class="s1">&#39;Choroid&#39;</span><span class="p">:</span> <span class="mi">20</span><span class="p">}</span>
             
         <span class="c1">#...and so that one can have different names for each layer</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">layerNames</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;ilm&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">layerIndex</span><span class="p">[</span><span class="s1">&#39;Inner Limiting Membrane&#39;</span><span class="p">],</span>
-            <span class="s1">&#39;innerlimitingmembrane&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">layerIndex</span><span class="p">[</span><span class="s1">&#39;Inner Limiting Membrane&#39;</span><span class="p">],</span>
-            <span class="s1">&#39;nfl&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">layerIndex</span><span class="p">[</span><span class="s1">&#39;Nerve Fiber Layer&#39;</span><span class="p">],</span>
-            <span class="s1">&#39;nervefiberlayer&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">layerIndex</span><span class="p">[</span><span class="s1">&#39;Nerve Fiber Layer&#39;</span><span class="p">],</span>
-            <span class="s1">&#39;gcl&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">layerIndex</span><span class="p">[</span><span class="s1">&#39;Ganglion Cell Layer&#39;</span><span class="p">],</span>
-            <span class="s1">&#39;ganglioncelllayer&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">layerIndex</span><span class="p">[</span><span class="s1">&#39;Ganglion Cell Layer&#39;</span><span class="p">],</span>
-            <span class="s1">&#39;ipl&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">layerIndex</span><span class="p">[</span><span class="s1">&#39;Inner Plexiform Layer&#39;</span><span class="p">],</span>
-            <span class="s1">&#39;innerplexiformlayer&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">layerIndex</span><span class="p">[</span><span class="s1">&#39;Inner Plexiform Layer&#39;</span><span class="p">],</span>
-            <span class="s1">&#39;inl&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">layerIndex</span><span class="p">[</span><span class="s1">&#39;Inner Nuclear Layer&#39;</span><span class="p">],</span>
-            <span class="s1">&#39;innernuclearlayer&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">layerIndex</span><span class="p">[</span><span class="s1">&#39;Inner Nuclear Layer&#39;</span><span class="p">],</span>
-            <span class="s1">&#39;opl&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">layerIndex</span><span class="p">[</span><span class="s1">&#39;Outer Plexiform Layer&#39;</span><span class="p">],</span>
-            <span class="s1">&#39;outerplexiformlayer&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">layerIndex</span><span class="p">[</span><span class="s1">&#39;Outer Plexiform Layer&#39;</span><span class="p">],</span>
-            <span class="s1">&#39;onl&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">layerIndex</span><span class="p">[</span><span class="s1">&#39;Outer Nuclear Layer&#39;</span><span class="p">],</span>
-            <span class="s1">&#39;outernuclearlayer&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">layerIndex</span><span class="p">[</span><span class="s1">&#39;Outer Nuclear Layer&#39;</span><span class="p">],</span>
-            <span class="s1">&#39;elm&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">layerIndex</span><span class="p">[</span><span class="s1">&#39;External Limiting Membrane&#39;</span><span class="p">],</span>
-            <span class="s1">&#39;externallimitingmembrane&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">layerIndex</span><span class="p">[</span><span class="s1">&#39;External Limiting Membrane&#39;</span><span class="p">],</span>
-            <span class="s1">&#39;rcl&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">layerIndex</span><span class="p">[</span><span class="s1">&#39;Rods and Cones Layers&#39;</span><span class="p">],</span>
-            <span class="s1">&#39;rodsandconeslayers&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">layerIndex</span><span class="p">[</span><span class="s1">&#39;Rods and Cones Layers&#39;</span><span class="p">],</span>
-            <span class="s1">&#39;rpe&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">layerIndex</span><span class="p">[</span><span class="s1">&#39;Retinal Pigment Epithelium&#39;</span><span class="p">],</span>
-            <span class="s1">&#39;retinalpigmentepithelium&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">layerIndex</span><span class="p">[</span><span class="s1">&#39;Retinal Pigment Epithelium&#39;</span><span class="p">],</span>
-            <span class="s1">&#39;choroid&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">layerIndex</span><span class="p">[</span><span class="s1">&#39;Choroid&#39;</span><span class="p">]}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layerNames</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;ilm&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s1">&#39;Inner Limiting Membrane&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;innerlimitingmembrane&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s1">&#39;Inner Limiting Membrane&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;nfl&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s1">&#39;Nerve Fiber Layer&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;nervefiberlayer&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s1">&#39;Nerve Fiber Layer&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;gcl&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s1">&#39;Ganglion Cell Layer&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;ganglioncelllayer&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s1">&#39;Ganglion Cell Layer&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;ipl&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s1">&#39;Inner Plexiform Layer&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;innerplexiformlayer&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s1">&#39;Inner Plexiform Layer&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;inl&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s1">&#39;Inner Nuclear Layer&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;innernuclearlayer&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s1">&#39;Inner Nuclear Layer&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;opl&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s1">&#39;Outer Plexiform Layer&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;outerplexiformlayer&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s1">&#39;Outer Plexiform Layer&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;onl&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s1">&#39;Outer Nuclear Layer&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;outernuclearlayer&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s1">&#39;Outer Nuclear Layer&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;elm&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s1">&#39;External Limiting Membrane&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;externallimitingmembrane&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s1">&#39;External Limiting Membrane&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;rcl&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s1">&#39;Rods and Cones Layers&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;rodsandconeslayers&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s1">&#39;Rods and Cones Layers&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;rpe&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s1">&#39;Retinal Pigment Epithelium&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;retinalpigmentepithelium&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s1">&#39;Retinal Pigment Epithelium&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;choroid&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s1">&#39;Choroid&#39;</span><span class="p">]}</span>
  
         <span class="c1">#Layer acronyms</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">layerAcronyms</span> <span class="o">=</span> <span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">layerIndex</span><span class="p">[</span><span class="s1">&#39;Inner Limiting Membrane&#39;</span><span class="p">]:</span> <span class="s1">&#39;ILM&#39;</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">layerIndex</span><span class="p">[</span><span class="s1">&#39;Nerve Fiber Layer&#39;</span><span class="p">]:</span> <span class="s1">&#39;NFL&#39;</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">layerIndex</span><span class="p">[</span><span class="s1">&#39;Ganglion Cell Layer&#39;</span><span class="p">]:</span> <span class="s1">&#39;GCL&#39;</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">layerIndex</span><span class="p">[</span><span class="s1">&#39;Inner Plexiform Layer&#39;</span><span class="p">]:</span> <span class="s1">&#39;IPL&#39;</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">layerIndex</span><span class="p">[</span><span class="s1">&#39;Inner Nuclear Layer&#39;</span><span class="p">]:</span> <span class="s1">&#39;INL&#39;</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">layerIndex</span><span class="p">[</span><span class="s1">&#39;Outer Plexiform Layer&#39;</span><span class="p">]:</span> <span class="s1">&#39;OPL&#39;</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">layerIndex</span><span class="p">[</span><span class="s1">&#39;Outer Nuclear Layer&#39;</span><span class="p">]:</span> <span class="s1">&#39;ONL&#39;</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">layerIndex</span><span class="p">[</span><span class="s1">&#39;External Limiting Membrane&#39;</span><span class="p">]:</span> <span class="s1">&#39;ELM&#39;</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">layerIndex</span><span class="p">[</span><span class="s1">&#39;Rods and Cones Layers&#39;</span><span class="p">]:</span> <span class="s1">&#39;RCL&#39;</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">layerIndex</span><span class="p">[</span><span class="s1">&#39;Retinal Pigment Epithelium&#39;</span><span class="p">]:</span> <span class="s1">&#39;RPE&#39;</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">layerIndex</span><span class="p">[</span><span class="s1">&#39;Choroid&#39;</span><span class="p">]:</span> <span class="s1">&#39;Choroid&#39;</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layerAcronyms</span> <span class="o">=</span> <span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s1">&#39;Inner Limiting Membrane&#39;</span><span class="p">]:</span> <span class="s1">&#39;ILM&#39;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s1">&#39;Nerve Fiber Layer&#39;</span><span class="p">]:</span> <span class="s1">&#39;NFL&#39;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s1">&#39;Ganglion Cell Layer&#39;</span><span class="p">]:</span> <span class="s1">&#39;GCL&#39;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s1">&#39;Inner Plexiform Layer&#39;</span><span class="p">]:</span> <span class="s1">&#39;IPL&#39;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s1">&#39;Inner Nuclear Layer&#39;</span><span class="p">]:</span> <span class="s1">&#39;INL&#39;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s1">&#39;Outer Plexiform Layer&#39;</span><span class="p">]:</span> <span class="s1">&#39;OPL&#39;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s1">&#39;Outer Nuclear Layer&#39;</span><span class="p">]:</span> <span class="s1">&#39;ONL&#39;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s1">&#39;External Limiting Membrane&#39;</span><span class="p">]:</span> <span class="s1">&#39;ELM&#39;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s1">&#39;Rods and Cones Layers&#39;</span><span class="p">]:</span> <span class="s1">&#39;RCL&#39;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s1">&#39;Retinal Pigment Epithelium&#39;</span><span class="p">]:</span> <span class="s1">&#39;RPE&#39;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="s1">&#39;Choroid&#39;</span><span class="p">]:</span> <span class="s1">&#39;Choroid&#39;</span><span class="p">}</span>
   
         <span class="k">return</span>
         
@@ -191,11 +191,11 @@
     
 <div class="viewcode-block" id="IOT_RetinalLayers.getAllLayersIndexes"><a class="viewcode-back" href="../../src.IOT_RetinalLayers.html#src.IOT_RetinalLayers.IOT_RetinalLayers.getAllLayersIndexes">[docs]</a>    <span class="k">def</span> <span class="nf">getAllLayersIndexes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="c1">#Retrieves a list of layer indexes</span>
-        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layerIndex</span><span class="o">.</span><span class="n">values</span><span class="p">())</span></div>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">values</span><span class="p">())</span></div>
 
 <div class="viewcode-block" id="IOT_RetinalLayers.getAllLayersNames"><a class="viewcode-back" href="../../src.IOT_RetinalLayers.html#src.IOT_RetinalLayers.IOT_RetinalLayers.getAllLayersNames">[docs]</a>    <span class="k">def</span> <span class="nf">getAllLayersNames</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="c1">#Retrieves a list of layer keys</span>
-        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layerIndex</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span></div>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span></div>
 
 <div class="viewcode-block" id="IOT_RetinalLayers.getLayerAcronym"><a class="viewcode-back" href="../../src.IOT_RetinalLayers.html#src.IOT_RetinalLayers.IOT_RetinalLayers.getLayerAcronym">[docs]</a>    <span class="k">def</span> <span class="nf">getLayerAcronym</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">idx</span><span class="p">):</span>
     <span class="c1">#Return the acronym of a layer idenfied by its index</span>
@@ -223,7 +223,7 @@
         <span class="n">lname</span> <span class="o">=</span> <span class="s1">&#39;Default&#39;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="c1">#There is no &#39;direct&#39; method to access the keys given the value.</span>
-            <span class="n">lname</span><span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layerIndex</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layerIndex</span><span class="o">.</span><span class="n">values</span><span class="p">())</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">idx</span><span class="p">)]</span>
+            <span class="n">lname</span><span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">values</span><span class="p">())</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">idx</span><span class="p">)]</span>
         <span class="k">except</span><span class="p">:</span>
             <span class="n">lname</span><span class="o">=</span><span class="s1">&#39;Unknown&#39;</span>
             <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">getClassName</span><span class="p">(),</span><span class="s1">&#39;:getLayerName: Unexpected layer index. Returning name &quot;&#39;</span><span class="p">,</span><span class="n">lname</span><span class="p">,</span><span class="s1">&#39;&quot;&#39;</span><span class="p">)</span>
@@ -232,7 +232,7 @@
         
 <div class="viewcode-block" id="IOT_RetinalLayers.getNumLayers"><a class="viewcode-back" href="../../src.IOT_RetinalLayers.html#src.IOT_RetinalLayers.IOT_RetinalLayers.getNumLayers">[docs]</a>    <span class="k">def</span> <span class="nf">getNumLayers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="c1">#Return the number of known layers (please note that this also include known non-retinal layers like the choroid)</span>
-        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layerIndex</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">)</span></div></div>
         
         
        
@@ -258,7 +258,7 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2017, Felipe Orihuela-Espina.
+        &#169; Copyright 2017-8, Felipe Orihuela-Espina.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
     </div>
   </body>

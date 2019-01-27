@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>4.1.1.1.6. src.IOT_Operation module &#8212; OCT-Tools 0.1 documentation</title>
+    <title>4.1.1.1.12. src.IOT_Operation module &#8212; OCT-Tools 0.1 documentation</title>
     <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -16,8 +16,8 @@
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="4.1.1.1.7. src.IOT_OperationEditSegmentation module" href="src.IOT_OperationEditSegmentation.html" />
-    <link rel="prev" title="4.1.1.1.5. src.IOT_GUI_ToolsWindow module" href="src.IOT_GUI_ToolsWindow.html" /> 
+    <link rel="next" title="4.1.1.1.13. src.IOT_OperationEditSegmentation module" href="src.IOT_OperationEditSegmentation.html" />
+    <link rel="prev" title="4.1.1.1.11. src.IOT_OCTvolume module" href="src.IOT_OCTvolume.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -29,10 +29,10 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="src.IOT_OperationEditSegmentation.html" title="4.1.1.1.7. src.IOT_OperationEditSegmentation module"
+          <a href="src.IOT_OperationEditSegmentation.html" title="4.1.1.1.13. src.IOT_OperationEditSegmentation module"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="src.IOT_GUI_ToolsWindow.html" title="4.1.1.1.5. src.IOT_GUI_ToolsWindow module"
+          <a href="src.IOT_OCTvolume.html" title="4.1.1.1.11. src.IOT_OCTvolume module"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">OCT-Tools 0.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="technical.html" >4. Technical Documentation</a> &#187;</li>
@@ -43,11 +43,11 @@
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="src.IOT_GUI_ToolsWindow.html"
-                        title="previous chapter">4.1.1.1.5. src.IOT_GUI_ToolsWindow module</a></p>
+  <p class="topless"><a href="src.IOT_OCTvolume.html"
+                        title="previous chapter">4.1.1.1.11. src.IOT_OCTvolume module</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="src.IOT_OperationEditSegmentation.html"
-                        title="next chapter">4.1.1.1.7. src.IOT_OperationEditSegmentation module</a></p>
+                        title="next chapter">4.1.1.1.13. src.IOT_OperationEditSegmentation module</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -76,7 +76,7 @@
           <div class="body" role="main">
             
   <div class="section" id="module-src.IOT_Operation">
-<span id="src-iot-operation-module"></span><h1>4.1.1.1.6. src.IOT_Operation module<a class="headerlink" href="#module-src.IOT_Operation" title="Permalink to this headline">¶</a></h1>
+<span id="src-iot-operation-module"></span><h1>4.1.1.1.12. src.IOT_Operation module<a class="headerlink" href="#module-src.IOT_Operation" title="Permalink to this headline">¶</a></h1>
 <p>-<em>- coding: utf-8 -</em>-</p>
 <p>File: IOT_Operation.py</p>
 <p>Class IOT_Operation</p>
@@ -129,6 +129,28 @@ instance attribute</li>
 <td><ul class="first last simple">
 <li>Updated comments and added Sphinx documentation to
 the class.</li>
+<li>_arity attribute “upgraded” from attribute to
+property arity and property getter/setter added</li>
+<li>_arity get/set methods deprecated.</li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><td>26-Sep-2018</td>
+<td>FOE</td>
+<td><ul class="first last simple">
+<li>The class becomes abstract and a new abstract
+method execute is provided.</li>
+<li>Added support to hold operands.</li>
+<li>Arity now becomes only the number of the operands.
+get/setArity methods are now deprecated</li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><td>1-Dec-2018</td>
+<td>FOE</td>
+<td><ul class="first last simple">
+<li>Signature of execute() method now accepts
+parameters and return result instead of None.</li>
 </ul>
 </td>
 </tr>
@@ -148,10 +170,26 @@ the class.</li>
 </div>
 <dl class="class">
 <dt id="src.IOT_Operation.IOT_Operation">
-<em class="property">class </em><code class="descclassname">src.IOT_Operation.</code><code class="descname">IOT_Operation</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/IOT_Operation.html#IOT_Operation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.IOT_Operation.IOT_Operation" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
-<p>A base class for operations on IOT_OCTvolumes and IOT_OCTscans.</p>
-<p>A base class for operations on IOT_OCTvolumes and IOT_OCTscans.</p>
+<em class="property">class </em><code class="descclassname">src.IOT_Operation.</code><code class="descname">IOT_Operation</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/IOT_Operation.html#IOT_Operation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.IOT_Operation.IOT_Operation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></a></p>
+<p>An abstract base class for operations on :class:<a href="#id1"><span class="problematic" id="id2">`</span></a>IOT_OCTvolume`s and :class:<a href="#id3"><span class="problematic" id="id4">`</span></a>IOT_OCTscan`s.</p>
+<p>An abstract base class for operations on :class:<a href="#id5"><span class="problematic" id="id6">`</span></a>IOT_OCTvolume`s and
+:class:<a href="#id7"><span class="problematic" id="id8">`</span></a>IOT_OCTscan`s.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Example:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tmp</span> <span class="o">=</span> <span class="n">IOT_OCTscan</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+<span class="n">o</span> <span class="o">=</span> <span class="n">IOT_OperationFlattening</span><span class="p">()</span>
+<span class="n">o</span><span class="o">.</span><span class="n">addOperand</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
+<span class="n">o</span><span class="o">.</span><span class="n">arity</span><span class="p">()</span> <span class="c1">#return 1</span>
+<span class="n">o</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span> <span class="c1">#Flattens the image</span>
+</pre></div>
+</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -162,23 +200,59 @@ the class.</li>
 </tbody>
 </table>
 <ul class="simple">
-<li>IOT_OperationEditSegmentation</li>
-<li>IOT_OperationFlattening</li>
-<li>IOT_OperationMeasureLayerThickness</li>
-<li>IOT_OperationPerfilometer</li>
-<li>IOT_OperationSegmentation</li>
-<li>IOT_OperationStitch</li>
+<li><code class="xref py py-class docutils literal notranslate"><span class="pre">IOT_OperationEditSegmentation</span></code></li>
+<li><code class="xref py py-class docutils literal notranslate"><span class="pre">IOT_OperationFlattening</span></code></li>
+<li><code class="xref py py-class docutils literal notranslate"><span class="pre">IOT_OperationMeasureLayerThickness</span></code></li>
+<li><code class="xref py py-class docutils literal notranslate"><span class="pre">IOT_OperationPerfilometer</span></code></li>
+<li><code class="xref py py-class docutils literal notranslate"><span class="pre">IOT_OperationSegmentation</span></code></li>
+<li><code class="xref py py-class docutils literal notranslate"><span class="pre">IOT_OperationStitch</span></code></li>
 </ul>
-<dl class="attribute">
-<dt id="src.IOT_Operation.IOT_Operation.arity">
-<code class="descname">arity</code><a class="headerlink" href="#src.IOT_Operation.IOT_Operation.arity" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gets the operation arity.</p>
-<p>Property arity getter. Gets the operation arity.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">None</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">None</p>
+</div>
+<div class="admonition-todo admonition" id="index-1">
+<p class="first admonition-title">Todo</p>
+<ul class="last simple">
+<li>Support to hold operand names.</li>
+</ul>
+</div>
+<dl class="method">
+<dt id="src.IOT_Operation.IOT_Operation.addOperand">
+<code class="descname">addOperand</code><span class="sig-paren">(</span><em>op</em>, <em>i=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/IOT_Operation.html#IOT_Operation.addOperand"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.IOT_Operation.IOT_Operation.addOperand" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a new operand.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The operation arity.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>op</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – The operand.</li>
+<li><strong>i</strong> – (optional) The operand order. If given it may shift the
+order of other operands already set. If not given, the operand
+is appended at the end of the list of operands.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">None</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.IOT_Operation.IOT_Operation.arity">
+<code class="descname">arity</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/IOT_Operation.html#IOT_Operation.arity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.IOT_Operation.IOT_Operation.arity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the operation arity (number of operands).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The operation arity</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a></td>
 </tr>
@@ -187,13 +261,36 @@ the class.</li>
 </dd></dl>
 
 <dl class="method">
-<dt id="src.IOT_Operation.IOT_Operation.getArity">
-<code class="descname">getArity</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/IOT_Operation.html#IOT_Operation.getArity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.IOT_Operation.IOT_Operation.getArity" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the operation arity.</p>
-<p>Get the operation arity.</p>
-<div class="deprecated">
-<p><span class="versionmodified">Deprecated since version 0.2: </span>Use property .arity instead.</p>
-</div>
+<dt id="src.IOT_Operation.IOT_Operation.clear">
+<code class="descname">clear</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/IOT_Operation.html#IOT_Operation.clear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.IOT_Operation.IOT_Operation.clear" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clears the operands; Removes all operands.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.IOT_Operation.IOT_Operation.execute">
+<code class="descname">execute</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/IOT_Operation.html#IOT_Operation.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.IOT_Operation.IOT_Operation.execute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Executes the operation on the operands.</p>
+<p>This is an abstract method. Executes the operation on the .operands
+and stores the outcome in .result</p>
+<p>Operation meta-parameters may be also passed.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Result of executing the operation.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">Type of result -depends on subclass implementation-.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -213,14 +310,59 @@ the class.</li>
 </table>
 </dd></dl>
 
-<dl class="method">
-<dt id="src.IOT_Operation.IOT_Operation.setArity">
-<code class="descname">setArity</code><span class="sig-paren">(</span><em>d</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/IOT_Operation.html#IOT_Operation.setArity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.IOT_Operation.IOT_Operation.setArity" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the operation arity.</p>
-<p>Set the operation arity.</p>
-<div class="deprecated">
-<p><span class="versionmodified">Deprecated since version 0.2: </span>Use property .arity instead.</p>
-</div>
+<dl class="attribute">
+<dt id="src.IOT_Operation.IOT_Operation.name">
+<code class="descname">name</code><a class="headerlink" href="#src.IOT_Operation.IOT_Operation.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The operation name</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Getter:</th><td class="field-body">Gets the operation name</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Setter:</th><td class="field-body">Sets the operation name.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">string</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.IOT_Operation.IOT_Operation.operands">
+<code class="descname">operands</code><a class="headerlink" href="#src.IOT_Operation.IOT_Operation.operands" title="Permalink to this definition">¶</a></dt>
+<dd><p>The list of operands.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Getter:</th><td class="field-body">Gets the list of operands</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Setter:</th><td class="field-body">Sets the list of operands.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)">list</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.IOT_Operation.IOT_Operation.result">
+<code class="descname">result</code><a class="headerlink" href="#src.IOT_Operation.IOT_Operation.result" title="Permalink to this definition">¶</a></dt>
+<dd><p>The list of results.</p>
+<p>This is a read only property. There is no setter method.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Getter:</th><td class="field-body">Gets the list of results</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Setter:</th><td class="field-body">Sets the list of results</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)">list</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -243,10 +385,10 @@ the class.</li>
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="src.IOT_OperationEditSegmentation.html" title="4.1.1.1.7. src.IOT_OperationEditSegmentation module"
+          <a href="src.IOT_OperationEditSegmentation.html" title="4.1.1.1.13. src.IOT_OperationEditSegmentation module"
              >next</a> |</li>
         <li class="right" >
-          <a href="src.IOT_GUI_ToolsWindow.html" title="4.1.1.1.5. src.IOT_GUI_ToolsWindow module"
+          <a href="src.IOT_OCTvolume.html" title="4.1.1.1.11. src.IOT_OCTvolume module"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">OCT-Tools 0.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="technical.html" >4. Technical Documentation</a> &#187;</li>
@@ -255,7 +397,7 @@ the class.</li>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2017, Felipe Orihuela-Espina.
+        &#169; Copyright 2017-8, Felipe Orihuela-Espina.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
     </div>
   </body>

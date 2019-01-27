@@ -1,0 +1,83 @@
+.. _rst-lofOfProgress:
+
+Log of progress
+===============
+
+* Author: Felipe Orihuela-Espina
+* Created: December 17, 2018
+* Revised: December 17, 2018
+* Copyright (c) 2018 INAOE
+
+
+This file attempts to gather all the reporting of progress that has until now
+(17-Dec-2018) been occurring through e-mails sent to Rodrigo Matsui. This is
+a bit more wordly and descriptive than updates to the GitHub. Please, note
+however, that this account does not cover the very first part of the project,
+and that we may have missed some of the e-mails in the chain.
+
+
+
+.. _secTaskForV0.3:
+
+Tasks pending for v0.3
+----------------------
+
+* Reorganise classes in subpackages; IOT (main), data (for classes corresponding
+to the data model), Op (for classes related to the operation), GUI (for classes
+related to the user interface)
+* Improve segmentation algorithm
+* Attend dependency on OpenCV (remove dependency on panorama for stitching?)
+
+
+.. _secTaskForV0.2:
+
+Tasks pending for v0.2
+----------------------
+
+
+
+
+.. _secProgressLog:
+
+Progress Log
+------------
+
+Authors acronyms:
+* AACA: Arlem Aleida Castillo Ávila
+* FOE: Felipe Orihuela-Espina
+
+========= =========== =========== ===========================================
+Version   Date        Responsible Change Description
+========= =========== =========== ===========================================
+0.1beta   3/Aug/2018  FOE         *After some adjustements, the program now
+                                  runs in my machine (under Windows) and still
+                                  using the interpreter. For compilation, a few
+                                  other issues have to be attended.
+                                  NOTE: FOE is using *Pyzo* with *Miniconda*, whereas
+                                  AACA uses *PyCharm* which gives some problems
+                                  because uses some non-standard libraries.
+                                  * We have dependencies on *Qt5* (for the
+                                  interface), but also with *SciPy* (this is not
+                                  too serious as it is a standard library of
+                                  Python, yet it must be installed in the
+                                  interpreter).
+                                  * We have dependencies on *OpenCV* for the
+                                  stitching operation which currently relies
+                                  on external algorithm *Panorama*. While this
+                                  is not ideal, but it works by now.
+                                  * Hardcoded path in the perfilometer function
+                                  has been removed.
+                                  * Hardcoded paths in the mosaic function
+                                  have been removed.
+                                  * Some further debugging
+========= =========== =========== ===========================================
+0.1beta   31/Jul/2018 AACA/FOE    * Still unsolved the issue with hard paths.
+========= =========== =========== ===========================================
+0.1beta   17/Jul/2018 AACA        * Reported by Rodrigo that the program does
+                                  not starts up. This was found to be due to
+                                  some remaining hard "paths".
+========= =========== =========== ===========================================
+0.1beta   11/Jul/2018 AACA        * Uploaded first version of the program
+                                  and report to OSF. This version still has
+                                  severe integration issues.
+========= =========== =========== ===========================================

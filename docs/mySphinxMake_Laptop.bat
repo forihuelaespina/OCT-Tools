@@ -3,6 +3,7 @@
 :: .bat maker of Sphinx documentation
 ::
 :: Compiles sphinx documentation.
+:: Run this from an Anaconda command prompt.
 ::
 ::
 :: @dateCreated: 22-Sep-2018

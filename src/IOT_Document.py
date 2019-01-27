@@ -22,16 +22,14 @@ IOT stands for INAOE OCT Tools
 | 23-Sep-2018 | FOE    | - Updated comments and added Sphinx documentation to |
 |             |        |   the class                                          |
 +-------------+--------+------------------------------------------------------+
+|  2-Dec-2018 | FOE    | - Encapsulated properties and deprecated get/set     |
+|             |        |   pairs for those properties.                        |
+|             |        | - Minor debugging                                    |
++-------------+--------+------------------------------------------------------+
 
 .. seealso:: None
 .. note:: None
 .. todo:: None
-
-    
-
-
-@dateCreated: 21-Aug-2018
-@dateModified: 23-Sep-2018
 
 .. sectionauthor:: Felipe Orihuela-Espina <f.orihuela-espina@inaoep.mx>
 .. codeauthor:: Felipe Orihuela-Espina <f.orihuela-espina@inaoep.mx>
@@ -41,7 +39,12 @@ IOT stands for INAOE OCT Tools
 
 
 ## Import
+import warnings
+from deprecated import deprecated
 
+from IOT_OCTscan import IOT_OCTscan
+from IOT_OCTscanSegmentation import IOT_OCTscanSegmentation
+from IOT_OCTvolume import IOT_OCTvolume
 
 
 
@@ -58,11 +61,9 @@ class IOT_Document():
     Currently, a study is only an OCT image (with several scans) with or without
     segmentation information.
     
-    
-
-    .. seealso:: 
-    .. note:: 
-    .. todo:: 
+    .. seealso:: None
+    .. note:: None
+    .. todo:: None
         
     """
 
@@ -75,19 +76,156 @@ class IOT_Document():
         
         
         #Initialize private attributes unique to this instance
-        self._study = None #The current study.
+        self.study = None #The current study.
                 #Currently, an OCT scan
-        self._segmentedScan = None
+        self.segmentation = None
                 
         #Document metadata
-        self._folderName = '.' #Folder where the document is currently stored
-        self._fileName = self.defaultName #The filename of the document
-        self._name = self.defaultName #A logical name for the study
+        self.folderName = '.' #Folder where the document is currently stored
+        self.fileName = self.defaultName #The filename of the document
+        self.name = self.defaultName #A logical name for the study
+        
+        return
+        
+    #Properties getters/setters
+    #
+    # Remember: Sphinx ignores docstrings on property setters so all
+    #documentation for a property must be on the @property method
+    @property
+    def study(self): #study getter
+        """
+        The OCT scan being processed and analysed.
+        
+        ..todo: Upgrade to volume. Watch out! This will affect many
+            other classess using this method.
+
+        :getter: Gets the OCT scan.
+        :setter: Sets the OCT scan. 
+        :type: :class:`src.IOT_OCTscan`
+        """
+        return self.__study
+
+    @study.setter
+    def study(self,vol): #study setter
+        if (vol is None or type(vol) is IOT_OCTscan):
+            self.__study = vol
+            #...and reset scan
+            self.segmentedScan = None
+        else:
+            warnMsg = self.getClassName() + ':study: Unexpected study type.'
+            warnings.warn(warnMsg,SyntaxWarning)
+        return None
         
         
+    @property
+    def segmentation(self): #segmentation getter
+        """
+        The segmentation over the OCT study being processed and analysed.
+
+        ..todo: Upgrade to volume. Watch out! This will affect many
+            other classess using this method.
+
+        :getter: Gets the OCT scan segmentation.
+        :setter: Sets the OCT scan segmentation. 
+        :type: :class:`IOT_OCTscanSegmentation`
+        """
+        return self.__segmentation
+
+    @segmentation.setter
+    def segmentation(self,newSegmentation): #segmentation setter
+        if ((newSegmentation is None) or (type(newSegmentation) is IOT_OCTscanSegmentation)):
+            self.__segmentation = newSegmentation
+            if (newSegmentation is not None):
+              if self.study is None:
+                warnMsg = self.getClassName() + ':segmentation: No reference image.'
+                warnings.warn(warnMsg,SyntaxWarning)
+              if(newSegmentation.shape == self.study.shape[0:1]):
+                warnMsg = self.getClassName() + ':segmentation: Unexpected size.'
+                warnings.warn(warnMsg,SyntaxWarning)
+        else:
+            warnMsg = self.getClassName() + ':segmentation: Unexpected segmented scan type.'
+            warnings.warn(warnMsg,SyntaxWarning)
+        return None
+
+
+
+        
+
+    @property
+    def folderName(self): #folderName getter
+        """
+        Folder where the document is currently stored.
+        
+        ..note: Also retrieve the py:attr:`fileName` to build the full path.
+
+        :getter: Gets the study folder name.
+        :setter: Sets the study folder name. If new folder is None,
+            the current directory '.' is chosen.
+        :type: str
+        """
+        return self.__folderName
+
+    @folderName.setter
+    def folderName(self,d): #name setter
+        if d is None:
+            d = '.' #Set to current folder
+        if (type(d) is str):
+            self.__folderName = d
+        else:
+            warnMsg = self.getClassName() + ':name: Unexpected folderName type.'
+            warnings.warn(warnMsg,SyntaxWarning)
+        return None
+        
+
+    @property
+    def fileName(self): #fileName getter
+        """
+        The filename of the document.
         
         
+        ..note: Also retrieve the py:attr:`folderName` to build the full path.
         
+        :getter: Gets the the filename of the document.
+        :setter: Sets the The filename of the document. If new name is None,
+            a default name is given.
+        :type: str
+        """
+        return self.__folderName
+
+    @fileName.setter
+    def fileName(self,newFilename): #fileName setter
+        if newFilename is None:
+            newFilename = self.defaultName #Set to default name
+        if (type(newFilename) is str):
+            self.__fileName = newFilename
+        else:
+            warnMsg = self.getClassName() + ':name: Unexpected fileName type.'
+            warnings.warn(warnMsg,SyntaxWarning)
+        return None
+        
+
+    @property
+    def name(self): #name getter
+        """
+        A logical name for the study.
+        
+        :getter: Gets the OCT study name.
+        :setter: Sets the OCT study name.
+        :type: str
+        """
+        return self.__name
+
+    @name.setter
+    def name(self,newName): #name setter
+        if (newName is None or type(newName) is str):
+            self.__name = newName
+        else:
+            warnMsg = self.getClassName() + ':name: Unexpected name type.'
+            warnings.warn(warnMsg,SyntaxWarning)
+        return None
+        
+
+
     #Private methods
         
     
@@ -95,58 +233,49 @@ class IOT_Document():
     def getClassName(self):
         return type(self).__name__
     
+    @deprecated(version='0.2', reason="Deprecated. Acess property .folderName instead.")
     def getFolderName(self):
-        return self._folderName
+        return self.folderName
 
+    @deprecated(version='0.2', reason="Deprecated. Acess property .folderName instead.")
     def setFolderName(self,d):
-        if d is None:
-            d = '.' #Set to current folder
-        self._folderName = d;
+        self.folderName = d;
         return
 
+    @deprecated(version='0.2', reason="Deprecated. Acess property .fileName instead.")
     def getFileName(self):
-        return self._fileName
+        return self.fileName
 
+    @deprecated(version='0.2', reason="Deprecated. Acess property .fileName instead.")
     def setFileName(self,newName):
-        if newName is None:
-            newName = self.defaultName #Set to a default filename
-        self._fileName = newName;
+        self.fileName = newName;
         return
 
+    @deprecated(version='0.2', reason="Deprecated. Acess property .name instead.")
     def getName(self):
-        return self._folder
+        return self.name
 
+    @deprecated(version='0.2', reason="Deprecated. Acess property .name instead.")
     def setName(self,newName):
-        if newName is None:
-            newName = self.defaultName #Set to a default name
         self._name = newName;
         return
 
+    @deprecated(version='0.2', reason="Deprecated. Acess property .study instead.")
     def getStudy(self):
-        return self._study
+        return self.study
 
+    @deprecated(version='0.2', reason="Deprecated. Acess property .study instead.")
     def setStudy(self,newStudy):
-        self._study = newStudy;
-        #...and reset scan
-        self._segmentedScan = None
+        self.study = newStudy;
         return
 
+    @deprecated(version='0.2', reason="Deprecated. Acess property .segmentation instead.")
     def getScanSegmentation(self):
-        return self._segmentedScan
+        return self.segmentation
 
+    @deprecated(version='0.2', reason="Deprecated. Acess property .segmentation instead.")
     def setScanSegmentation(self,newSegmentation):
-        #print(self.getClassName(),':setScanSegmentation: Setting scan segmentation; ', self._study)
-        if self._study is None:
-            print(self.getClassName(),':setScanSegmentation: Warning: No reference image.')
-            self._segmentedScan = newSegmentation          
-        if newSegmentation.shape == self._study.shape[0:2]:
-            #print(self.getClassName(),':setScanSegmentation: Setting new segmentation for current scan.')
-            self._segmentedScan = newSegmentation
-        else:
-            print(self.getClassName(),':setScanSegmentation: Error: Unexpected segmented scan size.')
-            print(self._study.shape[0:2])
-            print(newSegmentation.shape)
-            self._segmentedScan = None
+        self.segmentation = newSegmentation
         return
 
 

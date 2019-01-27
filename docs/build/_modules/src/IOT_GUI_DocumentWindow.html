@@ -1,0 +1,803 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>src.IOT_GUI_DocumentWindow &#8212; OCT-Tools 0.1 documentation</title>
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">OCT-Tools 0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for src.IOT_GUI_DocumentWindow</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">-*- coding: utf-8 -*-</span>
+
+<span class="sd">File: IOT_GUI_DocumentWindow.py</span>
+
+<span class="sd">Class IOT_GUI_DocumentWindow</span>
+
+<span class="sd">IOT stands for INAOE OCT Tools</span>
+
+<span class="sd">The main document window for OCT-Tools. This is where the current document</span>
+<span class="sd">(i.e. the OCT image) is displayed.</span>
+
+<span class="sd">:Log:</span>
+
+<span class="sd">+-------------+--------+------------------------------------------------------+</span>
+<span class="sd">| Date        | Author | Description                                          |</span>
+<span class="sd">+=============+========+======================================================+</span>
+<span class="sd">| 21-Aug-2018 | FOE    | - Class created. This class was created as a wrapper |</span>
+<span class="sd">|             |        |   to host the OCT image figure canvas.               |</span>
+<span class="sd">+-------------+--------+------------------------------------------------------+</span>
+<span class="sd">| 30-Aug-2018 | FOE    | - New instance attribute _lastMouseEvent now keeps   |</span>
+<span class="sd">|             |        |   track of mouseEvents so that other classes to have |</span>
+<span class="sd">|             |        |   access to it. A get method is also added.          |</span>
+<span class="sd">+-------------+--------+------------------------------------------------------+</span>
+<span class="sd">| 1-Sep-2018  | FOE    | - There is no longer a _flagEditSegmentation to keep |</span>
+<span class="sd">|             |        |   track of when editing is possible.                 |</span>
+<span class="sd">|             |        | - Method editSegmentar is no longer needed, and      |</span>
+<span class="sd">|             |        |   opEditSegmentation exhibits a behaviour more       |</span>
+<span class="sd">|             |        |   analogous to other operations.                     |</span>
+<span class="sd">|             |        | - Mouse listening methods, now are only respoonsible |</span>
+<span class="sd">|             |        |   for storing the last event.                        |</span>
+<span class="sd">|             |        | - Some cleaning. Removal of unused code              |</span>
+<span class="sd">+-------------+--------+------------------------------------------------------+</span>
+<span class="sd">| 23-Sep-2018 | FOE    | - Updated comments and added Sphinx documentation to |</span>
+<span class="sd">|             |        |   the class                                          |</span>
+<span class="sd">+-------------+--------+------------------------------------------------------+</span>
+<span class="sd">| 24-Sep-2018 | FOE    | - Adjusted to accept all scans from the Amira but    |</span>
+<span class="sd">|             |        |   contained to the first scan while I enable a       |</span>
+<span class="sd">|             |        |   scan selector.                                     |</span>
+<span class="sd">+-------------+--------+------------------------------------------------------+</span>
+<span class="sd">| 14-Nov-2018 | FOE    | - New method connectToolsWindow so that this class   |</span>
+<span class="sd">|             |        |   can now &quot;know&quot; the tools window.                   |</span>
+<span class="sd">+-------------+--------+------------------------------------------------------+</span>
+<span class="sd">| 16-Nov-2018 | FOE    | - Canvas navigation toolbar (for zooming, panning    |</span>
+<span class="sd">|             |        |   saving has been enabled)                           |</span>
+<span class="sd">+-------------+--------+------------------------------------------------------+</span>
+<span class="sd">|  2-Dec-2018 | FOE    | - Encapsulated the document properties and deprecated|</span>
+<span class="sd">|             |        |   get/set pair for that property.                    |</span>
+<span class="sd">|             |        | - Minor debugging                                    |</span>
+<span class="sd">+-------------+--------+------------------------------------------------------+</span>
+<span class="sd">| 12-Dec-2018 | FOE    | - Internal methods are now named in English          |</span>
+<span class="sd">|             |        |   e.g. &#39;openDocument&#39; instead of &#39;abrir&#39;             |</span>
+<span class="sd">|             |        | - Added method measureThickness to call for the      |</span>
+<span class="sd">|             |        |   corresponding operation to be executed.            |</span>
+<span class="sd">|             |        | - Minor debugging                                    |</span>
+<span class="sd">+-------------+--------+------------------------------------------------------+</span>
+
+
+<span class="sd">.. seealso:: None</span>
+<span class="sd">.. note:: None</span>
+<span class="sd">.. todo:: </span>
+<span class="sd">    * Add a scan selector</span>
+<span class="sd">    * Encapsulate remaining attributes as properties</span>
+
+
+<span class="sd">.. sectionauthor:: Felipe Orihuela-Espina &lt;f.orihuela-espina@inaoep.mx&gt;</span>
+<span class="sd">.. codeauthor:: Arlem Aleida Castillo Avila &lt;acastillo@inaoep.mx&gt;</span>
+<span class="sd">.. codeauthor:: Felipe Orihuela-Espina &lt;f.orihuela-espina@inaoep.mx&gt;</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<span class="c1">## Import</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">deprecated</span> <span class="k">import</span> <span class="n">deprecated</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">matplotlib.gridspec</span> <span class="k">as</span> <span class="nn">gridspec</span>
+<span class="kn">from</span> <span class="nn">matplotlib.figure</span> <span class="k">import</span> <span class="n">Figure</span>
+<span class="kn">from</span> <span class="nn">matplotlib.backend_bases</span> <span class="k">import</span> <span class="n">KeyEvent</span><span class="p">,</span> <span class="n">MouseEvent</span>
+<span class="kn">from</span> <span class="nn">skimage</span> <span class="k">import</span> <span class="n">io</span>
+
+
+<span class="kn">from</span> <span class="nn">PyQt5.QtCore</span> <span class="k">import</span> <span class="n">Qt</span> <span class="c1">#Imports constants</span>
+<span class="kn">from</span> <span class="nn">PyQt5.QtWidgets</span> <span class="k">import</span> <span class="n">QWidget</span><span class="p">,</span> <span class="n">QMainWindow</span><span class="p">,</span> <span class="n">QFileDialog</span>
+<span class="kn">from</span> <span class="nn">PyQt5.QtGui</span> <span class="k">import</span> <span class="n">QMouseEvent</span>
+
+<span class="kn">from</span> <span class="nn">matplotlib.backends.qt_compat</span> <span class="k">import</span> <span class="n">QtCore</span><span class="p">,</span> <span class="n">QtWidgets</span><span class="p">,</span> <span class="n">is_pyqt5</span>
+<span class="k">if</span> <span class="n">is_pyqt5</span><span class="p">():</span>
+    <span class="kn">from</span> <span class="nn">matplotlib.backends.backend_qt5agg</span> <span class="k">import</span> <span class="p">(</span>
+        <span class="n">FigureCanvas</span><span class="p">,</span> <span class="n">NavigationToolbar2QT</span> <span class="k">as</span> <span class="n">NavigationToolbar</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">matplotlib.backends.backend_qt4agg</span> <span class="k">import</span> <span class="p">(</span>
+        <span class="n">FigureCanvas</span><span class="p">,</span> <span class="n">NavigationToolbar2QT</span> <span class="k">as</span> <span class="n">NavigationToolbar</span><span class="p">)</span>
+
+
+<span class="kn">from</span> <span class="nn">AmiraReader</span> <span class="k">import</span> <span class="n">AmiraReader</span> 
+<span class="kn">from</span> <span class="nn">IOT_Document</span> <span class="k">import</span> <span class="n">IOT_Document</span>
+<span class="kn">from</span> <span class="nn">IOT_OCTscan</span> <span class="k">import</span> <span class="n">IOT_OCTscan</span>
+
+<span class="kn">from</span> <span class="nn">IOT_OperationPerfilometer</span> <span class="k">import</span> <span class="n">IOT_OperationPerfilometer</span>
+<span class="kn">from</span> <span class="nn">IOT_OperationMeasureLayerThickness</span> <span class="k">import</span> <span class="n">IOT_OperationMeasureLayerThickness</span>
+<span class="kn">from</span> <span class="nn">IOT_OperationEditSegmentation</span> <span class="k">import</span> <span class="n">IOT_OperationEditSegmentation</span>
+<span class="kn">from</span> <span class="nn">IOT_OperationFlattening</span> <span class="k">import</span> <span class="n">IOT_OperationFlattening</span>
+<span class="kn">from</span> <span class="nn">IOT_OperationSegmentation</span> <span class="k">import</span> <span class="n">IOT_OperationSegmentation</span>
+<span class="kn">from</span> <span class="nn">IOT_OperationStitch</span> <span class="k">import</span> <span class="n">IOT_OperationStitch</span>
+<span class="kn">from</span> <span class="nn">IOT_RetinalLayers</span> <span class="k">import</span> <span class="n">IOT_RetinalLayers</span>
+
+<span class="kn">from</span> <span class="nn">IOT_GUI_UtilitiesDock</span> <span class="k">import</span> <span class="n">IOT_GUI_UtilitiesDock</span>
+
+
+
+<span class="c1">## Class definition</span>
+<div class="viewcode-block" id="IOT_GUI_DocumentWindow"><a class="viewcode-back" href="../../src.IOT_GUI_DocumentWindow.html#src.IOT_GUI_DocumentWindow.IOT_GUI_DocumentWindow">[docs]</a><span class="k">class</span> <span class="nc">IOT_GUI_DocumentWindow</span><span class="p">(</span><span class="n">QMainWindow</span><span class="p">):</span>
+    <span class="c1">#Sphinx documentation</span>
+    <span class="sd">&quot;&quot;&quot;The main document window for OCT-Tools.</span>
+<span class="sd">    </span>
+<span class="sd">    The main document window for OCT-Tools. This is where the current document</span>
+<span class="sd">    (i.e. the OCT image) is displayed.</span>
+<span class="sd">    </span>
+<span class="sd">    .. seealso:: None</span>
+<span class="sd">    .. note:: None</span>
+<span class="sd">    .. todo:: None</span>
+<span class="sd">        </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+     
+    <span class="c1">#Private class attributes shared by all instances</span>
+    <span class="n">workingDir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+
+    <span class="c1">#Class constructor</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Class constructor&quot;&quot;&quot;</span>
+        <span class="c1">#Call superclass constructor</span>
+        <span class="c1">#QDockWidget.__init__(self)</span>
+        <span class="n">QMainWindow</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">_toolsWindow</span> <span class="o">=</span> <span class="kc">None</span>
+        
+        <span class="c1">#Initialize private attributes unique to this instance</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1">#The current document. Initialize a document</span>
+        <span class="c1">#self._perfil = None #The perfilometer image</span>
+        
+        <span class="c1">#Prepare the matplotlib figure area to render the current OCT scan</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fig</span> <span class="o">=</span> <span class="n">Figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+        
+        <span class="c1">#Prepare the grid</span>
+        <span class="n">gs</span> <span class="o">=</span> <span class="n">gridspec</span><span class="o">.</span><span class="n">GridSpec</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">width_ratios</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="c1">#The OCT image</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="c1">#The perfilometer</span>
+        
+        
+        <span class="c1">#make ticklabels invisible</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">axs</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fig</span><span class="o">.</span><span class="n">axes</span><span class="p">):</span>
+            <span class="n">axs</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="s2">&quot;ax</span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="n">va</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">)</span>
+            <span class="n">axs</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelbottom</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">labelleft</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="c1">#Render</span>
+        <span class="c1">#plt.show() #Do not &quot;show&quot; the plot directly. It will &quot;create&quot; another</span>
+                    <span class="c1">#window on its own.</span>
+                    <span class="c1">#Instead, first it is necessary to encapsulate the</span>
+                    <span class="c1">#matplotlib figure into a Qt widget FigureCanvas, and</span>
+                    <span class="c1">#then call the window QMainWindow.show()</span>
+                    <span class="c1">#method after creation.</span>
+        
+        <span class="c1">#Encapsulate the matplotlib figure into a Qt widget FigureCanvas   </span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_canvas</span> <span class="o">=</span> <span class="n">FigureCanvas</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fig</span><span class="p">)</span> <span class="c1">#first link the figure to the FigureCanvas </span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fig</span><span class="o">.</span><span class="n">set_canvas</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_canvas</span><span class="p">);</span> <span class="c1">#Then, inform the figure who is its cointainer</span>
+        
+        <span class="c1">#Link to pass matplotlib.MouseEvent to this class so that mouse</span>
+        <span class="c1">#events can be controlled from here.</span>
+        <span class="c1">#For a complete list of events, please refer to:</span>
+        <span class="c1">#https://matplotlib.org/users/event_handling.html</span>
+        <span class="c1">#</span>
+        <span class="c1"># Event name	        | Class         - Description</span>
+        <span class="c1">#=======================+===============+===========================</span>
+        <span class="c1">#&#39;button_press_event&#39;   | MouseEvent    - mouse button is pressed</span>
+        <span class="c1">#&#39;button_release_event&#39; | MouseEvent    - mouse button is released</span>
+        <span class="c1">#&#39;motion_notify_event&#39;  | MouseEvent    - mouse motion</span>
+        <span class="c1">#&#39;scroll_event&#39;         | MouseEvent    - mouse scroll wheel is rolled</span>
+        <span class="c1">#&#39;draw_event&#39;           | DrawEvent     - canvas draw (but before screen update)</span>
+        <span class="c1">#&#39;key_press_event&#39;      | KeyEvent      - key is pressed</span>
+        <span class="c1">#&#39;key_release_event&#39;    | KeyEvent      - key is released</span>
+        <span class="c1">#&#39;pick_event&#39;           | PickEvent     - an object in the canvas is selected</span>
+        <span class="c1">#&#39;resize_event&#39;         | ResizeEvent   - figure canvas is resized</span>
+        <span class="c1">#&#39;figure_enter_event&#39;   | LocationEvent - mouse enters a new figure</span>
+        <span class="c1">#&#39;figure_leave_event&#39;   | LocationEvent - mouse leaves a figure</span>
+        <span class="c1">#&#39;axes_enter_event&#39;     | LocationEvent - mouse enters a new axes</span>
+        <span class="c1">#&#39;axes_leave_event&#39;     | LocationEvent - mouse leaves an axes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cid</span><span class="o">=</span><span class="nb">list</span><span class="p">()</span> <span class="c1">#Initialize empty list</span>
+        <span class="n">tmpCid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">mpl_connect</span><span class="p">(</span><span class="s1">&#39;motion_notify_event&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mouseMoveEvent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cid</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tmpCid</span><span class="p">)</span>
+        <span class="n">tmpCid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">mpl_connect</span><span class="p">(</span><span class="s1">&#39;button_press_event&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mousePressEvent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cid</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tmpCid</span><span class="p">)</span>
+        <span class="n">tmpCid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">mpl_connect</span><span class="p">(</span><span class="s1">&#39;button_release_event&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mouseReleaseEvent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cid</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tmpCid</span><span class="p">)</span>
+        <span class="n">tmpCid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">mpl_connect</span><span class="p">(</span><span class="s1">&#39;scroll_event&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mouseWheelEvent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cid</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tmpCid</span><span class="p">)</span>
+        
+        
+        <span class="c1">#Utilities dock</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_utilDock</span> <span class="o">=</span> <span class="n">IOT_GUI_UtilitiesDock</span><span class="p">()</span>
+        
+        <span class="c1">#And add them to the QMainWindow</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setCentralWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_canvas</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">addDockWidget</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">BottomDockWidgetArea</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">_utilDock</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">addToolBar</span><span class="p">(</span><span class="n">NavigationToolbar</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_canvas</span><span class="p">,</span> <span class="bp">self</span><span class="p">))</span>
+        <span class="c1">#self.layout().addWidget(self._canvas)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">statusBar</span><span class="p">()</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">_flagEditingSegmentation</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lastMouseEvent</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1">#self.setMouseTracking(True)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s2">&quot;OCT Tools App&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_utilDock</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+        
+        <span class="k">return</span>
+        
+        
+    <span class="c1">#Properties getters/setters</span>
+    <span class="c1">#</span>
+    <span class="c1"># Remember: Sphinx ignores docstrings on property setters so all</span>
+    <span class="c1">#documentation for a property must be on the @property method</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">document</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="c1">#document getter</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The current open document.</span>
+
+<span class="sd">        :getter: Gets the current document</span>
+<span class="sd">        :setter: Sets the current document </span>
+<span class="sd">        :type: class:`IOT_Document`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__document</span>
+
+    <span class="nd">@document</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">document</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">newDoc</span><span class="p">):</span> <span class="c1">#document setter</span>
+        <span class="k">if</span> <span class="n">newDoc</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">newDoc</span> <span class="o">=</span> <span class="n">IOT_Document</span><span class="p">()</span> <span class="c1">#Initialize a document</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">newDoc</span><span class="p">)</span> <span class="ow">is</span> <span class="n">IOT_Document</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__document</span> <span class="o">=</span> <span class="n">newDoc</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">warnMsg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getClassName</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;:document: Unexpected document type.&#39;</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">warnMsg</span><span class="p">,</span><span class="ne">SyntaxWarning</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span>
+       
+    <span class="c1">#Private methods</span>
+        
+        
+    <span class="k">def</span> <span class="nf">_getSemiTransparentColormap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N</span> <span class="o">=</span> <span class="mi">10</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Creates a semi-transparent colormap.</span>
+<span class="sd">        </span>
+<span class="sd">        :param N: Number of elements in the colormap.</span>
+<span class="sd">        :type N: int</span>
+<span class="sd">        :returns: A colormap</span>
+<span class="sd">        :rtype: ndarray</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">base</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s1">&#39;jet&#39;</span><span class="p">)</span>
+        <span class="n">color_list</span> <span class="o">=</span> <span class="n">base</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">cmap_name</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">N</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">mycmap</span><span class="o">=</span><span class="n">base</span><span class="o">.</span><span class="n">from_list</span><span class="p">(</span><span class="n">cmap_name</span><span class="p">,</span> <span class="n">color_list</span><span class="p">,</span> <span class="n">N</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">mycmap</span><span class="o">.</span><span class="n">_init</span><span class="p">()</span>
+        <span class="c1">#mycmap._lut[:,-1] = np.linspace(0, 0.8, N+4)</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1">#Create an empty array</span>
+        <span class="n">tmp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">tmp</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">N</span><span class="o">+</span><span class="mi">3</span><span class="p">))</span>
+        <span class="n">mycmap</span><span class="o">.</span><span class="n">_lut</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span> <span class="c1">#Transparent background, but fully visible layers</span>
+        <span class="k">return</span> <span class="n">mycmap</span>
+
+
+
+    <span class="k">def</span> <span class="nf">_getImageFilename</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1">#Chooses a new image to work on.</span>
+        <span class="c1">#The image can be in Amira o other image format.</span>
+        <span class="c1">#If the operation is cancelled, then an empty string is returned</span>
+        <span class="c1">#Se captura el nombre del archivo a abrir</span>
+        <span class="n">options</span> <span class="o">=</span> <span class="n">QFileDialog</span><span class="o">.</span><span class="n">Options</span><span class="p">()</span>
+        <span class="n">options</span> <span class="o">|=</span> <span class="n">QFileDialog</span><span class="o">.</span><span class="n">DontUseNativeDialog</span>
+        <span class="n">fileName</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">QFileDialog</span><span class="o">.</span><span class="n">getOpenFileName</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s2">&quot;Open OCT scan&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">workingDir</span><span class="p">,</span> <span class="s2">&quot;All Files (*);;Amira Files (*.am)&quot;</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">workingDir</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">fileName</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">fileName</span><span class="p">)</span>        
+        <span class="k">return</span> <span class="n">fileName</span>
+    
+ 
+
+    <span class="k">def</span> <span class="nf">_openImageFile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fileName</span><span class="p">):</span>
+        <span class="c1">#Open a new image file. The file must exist!</span>
+        <span class="n">ext</span> <span class="o">=</span> <span class="n">fileName</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+        <span class="n">extension</span> <span class="o">=</span> <span class="n">ext</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="c1">#Gets the last piece (that&#39;s the extension)</span>
+        <span class="k">if</span> <span class="n">extension</span> <span class="o">==</span> <span class="s2">&quot;am&quot;</span><span class="p">:</span>
+            <span class="n">amr</span> <span class="o">=</span> <span class="n">AmiraReader</span><span class="p">()</span>
+            <span class="n">img</span> <span class="o">=</span> <span class="n">amr</span><span class="o">.</span><span class="n">readAmiraImage</span><span class="p">(</span><span class="n">fileName</span><span class="p">)</span>
+                <span class="c1">#Reads all scans!</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">img</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">fileName</span><span class="p">)</span>
+
+
+        <span class="n">imWidth</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">imHeight</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">nScans</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">getClassName</span><span class="p">(),</span><span class="s1">&#39;:_openImageFile: Read &#39;</span><span class="p">,</span><span class="n">nScans</span><span class="p">,</span> \
+                <span class="s1">&#39;sized [w,h]=[&#39;</span><span class="p">,</span> <span class="n">imWidth</span><span class="p">,</span><span class="s1">&#39;,&#39;</span><span class="p">,</span><span class="n">imHeight</span><span class="p">,</span><span class="s1">&#39;]&#39;</span><span class="p">)</span>
+        
+        <span class="c1">#Intentionally keep only first scan by now.</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">nScans</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">img</span> <span class="o">=</span> <span class="n">img</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">];</span>
+            <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">getClassName</span><span class="p">(),</span><span class="s1">&#39;:_openImageFile: Keeping just 1st scan.&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">img</span>
+            
+
+
+    <span class="k">def</span> <span class="nf">_preparePlottingWindow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1">#Initialize the document window</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_docWindow</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_docWindow</span> <span class="o">=</span> <span class="n">IOT_GUI_DocumentWindow</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_docWindow</span>
+        
+
+
+
+
+
+
+
+
+    <span class="c1">#Public methods</span>
+    
+<div class="viewcode-block" id="IOT_GUI_DocumentWindow.getClassName"><a class="viewcode-back" href="../../src.IOT_GUI_DocumentWindow.html#src.IOT_GUI_DocumentWindow.IOT_GUI_DocumentWindow.getClassName">[docs]</a>    <span class="k">def</span> <span class="nf">getClassName</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Gets the class name as a string.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span></div>
+    
+<div class="viewcode-block" id="IOT_GUI_DocumentWindow.connectToolsWindow"><a class="viewcode-back" href="../../src.IOT_GUI_DocumentWindow.html#src.IOT_GUI_DocumentWindow.IOT_GUI_DocumentWindow.connectToolsWindow">[docs]</a>    <span class="k">def</span> <span class="nf">connectToolsWindow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">theToolsWindow</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_toolsWindow</span> <span class="o">=</span> <span class="n">theToolsWindow</span></div>
+    
+    
+    
+<div class="viewcode-block" id="IOT_GUI_DocumentWindow.closeEvent"><a class="viewcode-back" href="../../src.IOT_GUI_DocumentWindow.html#src.IOT_GUI_DocumentWindow.IOT_GUI_DocumentWindow.closeEvent">[docs]</a>    <span class="k">def</span> <span class="nf">closeEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Closes the document window and the application.&quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Closing OCT-Tools&#39;</span><span class="p">)</span>
+        <span class="c1">#This is not yet working</span>
+        <span class="c1">#self._docWindow.closeEvent(event)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="n">event</span><span class="o">.</span><span class="n">accept</span><span class="p">()</span></div>
+        
+<div class="viewcode-block" id="IOT_GUI_DocumentWindow.getDocument"><a class="viewcode-back" href="../../src.IOT_GUI_DocumentWindow.html#src.IOT_GUI_DocumentWindow.IOT_GUI_DocumentWindow.getDocument">[docs]</a>    <span class="nd">@deprecated</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="s1">&#39;0.2&#39;</span><span class="p">,</span> <span class="n">reason</span><span class="o">=</span><span class="s2">&quot;Deprecated. Acess property .document instead.&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">getDocument</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Gets the current document.</span>
+<span class="sd">        </span>
+<span class="sd">        :returns: The current document</span>
+<span class="sd">        :rtype: :class:`IOT_Document`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">document</span></div>
+
+<div class="viewcode-block" id="IOT_GUI_DocumentWindow.setDocument"><a class="viewcode-back" href="../../src.IOT_GUI_DocumentWindow.html#src.IOT_GUI_DocumentWindow.IOT_GUI_DocumentWindow.setDocument">[docs]</a>    <span class="nd">@deprecated</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="s1">&#39;0.2&#39;</span><span class="p">,</span> <span class="n">reason</span><span class="o">=</span><span class="s2">&quot;Deprecated. Acess property .document instead.&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">setDocument</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">d</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Sets the current document.</span>
+<span class="sd">        </span>
+<span class="sd">        :param d: The new document</span>
+<span class="sd">        :type d: :class:`IOT_Document`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span> <span class="o">=</span> <span class="n">d</span><span class="p">;</span>
+        <span class="k">return</span></div>
+
+
+<div class="viewcode-block" id="IOT_GUI_DocumentWindow.perfilometer"><a class="viewcode-back" href="../../src.IOT_GUI_DocumentWindow.html#src.IOT_GUI_DocumentWindow.IOT_GUI_DocumentWindow.perfilometer">[docs]</a>    <span class="k">def</span> <span class="nf">perfilometer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Renders the perfilometer&quot;&quot;&quot;</span>
+        <span class="n">octScan</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">study</span>
+        <span class="k">if</span> <span class="n">octScan</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="n">IOT_OperationPerfilometer</span><span class="p">()</span>
+            <span class="n">tmp</span><span class="o">.</span><span class="n">addOperand</span><span class="p">(</span><span class="n">octScan</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_toolsWindow</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+                <span class="n">settingsGUI</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_toolsWindow</span><span class="o">.</span><span class="n">_settingsOperationPerfilometer</span>
+                <span class="n">tmp</span><span class="o">.</span><span class="n">pixelColumn</span> <span class="o">=</span> <span class="n">settingsGUI</span><span class="o">.</span><span class="n">getPixelColumnValue</span><span class="p">()</span>
+                <span class="n">tmp</span><span class="o">.</span><span class="n">windowHalfWidth</span> <span class="o">=</span> <span class="n">settingsGUI</span><span class="o">.</span><span class="n">getWidthValue</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">tmp</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1">#Return a flat line</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">]);</span></div>
+
+<div class="viewcode-block" id="IOT_GUI_DocumentWindow.refresh"><a class="viewcode-back" href="../../src.IOT_GUI_DocumentWindow.html#src.IOT_GUI_DocumentWindow.IOT_GUI_DocumentWindow.refresh">[docs]</a>    <span class="k">def</span> <span class="nf">refresh</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Visualizes the selected scan, its perfilometer and its segmentation&quot;&quot;&quot;</span>
+        <span class="n">octScan</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">study</span>
+        <span class="n">octScanSegmentation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">segmentation</span>
+        
+        <span class="c1">#The following is a bug. It should be capture &quot;on the fly&quot; and</span>
+        <span class="c1">#clearing axes rather than reset, but I cannot make it work :(</span>
+        <span class="c1">#_,ax = self._preparePlottingWindow()</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fig</span><span class="o">.</span><span class="n">axes</span>
+        
+        <span class="c1">#Plot 1: The image</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">octScan</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">octScan</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">cmap</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s1">&#39;gray&#39;</span><span class="p">))</span>
+        
+        <span class="c1">#Overlay segmentation if available (with a semitransparent colormap)</span>
+        <span class="k">if</span> <span class="n">octScanSegmentation</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">r</span><span class="o">=</span> <span class="n">IOT_RetinalLayers</span><span class="p">()</span>
+            <span class="n">mycmap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getSemiTransparentColormap</span><span class="p">(</span><span class="n">N</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">getNumLayers</span><span class="p">())</span>
+            <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">octScanSegmentation</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">mycmap</span><span class="p">)</span>
+        
+        
+        <span class="c1">#Plot 2: The perfilometer</span>
+        <span class="n">perfil</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">perfilometer</span><span class="p">()</span>  <span class="c1">#Updates the perfilometer</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">perfil</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">perfil</span><span class="p">)))</span>
+
+        <span class="c1">#Update</span>
+        <span class="c1">#plt.draw()</span>
+        <span class="c1">#self._fig.draw()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">flush_events</span><span class="p">()</span>
+        
+        <span class="c1">#Refresh the Docked widgets</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_utilDock</span><span class="o">.</span><span class="n">layerThicknesses</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">measureThickness</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_utilDock</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
+
+        <span class="k">return</span></div>
+        
+    
+
+    
+
+    <span class="c1">#Operation methods</span>
+<div class="viewcode-block" id="IOT_GUI_DocumentWindow.openDocument"><a class="viewcode-back" href="../../src.IOT_GUI_DocumentWindow.html#src.IOT_GUI_DocumentWindow.IOT_GUI_DocumentWindow.openDocument">[docs]</a>    <span class="k">def</span> <span class="nf">openDocument</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initializes an :class:`IOT_Document` and opens a OCT image to work on.</span>
+<span class="sd">        </span>
+<span class="sd">        :returns: An new document</span>
+<span class="sd">        :rtype: :class:`IOT_Document`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="n">tmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">document</span> <span class="c1">#Capture current document</span>
+        <span class="k">if</span> <span class="n">tmp</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="n">IOT_Document</span><span class="p">()</span> <span class="c1">#Initialize an empty document</span>
+        
+        <span class="n">fileName</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getImageFilename</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">fileName</span><span class="p">:</span> <span class="c1">#Empty strings evaluate to false in Python;</span>
+                     <span class="c1">#If fileName is empty, this skips the attempt to open the file</span>
+            <span class="c1">#print(&quot;OCT-Tools: OCTToolsMainWindow: Opening file &quot;, fileName)</span>
+            
+            <span class="n">img</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_openImageFile</span><span class="p">(</span><span class="n">fileName</span><span class="p">)</span>
+            
+            <span class="n">tmp</span> <span class="o">=</span> <span class="n">IOT_Document</span><span class="p">()</span> <span class="c1">#Forget current document and initialize a new empty document</span>
+            <span class="n">tmp</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">fileName</span>
+            <span class="n">tmp</span><span class="o">.</span><span class="n">folderName</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">workingDir</span>
+            <span class="n">tmp</span><span class="o">.</span><span class="n">fileName</span> <span class="o">=</span> <span class="n">fileName</span>
+            <span class="n">tmp</span><span class="o">.</span><span class="n">study</span> <span class="o">=</span> <span class="n">IOT_OCTscan</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+                        
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1">#continue with current document</span>
+            <span class="k">pass</span>
+            
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span> <span class="o">=</span> <span class="n">tmp</span>
+        <span class="c1">#self.show() #Ensure it is visible. Pressing the close button in the document window, only hides the document window</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
+        
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">document</span></div>
+
+
+<div class="viewcode-block" id="IOT_GUI_DocumentWindow.stitch"><a class="viewcode-back" href="../../src.IOT_GUI_DocumentWindow.html#src.IOT_GUI_DocumentWindow.IOT_GUI_DocumentWindow.stitch">[docs]</a>    <span class="k">def</span> <span class="nf">stitch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Selects a second image and applies the stitching step.</span>
+<span class="sd">        </span>
+<span class="sd">        .. todo:</span>
+<span class="sd">            Return an OCT volume</span>
+<span class="sd">        </span>
+<span class="sd">        :returns: The image resulting from the stitching</span>
+<span class="sd">        :rtype: ndarray</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="n">IOT_OperationStitch</span><span class="p">()</span>
+        <span class="n">tmp</span><span class="o">.</span><span class="n">addOperand</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">study</span><span class="p">)</span>
+        <span class="n">image2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">openDocument</span><span class="p">()</span>
+        <span class="n">tmp</span><span class="o">.</span><span class="n">addOperand</span><span class="p">(</span><span class="n">image2</span><span class="o">.</span><span class="n">study</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">study</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">study</span></div>
+    
+     
+     
+<div class="viewcode-block" id="IOT_GUI_DocumentWindow.flatten"><a class="viewcode-back" href="../../src.IOT_GUI_DocumentWindow.html#src.IOT_GUI_DocumentWindow.IOT_GUI_DocumentWindow.flatten">[docs]</a>    <span class="k">def</span> <span class="nf">flatten</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Applies the flattening step.</span>
+<span class="sd">        </span>
+<span class="sd">        .. todo:</span>
+<span class="sd">            Return an OCT volume</span>
+<span class="sd">        </span>
+<span class="sd">        :returns: The flattened image</span>
+<span class="sd">        :rtype: ndarray</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="n">IOT_OperationFlattening</span><span class="p">()</span>
+        <span class="n">tmp</span><span class="o">.</span><span class="n">addOperand</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">study</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">study</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">study</span></div>
+        
+     
+<div class="viewcode-block" id="IOT_GUI_DocumentWindow.measureThickness"><a class="viewcode-back" href="../../src.IOT_GUI_DocumentWindow.html#src.IOT_GUI_DocumentWindow.IOT_GUI_DocumentWindow.measureThickness">[docs]</a>    <span class="k">def</span> <span class="nf">measureThickness</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Renders layer thicknesses</span>
+<span class="sd">        </span>
+<span class="sd">        :returns: List of layers thicknesses</span>
+<span class="sd">        :rtype: list</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">theSegmentation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">segmentation</span>
+        <span class="k">if</span> <span class="n">theSegmentation</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="n">IOT_OperationMeasureLayerThickness</span><span class="p">()</span>
+            <span class="n">tmp</span><span class="o">.</span><span class="n">addOperand</span><span class="p">(</span><span class="n">theSegmentation</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_toolsWindow</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+                <span class="n">settingsGUI</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_toolsWindow</span><span class="o">.</span><span class="n">_settingsOperationMeasureThickness</span>
+                <span class="n">tmp</span><span class="o">.</span><span class="n">pixelColumn</span> <span class="o">=</span> <span class="n">settingsGUI</span><span class="o">.</span><span class="n">getPixelColumnValue</span><span class="p">()</span>
+                <span class="n">tmp</span><span class="o">.</span><span class="n">windowHalfWidth</span> <span class="o">=</span> <span class="n">settingsGUI</span><span class="o">.</span><span class="n">getWindowHalfWidthValue</span><span class="p">()</span>
+                <span class="n">tmp</span><span class="o">.</span><span class="n">pixelWidth</span> <span class="o">=</span> <span class="n">settingsGUI</span><span class="o">.</span><span class="n">getPixelWidthValue</span><span class="p">()</span>
+                <span class="n">tmp</span><span class="o">.</span><span class="n">pixelHeight</span> <span class="o">=</span> <span class="n">settingsGUI</span><span class="o">.</span><span class="n">getPixelHeightValue</span><span class="p">()</span>
+            <span class="n">thicknesses</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1">#Return a list of thickness&lt;es of 0.</span>
+            <span class="n">r</span><span class="o">=</span> <span class="n">IOT_RetinalLayers</span><span class="p">()</span>
+            <span class="n">layers</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">getAllLayersIndexes</span><span class="p">()</span>
+            <span class="n">thicknesses</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">layers</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">thicknesses</span></div>
+
+    
+<div class="viewcode-block" id="IOT_GUI_DocumentWindow.segment"><a class="viewcode-back" href="../../src.IOT_GUI_DocumentWindow.html#src.IOT_GUI_DocumentWindow.IOT_GUI_DocumentWindow.segment">[docs]</a>    <span class="k">def</span> <span class="nf">segment</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Applies the segmentation step.</span>
+<span class="sd">        </span>
+<span class="sd">        .. todo:</span>
+<span class="sd">            Return an OCT volume</span>
+<span class="sd">        </span>
+<span class="sd">        :returns: The segmentation</span>
+<span class="sd">        :rtype: ndarray</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">seg</span> <span class="o">=</span> <span class="n">IOT_OperationSegmentation</span><span class="p">()</span>
+        <span class="n">tmp</span><span class="o">.</span><span class="n">addOperand</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">study</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">segmentation</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">segmentation</span></div>
+        
+        
+
+<div class="viewcode-block" id="IOT_GUI_DocumentWindow.opEditSegmentation"><a class="viewcode-back" href="../../src.IOT_GUI_DocumentWindow.html#src.IOT_GUI_DocumentWindow.IOT_GUI_DocumentWindow.opEditSegmentation">[docs]</a>    <span class="k">def</span> <span class="nf">opEditSegmentation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">theOperation</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Applies some editSegmentation step.</span>
+<span class="sd">        </span>
+<span class="sd">        .. todo:</span>
+<span class="sd">            Return an OCT volume</span>
+
+<span class="sd">        :param theOperation: The edit operation name. e.g. &#39;COIDelete&#39;</span>
+<span class="sd">        :type theOperation: string</span>
+<span class="sd">        :param params: The params to be passed to the operation</span>
+<span class="sd">        </span>
+<span class="sd">        :returns: The segmentation</span>
+<span class="sd">        :rtype: ndarray</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="c1">#Catch current OCT scan</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="n">IOT_OperationEditSegmentation</span><span class="p">()</span>
+        <span class="n">im</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">study</span>
+        <span class="n">imSegmented</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">.</span><span class="n">initEditSegmentation</span><span class="p">(</span><span class="n">im</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">segmentation</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">segmentation</span> <span class="o">=</span> <span class="n">imSegmented</span> <span class="c1">#Sync, in case a dummy</span>
+                                                 <span class="c1">#one has been generated.</span>
+
+        <span class="c1">#Indirect call to the operation</span>
+        <span class="c1">#See: https://stackoverflow.com/questions/3061/calling-a-function-of-a-module-by-using-its-name-a-string    </span>
+        <span class="n">theOp</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span> <span class="n">theOperation</span><span class="p">)</span> 
+        <span class="k">if</span> <span class="n">params</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">imSegmented</span> <span class="o">=</span> <span class="n">theOp</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">imSegmented</span> <span class="o">=</span> <span class="n">theOp</span><span class="p">(</span><span class="o">*</span><span class="n">params</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">imSegmented</span><span class="p">,</span><span class="nb">bool</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">segmentation</span> <span class="o">=</span> <span class="n">imSegmented</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
+            
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">document</span><span class="o">.</span><span class="n">segmentation</span></div>
+        
+
+
+
+
+
+
+
+    <span class="c1">#Mouse listening methods</span>
+    
+<div class="viewcode-block" id="IOT_GUI_DocumentWindow.mouseMoveEvent"><a class="viewcode-back" href="../../src.IOT_GUI_DocumentWindow.html#src.IOT_GUI_DocumentWindow.IOT_GUI_DocumentWindow.mouseMoveEvent">[docs]</a>    <span class="k">def</span> <span class="nf">mouseMoveEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">MouseEvent</span><span class="p">):</span>
+        <span class="c1"># if self._flagEditingSegmentation:</span>
+        <span class="c1">#     #Editing segmentation</span>
+        <span class="c1">#     # mousePos = [event.x, event.y]</span>
+        <span class="c1">#     # mouseCoords = [event.xdata, event.ydata]</span>
+        <span class="c1">#     # mouseInAxes= event.inaxes</span>
+        <span class="c1">#     # print(self.getClassName(),&quot;: MouseMoveEvent: &quot;, mousePos)</span>
+        <span class="c1"># </span>
+        <span class="c1">#     # self.document.setScanSegmentation(imSegmented)</span>
+        <span class="c1">#     # self.refresh()</span>
+        <span class="c1">#     </span>
+        <span class="c1">#     self._lastMouseEvent = event</span>
+        <span class="c1"># else:</span>
+        <span class="c1">#     #Not editing segmentation</span>
+        <span class="c1">#     pass</span>
+        
+        <span class="c1">#print(self.getClassName(),&quot;: MouseMoveEvent: Saving current event.&quot;)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setLastMouseEvent</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+        <span class="k">return</span></div>
+
+
+
+
+<div class="viewcode-block" id="IOT_GUI_DocumentWindow.mousePressEvent"><a class="viewcode-back" href="../../src.IOT_GUI_DocumentWindow.html#src.IOT_GUI_DocumentWindow.IOT_GUI_DocumentWindow.mousePressEvent">[docs]</a>    <span class="k">def</span> <span class="nf">mousePressEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">MouseEvent</span><span class="p">):</span>
+        <span class="c1"># mousePos = [event.x, event.y]</span>
+        <span class="c1"># mouseCoords = [event.xdata, event.ydata]</span>
+        <span class="c1"># mouseButton = event.button #1 -Left, 2 - Middle, 3 - Right</span>
+        <span class="c1"># if mouseButton == 1:</span>
+        <span class="c1">#     print(self.getClassName(),&quot;: MousePressEvent: Left clicked at &quot;,mousePos)</span>
+        <span class="c1"># elif mouseButton == 3:</span>
+        <span class="c1">#     print(self.getClassName(),&quot;: MousePressEvent: Right clicked at &quot;,mousePos)</span>
+        
+        <span class="c1">#print(self.getClassName(),&quot;: MousePressEvent: Saving current event.&quot;)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setLastMouseEvent</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+        <span class="k">return</span></div>
+
+
+
+
+<div class="viewcode-block" id="IOT_GUI_DocumentWindow.mouseReleaseEvent"><a class="viewcode-back" href="../../src.IOT_GUI_DocumentWindow.html#src.IOT_GUI_DocumentWindow.IOT_GUI_DocumentWindow.mouseReleaseEvent">[docs]</a>    <span class="k">def</span> <span class="nf">mouseReleaseEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">MouseEvent</span><span class="p">):</span>
+        <span class="c1"># mousePos = [event.x, event.y]</span>
+        <span class="c1"># mouseCoords = [event.xdata, event.ydata]</span>
+        <span class="c1"># mouseButton = event.button #1 -Left, 2 - Middle, 3 - Right</span>
+    
+        <span class="c1">#self.document.setScanSegmentation(imSegmented)</span>
+        <span class="c1">#self.refresh()</span>
+        
+        <span class="c1">#print(self.getClassName(),&quot;: MouseReleaseEvent: Saving current event.&quot;)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setLastMouseEvent</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+        <span class="k">return</span></div>
+
+
+
+<div class="viewcode-block" id="IOT_GUI_DocumentWindow.mouseWheelEvent"><a class="viewcode-back" href="../../src.IOT_GUI_DocumentWindow.html#src.IOT_GUI_DocumentWindow.IOT_GUI_DocumentWindow.mouseWheelEvent">[docs]</a>    <span class="k">def</span> <span class="nf">mouseWheelEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">MouseEvent</span><span class="p">):</span>
+        <span class="c1"># mousePos = [event.x, event.y]</span>
+        <span class="c1"># mouseCoords = [event.xdata, event.ydata]</span>
+        <span class="c1"># mouseButton = event.button #&#39;up&#39; or &#39;down&#39;</span>
+        <span class="c1"># print(self.getClassName(),&quot;: mouseWheelEvent: Wheel &quot;, mouseButton ,&quot; at &quot;,mousePos)</span>
+        
+        <span class="c1"># consume the event so it will do nothing</span>
+        <span class="c1">#pass</span>
+    
+        <span class="c1">#self.document.setScanSegmentation(imSegmented)</span>
+        <span class="c1">#self.refresh()</span>
+        
+        <span class="c1">#print(self.getClassName(),&quot;: MouseWheelEvent: Saving current event.&quot;)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setLastMouseEvent</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+        <span class="k">return</span></div>
+
+
+<div class="viewcode-block" id="IOT_GUI_DocumentWindow.getLastMouseEvent"><a class="viewcode-back" href="../../src.IOT_GUI_DocumentWindow.html#src.IOT_GUI_DocumentWindow.IOT_GUI_DocumentWindow.getLastMouseEvent">[docs]</a>    <span class="k">def</span> <span class="nf">getLastMouseEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="c1">#So that other windows can &quot;listen&quot; to events in this one</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lastMouseEvent</span></div>
+
+
+<div class="viewcode-block" id="IOT_GUI_DocumentWindow.setLastMouseEvent"><a class="viewcode-back" href="../../src.IOT_GUI_DocumentWindow.html#src.IOT_GUI_DocumentWindow.IOT_GUI_DocumentWindow.setLastMouseEvent">[docs]</a>    <span class="k">def</span> <span class="nf">setLastMouseEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">MouseEvent</span><span class="p">):</span>
+    <span class="c1">#Set the last mouse event and update the status bar.</span>
+    
+        <span class="c1">#Watch out! Events controlled by matplotlib will be passed as</span>
+        <span class="c1">#matplotlib.MouseEvents (these are; move, button pressed, button</span>
+        <span class="c1">#released, and wheel operation within the figure), but events</span>
+        <span class="c1">#in the window but not in the figure (e.g. corner click to resize)</span>
+        <span class="c1">#will be passed as a QMouseEvent</span>
+        
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">event</span><span class="p">,</span><span class="n">QMouseEvent</span><span class="p">):</span> <span class="c1">#QMouseEvent event</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Detected QMouseEvent.&quot;</span>
+
+
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">event</span><span class="p">,</span><span class="n">MouseEvent</span><span class="p">):</span> <span class="c1">#matplotlib event</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_lastMouseEvent</span> <span class="o">=</span> <span class="n">event</span>
+            
+            <span class="c1">#...and update the status bar</span>
+            <span class="n">mousePos</span> <span class="o">=</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">x</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
+            <span class="n">mouseCoords</span> <span class="o">=</span> <span class="p">[</span><span class="n">event</span><span class="o">.</span><span class="n">xdata</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">ydata</span><span class="p">]</span>
+            <span class="n">mouseButton</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">button</span> <span class="c1">#&#39;up&#39; or &#39;down&#39;</span>
+            
+            <span class="c1">#note that at this point there is no way to distinguish a move event from</span>
+            <span class="c1">#a release event (both have the mouse.button to none)</span>
+            <span class="n">msg</span><span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="k">if</span> <span class="n">mouseButton</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="n">msg</span> <span class="o">+</span> <span class="s2">&quot;Left click at &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">mousePos</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">mouseButton</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="n">msg</span> <span class="o">+</span> <span class="s2">&quot;Middle click at &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">mousePos</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">mouseButton</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="n">msg</span> <span class="o">+</span> <span class="s2">&quot;Right click at &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">mousePos</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">mouseButton</span> <span class="o">==</span> <span class="s1">&#39;up&#39;</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="n">msg</span> <span class="o">+</span> <span class="s2">&quot;Wheel up at &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">mousePos</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">mouseButton</span> <span class="o">==</span> <span class="s1">&#39;down&#39;</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="n">msg</span> <span class="o">+</span> <span class="s2">&quot;Wheel down at &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">mousePos</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="n">msg</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">mousePos</span><span class="p">)</span>
+        
+        <span class="k">else</span><span class="p">:</span> <span class="c1">#Unknown event type </span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Unknown event type. Ignoring&quot;</span>
+
+        <span class="c1">#print(event)</span>
+        <span class="c1">#print(self.getClassName(),&quot;: setLastMouseEvent: &quot;,msg)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">statusBar</span><span class="p">()</span><span class="o">.</span><span class="n">showMessage</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lastMouseEvent</span></div>
+
+
+<div class="viewcode-block" id="IOT_GUI_DocumentWindow.waitForMouseButtonPress"><a class="viewcode-back" href="../../src.IOT_GUI_DocumentWindow.html#src.IOT_GUI_DocumentWindow.IOT_GUI_DocumentWindow.waitForMouseButtonPress">[docs]</a>    <span class="k">def</span> <span class="nf">waitForMouseButtonPress</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="c1">#Wraps the waitforbuttonpress from matplotlib</span>
+        
+        <span class="c1">#matplotlib.waitforbuttonpress returns:</span>
+        <span class="c1">#   True is a key was pressed,</span>
+        <span class="c1">#   False if a mouse button was pressed</span>
+        <span class="c1">#   None if timeout was reached (with negative timeout, it does not timeout</span>
+        <span class="n">mouseButtonPressed</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">while</span> <span class="ow">not</span> <span class="n">mouseButtonPressed</span><span class="p">:</span>
+            <span class="n">tmp</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_fig</span><span class="o">.</span><span class="n">waitforbuttonpress</span><span class="p">(</span><span class="n">timeout</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">mouseButtonPressed</span> <span class="o">=</span> <span class="p">(</span><span class="n">tmp</span> <span class="o">==</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lastMouseEvent</span></div></div>
+
+
+
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">OCT-Tools 0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017-8, Felipe Orihuela-Espina.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
+    </div>
+  </body>
+</html>
