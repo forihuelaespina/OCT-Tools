@@ -38,6 +38,9 @@ Initial code isolated from previous file segment.py
 |  1-Dec-2018 | FOE    | - Adapted to new signature of inherited execute()    |
 |             |        |   method to accept parameters.                       |
 +-------------+--------+------------------------------------------------------+
+| 13-Dec-2018 | FOE    | - Updated deprecation package to "deprecation" due   |
+|             |        |   compilation problems with package "deprecated".    |
++-------------+--------+------------------------------------------------------+
 
 .. seealso:: None
 .. note:: None
@@ -51,10 +54,9 @@ Initial code isolated from previous file segment.py
 """
 
 ## Import
-from IOT_Operation import IOT_Operation
-
 import warnings
-from deprecated import deprecated
+#from deprecated import deprecated
+import deprecation
 
 import numpy as np
 from skimage import feature, color
@@ -62,6 +64,8 @@ import cv2 #That's OpenCV
 import segmentationUtils
 #import matlab.engine
 
+from version import __version__
+from IOT_Operation import IOT_Operation
 
 
 
@@ -221,7 +225,10 @@ class IOT_OperationSegmentation(IOT_Operation):
 
 
 
-    @deprecated(version='0.2', reason="Deprecated. Use method execute() instead.")
+    #@deprecated(version='0.2', reason="Deprecated. Use method execute() instead.")
+    @deprecation.deprecated(deprecated_in="0.2", removed_in="0.3",
+                        current_version=__version__,
+                        details="Use method execute() instead.")
     def segmentar(self,image):
         #Encapsulate the image as an IOT_OCTscan
         tmp=IOT_OCTscan(image)

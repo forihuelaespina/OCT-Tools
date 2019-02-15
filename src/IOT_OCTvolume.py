@@ -18,6 +18,8 @@ A set of OCT scans. All scans are of :class:`IOT_OCTscan`s.
 +-------------+--------+------------------------------------------------------+
 |  2-Dec-2018 | FOE    | - Minor debugging.                                   |
 +-------------+--------+------------------------------------------------------+
+| 13-Dec-2018 | FOE    | - Remove importing of deprecated.                    |
++-------------+--------+------------------------------------------------------+
 
 .. seealso:: None
 .. note:: None
@@ -32,7 +34,7 @@ A set of OCT scans. All scans are of :class:`IOT_OCTscan`s.
 
 ## Import
 import warnings
-from deprecated import deprecated
+
 
 ## Class definition
 class IOT_OCTvolume(object):

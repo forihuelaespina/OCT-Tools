@@ -1,29 +1,36 @@
-# File: setup.py
-#
-# Code to compile OCT-Tools
-# 
-#
-#
-# @dateCreated: 5-Aug-2018
-# @authors: Arlem Aleida Castillo Avila, Felipe Orihuela-Espina
-# @dateModified: 3-Sep-2018
-#
-# See also:
-# 
+"""
+-*- coding: utf-8 -*-
+
+File: setup.py
+
+Code to compile OCT-Tools
+
+:Log:
+
++-------------+--------+------------------------------------------------------+   
+| Date        | Author | Description                                          |
++=============+========+======================================================+
+|  5-Aug-2018 | FOE    | - Initial script.                                    |
++-------------+--------+------------------------------------------------------+   
+|  3-Sep-2018 | FOE    | - Updated according to:                              |
+|             |        | https://packaging.python.org/tutorials/packaging-projects/ |
++-------------+--------+------------------------------------------------------+   
+| 13-Feb-2019 | FOE    | - Updated version to __version__                     |
+|             |        | (NOTE: variable __version__ imported in __init__.py) |
+|             |        | - Comments updated to Sphinx style.                  |
++-------------+--------+------------------------------------------------------+   
 
 
 
+.. seealso:: None
+.. note:: None
+.. todo:: None
 
-#
-# LOG:
-#
-# 5-Aug-2018: FOE:
-#   * Initial script
-#
-# 3-Sep-2018: FOE:
-#   * Updated according to: https://packaging.python.org/tutorials/packaging-projects/
-#
+.. sectionauthor:: Felipe Orihuela-Espina <f.orihuela-espina@inaoep.mx>
+.. codeauthor:: Arlem Aleida Castillo Avila <acastillo@inaoep.mx>
+.. codeauthor:: Felipe Orihuela-Espina <f.orihuela-espina@inaoep.mx>
 
+"""
 
 
 ## Compiling with setuptools and wheels:
@@ -47,11 +54,12 @@ import setuptools
 with open("../README.md", "r") as fh:
     long_description = fh.read()
 
+exec(open('src/version.py').read())
 
 # See: https://packaging.python.org/tutorials/packaging-projects/
 setuptools.setup(
     name="OCTToolsApp",
-    version="0.1",
+    version=__version__,
     author="Felipe Orihuela-Espina; Arlem Aleida Castillo Ávila",
     author_email="f.orihuela-espina@inaoep.mx",
     description="A suite of tools for segmenting retinal OCT tools",

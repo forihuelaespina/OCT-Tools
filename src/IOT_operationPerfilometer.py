@@ -45,6 +45,9 @@ Initial code isolated from previous file perfilometro.py
 |  1-Dec-2018 | FOE    | - Adapted to new signature of inherited execute()    |
 |             |        |   method to accept parameters.                       |
 +-------------+--------+------------------------------------------------------+
+| 13-Dec-2018 | FOE    | - Updated deprecation package to "deprecation" due   |
+|             |        |   compilation problems with package "deprecated".    |
++-------------+--------+------------------------------------------------------+
 
 .. seealso:: None
 .. note:: None
@@ -58,11 +61,9 @@ Initial code isolated from previous file perfilometro.py
 """
 
 ## Import
-from IOT_Operation import IOT_Operation
-from IOT_OCTscan import IOT_OCTscan
-
 import warnings
-from deprecated import deprecated
+#from deprecated import deprecated
+import deprecation
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -70,6 +71,9 @@ import matplotlib.image as mpimg
 from skimage import io, color
 
 
+from version import __version__
+from IOT_Operation import IOT_Operation
+from IOT_OCTscan import IOT_OCTscan
 
 
 ## Class definition
@@ -236,7 +240,10 @@ class IOT_OperationPerfilometer(IOT_Operation):
         return self.result    
             
 
-    @deprecated(version='0.2', reason="Deprecated. Use method execute() instead.")
+    #@deprecated(version='0.2', reason="Deprecated. Use method execute() instead.")
+    @deprecation.deprecated(deprecated_in="0.2", removed_in="0.3",
+                        current_version=__version__,
+                        details="Use method execute() instead.")
     def perfilometry(self,image, pixel = -1 , a = 5):
         #Encapsulate the image as an IOT_OCTscan
         tmp=IOT_OCTscan(image)

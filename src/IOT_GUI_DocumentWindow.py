@@ -57,6 +57,9 @@ The main document window for OCT-Tools. This is where the current document
 | 20-Jan-2019 | FOE    | - Added support for the class:`IOT_OperationBrush`   |
 |             |        |   operation.                                         |
 +-------------+--------+------------------------------------------------------+
+| 13-Dec-2018 | FOE    | - Updated deprecation package to "deprecation" due   |
+|             |        |   compilation problems with package "deprecated".    |
++-------------+--------+------------------------------------------------------+
 
 
 .. seealso:: None
@@ -77,7 +80,9 @@ The main document window for OCT-Tools. This is where the current document
 import os
 
 import warnings
-from deprecated import deprecated
+#from deprecated import deprecated
+import deprecation
+
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -100,6 +105,7 @@ else:
         FigureCanvas, NavigationToolbar2QT as NavigationToolbar)
 
 
+from version import __version__
 from AmiraReader import AmiraReader 
 from IOT_Document import IOT_Document
 from IOT_OCTscan import IOT_OCTscan
@@ -356,7 +362,7 @@ class IOT_GUI_DocumentWindow(QMainWindow):
         self.close()
         event.accept()
         
-    @deprecated(version='0.2', reason="Deprecated. Acess property .document instead.")
+    #@deprecated(version='0.2', reason="Deprecated. Acess property .document instead.")
     def getDocument(self):
         """Gets the current document.
         
@@ -365,7 +371,10 @@ class IOT_GUI_DocumentWindow(QMainWindow):
         """
         return self.document
 
-    @deprecated(version='0.2', reason="Deprecated. Acess property .document instead.")
+    #@deprecated(version='0.2', reason="Deprecated. Acess property .document instead.")
+    @deprecation.deprecated(deprecated_in="0.2", removed_in="0.3",
+                        current_version=__version__,
+                        details="Access property .document instead.")
     def setDocument(self,d):
         """Sets the current document.
         

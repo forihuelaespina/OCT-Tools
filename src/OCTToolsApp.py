@@ -35,6 +35,8 @@ Application entrance point.
 +-------------+--------+------------------------------------------------------+
 | 14-Nov-2018 | FOE    | - Connected the tools window to the document window. |
 +-------------+--------+------------------------------------------------------+   
+| 13-Feb-2019 | FOE    | - Updated support for version control. See version.py|
++-------------+--------+------------------------------------------------------+   
 
 .. seealso:: None
 .. note:: None
@@ -63,6 +65,7 @@ from PyQt5.QtWidgets import QApplication
 #from PyQt5 import uic
 
 
+from version import __version__
 from IOT_GUI_DocumentWindow import *
 from IOT_GUI_ToolsWindow import *
 
@@ -80,7 +83,7 @@ class OCTToolsApp():
         
     """
 
-    #Private class attributes shared by all instances
+        #Private class attributes shared by all instances
 
     #Class constructor
     def __init__(self):
@@ -98,7 +101,7 @@ class OCTToolsApp():
 
 #This is the application entrance point. Note that it is NOT a method of the OCTToolsApp class
 def main():
-    print("OCT-Tools: Initiating...")
+    print("OCT-Tools v" + __version__ + ": Initiating...")
     #Instancia para iniciar una aplicación
     app = QApplication(sys.argv)
     

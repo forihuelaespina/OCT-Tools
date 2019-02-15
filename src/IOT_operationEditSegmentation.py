@@ -46,6 +46,9 @@ Operation EditSegmentation
 |  9-Jan-2019 | FOE    | - Bug detected. Variable imgin in method execute had |
 |             |        |   not been set.                                      |
 +-------------+--------+------------------------------------------------------+
+| 13-Dec-2018 | FOE    | - Updated deprecation package to "deprecation" due   |
+|             |        |   compilation problems with package "deprecated".    |
++-------------+--------+------------------------------------------------------+
 
 .. seealso:: None
 .. note:: None
@@ -61,8 +64,8 @@ Operation EditSegmentation
 ## Import
 
 import warnings
-from deprecated import deprecated
-
+#from deprecated import deprecated
+import deprecation
 
 import numpy as np
 #from skimage import feature, color
@@ -72,6 +75,7 @@ import numpy as np
 from scipy import ndimage
 from skimage import io, color, morphology
 
+from version import __version__
 from IOT_Operation import IOT_Operation
 from IOT_OCTscan import IOT_OCTscan
 from IOT_OCTscanSegmentation import IOT_OCTscanSegmentation
@@ -294,7 +298,10 @@ class IOT_OperationEditSegmentation(IOT_Operation):
         return self.result   
     
     # See: https://pypi.org/project/pynput/
-    @deprecated(version='0.2', reason="Deprecated. Use method addOperand() and add reference image as scan property of class:`IOT_OCTscanSegmentation`.")
+    #@deprecated(version='0.2', reason="Deprecated. Use method addOperand() and add reference image as scan property of class:`IOT_OCTscanSegmentation`.")
+    @deprecation.deprecated(deprecated_in="0.2", removed_in="0.3",
+                        current_version=__version__,
+                        details="Use method addOperand() and add reference image as scan property of class:`IOT_OCTscanSegmentation`.")
     def initEditSegmentation(self,refImage,imageSegmented = None):
         """Initialize segmentation for editing from reference :class:`IOT_OCTscan`.
         

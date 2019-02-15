@@ -60,6 +60,9 @@ Tasks pending for v0.3
   and shifting ROIs should be incorporated. These are not aplicable
   to COI.
 * Improving manual edition of segmentation borders.
+* Bug pending for the stitching of more than 3 scans.
+* Attempting to open a new scan when one is already open, will launch
+  the opening dialog, but this will be freezed.
 
 
 .. _secTaskForV0.2:
@@ -67,9 +70,6 @@ Tasks pending for v0.3
 Tasks pending for v0.2
 ----------------------
 
-* Bug pending for the stitching of more than 3 scans.
-* Attempting to open a new scan when one is already open, will launch
-  the opening dialog, but this will be freezed.
 * Find an alternative to Git LFS.
 * Packing and generating the installer.
 
@@ -81,6 +81,89 @@ Progress Log
 
 Plase note that advances indicated at a particular date, may actually refer to
 advances in the previous days/weeks.
+
+
+
+.. _secLogAdvances20190213:
+
+Advances 13-Feb-2019
+--------------------
+
+* **Version**: v0.2alpha
+* **Responsible**: FOE
+
+Summary of changes:
+
+* Transitioned to package "deprecation" (from "deprecated"). This requires finer
+  control of package version. Modified classes are:
+  
+  * class:`src:OCTToolsApp`
+  * class:`src:IOT_Document`
+  * class:`src:IOT_GUI_DocumentWindow`
+  * class:`src:IOT_OCTvolume`
+  * class:`src:IOT_OperationBrush`
+  * class:`src:IOT_OperationFlattening`
+  * class:`src:IOT_OperationMesureLayerThickness`
+  * class:`src:IOT_OperationPerfilometer`
+  * class:`src:IOT_OperationSegmentation`
+  * class:`src:IOT_OperationStitch`
+  
+* Version control is now in version.py (instead of setup.py), and loaded in __init__.py
+
+    * Package version control in Python is not easy with over 7 different
+      potential ways to do it (https://packaging.python.org/guides/single-sourcing-package-version/#single-sourcing-the-version).
+      Another additonal option is to use package pbr which I may consider in
+      the future as explained here: 
+      https://stackoverflow.com/questions/458550/standard-way-to-embed-version-into-python-package
+      But for now I opted for the simplest option.      
+
+* Comments in setup.py and __init__.py updated to Sphinx style
+* Opening message now informs of version.
+* First version of the installer is FINALLY compiling. Installer is now being tested.
+* We are now in v0.2beta, but release to GitHub is pending
+
+
+.. _secLogAdvances20190205:
+
+Advances 5-Feb-2019
+--------------------
+
+* **Version**: v0.2alpha
+* **Responsible**: FOE
+
+Summary of changes:
+
+
+* New attempts to generate the installer; now under Anaconda, have failed. The library “deprecated” continues to give problems for compiling in either versions 1.2.3 and 1.2.4.
+* We’re now seeking alternatives:
+
+  * Package deprecation 2.0.6
+  * A shortcut by now may be to defer all deprecations to the next version.
+
+* Deprecation in general seems to be a more general problem in python; https://www.python.org/dev/peps/pep-0004/ which might partially explain the difficulties in compiling the deprecated module.
+
+
+
+.. _secLogAdvances20190127:
+
+Advances 27-Jan-2019
+--------------------
+
+* **Version**: v0.2
+* **Responsible**: FOE
+
+Summary of changes:
+
+* Version v0.2 alpha released and commited to GitHub.
+* Installer.cfg updated for new package versions.
+
+  * wrapt 1.10.11 -> wrapt 1.11.1
+  * deprecated 1.2.3 -> deprecated 1.2.4
+
+* Generation of installer in progress. The library "deprecated" which works
+  well when interpreted is giving some troubles during compilation. This has
+  been tested in two Windows 10 machines (FOE_INAOE laptop and CHOLULA desktop).
+  Currently, investigating a solution.
 
 
 

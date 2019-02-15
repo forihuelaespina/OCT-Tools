@@ -18,6 +18,8 @@ Operation Brush
 +-------------+--------+------------------------------------------------------+
 | 20-Jan-2018 | FOE    | - Major debugging.                                   |
 +-------------+--------+------------------------------------------------------+
+| 13-Dec-2018 | FOE    | - Remove importing of deprecated.                    |
++-------------+--------+------------------------------------------------------+
 
 
 .. seealso:: None
@@ -33,7 +35,6 @@ Operation Brush
 ## Import
 
 import warnings
-from deprecated import deprecated
 
 import numpy as np
 

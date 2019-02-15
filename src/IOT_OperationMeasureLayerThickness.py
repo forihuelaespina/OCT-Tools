@@ -42,6 +42,9 @@ class:`IOT_OCTscanSegmentation`.
 |             |        | - New property layers                                |
 |             |        | - More than one layer can now be measured at once.   |
 +-------------+--------+------------------------------------------------------+
+| 13-Dec-2018 | FOE    | - Updated deprecation package to "deprecation" due   |
+|             |        |   compilation problems with package "deprecated".    |
++-------------+--------+------------------------------------------------------+
 
 .. seealso:: None
 .. note:: None
@@ -56,13 +59,15 @@ class:`IOT_OCTscanSegmentation`.
 
 ## Import
 import warnings
-from deprecated import deprecated
+#from deprecated import deprecated
+import deprecation
 
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 from skimage import io, color
 
+from version import __version__
 from IOT_OCTscanSegmentation import IOT_OCTscanSegmentation
 from IOT_Operation import IOT_Operation
 from IOT_RetinalLayers import IOT_RetinalLayers
@@ -164,7 +169,10 @@ class IOT_OperationMeasureLayerThickness(IOT_Operation):
 
 
     @property
-    @deprecated(version='0.2', reason="Deprecated. Use property layers instead.")
+    #@deprecated(version='0.2', reason="Deprecated. Use property layers instead.")
+    @deprecation.deprecated(deprecated_in="0.2", removed_in="0.3",
+                        current_version=__version__,
+                        details="Use property .layers instead.")
     def layerIndex(self): #layerIndex getter
         """
         Selected retinal layer index(es) for being measured.
@@ -356,7 +364,10 @@ class IOT_OperationMeasureLayerThickness(IOT_Operation):
 
 
 
-    @deprecated(version='0.2', reason="Deprecated. Use method execute() instead.")
+    #@deprecated(version='0.2', reason="Deprecated. Use method execute() instead.")
+    @deprecation.deprecated(deprecated_in="0.2", removed_in="0.3",
+                        current_version=__version__,
+                        details="Use method execute() instead.")
     def getLayerThickness(self,segmentedImage, layerName, pixel = -1):
         #Encapsulate the image as an IOT_OCTscan
         tmp=IOT_OCTscan(segmentedImage)

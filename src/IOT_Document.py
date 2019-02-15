@@ -26,6 +26,9 @@ IOT stands for INAOE OCT Tools
 |             |        |   pairs for those properties.                        |
 |             |        | - Minor debugging                                    |
 +-------------+--------+------------------------------------------------------+
+| 13-Dec-2018 | FOE    | - Updated deprecation package to "deprecation" due   |
+|             |        |   compilation problems with package "deprecated".    |
++-------------+--------+------------------------------------------------------+
 
 .. seealso:: None
 .. note:: None
@@ -40,11 +43,13 @@ IOT stands for INAOE OCT Tools
 
 ## Import
 import warnings
-from deprecated import deprecated
+#from deprecated import deprecated
+import deprecation
 
+from version import __version__
 from IOT_OCTscan import IOT_OCTscan
 from IOT_OCTscanSegmentation import IOT_OCTscanSegmentation
-from IOT_OCTvolume import IOT_OCTvolume
+#from IOT_OCTvolume import IOT_OCTvolume
 
 
 
@@ -233,47 +238,77 @@ class IOT_Document():
     def getClassName(self):
         return type(self).__name__
     
-    @deprecated(version='0.2', reason="Deprecated. Acess property .folderName instead.")
+   # @deprecated(version='0.2', reason="Deprecated. Access property .folderName instead.")
+    @deprecation.deprecated(deprecated_in="0.2", removed_in="0.3",
+                        current_version=__version__,
+                        details="Access property .folderName instead.")
     def getFolderName(self):
         return self.folderName
 
-    @deprecated(version='0.2', reason="Deprecated. Acess property .folderName instead.")
+    #@deprecated(version='0.2', reason="Deprecated. Access property .folderName instead.")
+    @deprecation.deprecated(deprecated_in="0.2", removed_in="0.3",
+                        current_version=__version__,
+                        details="Access property .folderName instead.")
     def setFolderName(self,d):
         self.folderName = d;
         return
 
-    @deprecated(version='0.2', reason="Deprecated. Acess property .fileName instead.")
+    #@deprecated(version='0.2', reason="Deprecated. Access property .fileName instead.")
+    @deprecation.deprecated(deprecated_in="0.2", removed_in="0.3",
+                        current_version=__version__,
+                        details="Access property .fileName instead.")
     def getFileName(self):
         return self.fileName
 
-    @deprecated(version='0.2', reason="Deprecated. Acess property .fileName instead.")
+    #@deprecated(version='0.2', reason="Deprecated. Access property .fileName instead.")
+    @deprecation.deprecated(deprecated_in="0.2", removed_in="0.3",
+                        current_version=__version__,
+                        details="Access property .fileName instead.")
     def setFileName(self,newName):
         self.fileName = newName;
         return
 
-    @deprecated(version='0.2', reason="Deprecated. Acess property .name instead.")
+    #@deprecated(version='0.2', reason="Deprecated. Access property .name instead.")
+    @deprecation.deprecated(deprecated_in="0.2", removed_in="0.3",
+                        current_version=__version__,
+                        details="Access property .name instead.")
     def getName(self):
         return self.name
 
-    @deprecated(version='0.2', reason="Deprecated. Acess property .name instead.")
+    #@deprecated(version='0.2', reason="Deprecated. Access property .name instead.")
+    @deprecation.deprecated(deprecated_in="0.2", removed_in="0.3",
+                        current_version=__version__,
+                        details="Access property .name instead.")
     def setName(self,newName):
         self._name = newName;
         return
 
-    @deprecated(version='0.2', reason="Deprecated. Acess property .study instead.")
+    #@deprecated(version='0.2', reason="Deprecated. Access property .study instead.")
+    @deprecation.deprecated(deprecated_in="0.2", removed_in="0.3",
+                        current_version=__version__,
+                        details="Access property .study instead.")
     def getStudy(self):
         return self.study
 
-    @deprecated(version='0.2', reason="Deprecated. Acess property .study instead.")
+    #@deprecated(version='0.2', reason="Deprecated. Access property .study instead.")
+    @deprecation.deprecated(deprecated_in="0.2", removed_in="0.3",
+                        current_version=__version__,
+                        details="Access property .study instead.")
     def setStudy(self,newStudy):
         self.study = newStudy;
         return
 
-    @deprecated(version='0.2', reason="Deprecated. Acess property .segmentation instead.")
+    #@deprecated(version='0.2', reason="Deprecated. Access property .segmentation instead.")
+    @deprecation.deprecated(deprecated_in="0.2", removed_in="0.3",
+                        current_version=__version__,
+                        details="Access property .segmentation instead.")
     def getScanSegmentation(self):
         return self.segmentation
 
-    @deprecated(version='0.2', reason="Deprecated. Acess property .segmentation instead.")
+    #@deprecated(version='0.2', reason="Deprecated. Access property .segmentation instead.")
+    @deprecation.deprecated(deprecated_in="0.2", removed_in="0.3",
+                        current_version=__version__,
+                        details="Access property .segmentation instead.")
     def setScanSegmentation(self,newSegmentation):
         self.segmentation = newSegmentation
         return
