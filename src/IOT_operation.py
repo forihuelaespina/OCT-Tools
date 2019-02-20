@@ -65,13 +65,12 @@ from abc import ABC, abstractmethod
 ## Class definition
 class IOT_Operation(ABC):
     #Sphinx documentation
-    """An abstract base class for operations on :class:`IOT_OCTvolume`s and :class:`IOT_OCTscan`s.
+    """An abstract base class for operations on :class:`IOT_OCTvolume` and :class:`IOT_OCTscan` .
 
-    An abstract base class for operations on :class:`IOT_OCTvolume`s and
-    :class:`IOT_OCTscan`s.
+    An abstract base class for operations on :class:`IOT_OCTvolume` and
+    :class:`IOT_OCTscan`.
     
     :Example:
-    ::
     
         tmp = IOT_OCTscan(img)
         o = IOT_OperationFlattening()
@@ -81,6 +80,7 @@ class IOT_Operation(ABC):
 
 
     :Known subclasses:
+
     * :class:`IOT_OperationEditSegmentation`
     * :class:`IOT_OperationFlattening`
     * :class:`IOT_OperationMeasureLayerThickness`

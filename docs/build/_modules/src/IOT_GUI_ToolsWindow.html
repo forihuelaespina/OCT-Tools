@@ -13,7 +13,6 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
   </head><body>
@@ -130,6 +129,9 @@
 <span class="sd">|             |        | - Added method measureThickness to call for the      |</span>
 <span class="sd">|             |        |   corresponding operation to be executed.            |</span>
 <span class="sd">+-------------+--------+------------------------------------------------------+</span>
+<span class="sd">| 20-Jan-2019 | FOE    | - Added support for the class:`IOT_OperationBrush`   |</span>
+<span class="sd">|             |        |   operation.                                         |</span>
+<span class="sd">+-------------+--------+------------------------------------------------------+</span>
 
 <span class="sd">.. seealso:: None</span>
 <span class="sd">.. note:: None</span>
@@ -154,6 +156,7 @@
 <span class="kn">from</span> <span class="nn">IOT_GUI_EditSegmentationTools</span> <span class="k">import</span> <span class="n">IOT_GUI_EditSegmentationTools</span>
 <span class="kn">from</span> <span class="nn">IOT_GUI_PerfilometerParameterSettings</span> <span class="k">import</span> <span class="n">IOT_GUI_PerfilometerParameterSettings</span>
 <span class="kn">from</span> <span class="nn">IOT_GUI_MeasureThicknessParameterSettings</span> <span class="k">import</span> <span class="n">IOT_GUI_MeasureThicknessParameterSettings</span>
+<span class="kn">from</span> <span class="nn">IOT_GUI_BrushParameterSettings</span> <span class="k">import</span> <span class="n">IOT_GUI_BrushParameterSettings</span>
 
 <span class="kn">from</span> <span class="nn">IOT_OperationEditSegmentation</span> <span class="k">import</span> <span class="n">IOT_OperationEditSegmentation</span>
 
@@ -270,19 +273,27 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_settings</span> <span class="o">=</span> <span class="n">QTabWidget</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_settingsOperationPerfilometer</span> <span class="o">=</span> <span class="n">IOT_GUI_PerfilometerParameterSettings</span><span class="p">()</span>
-        <span class="c1">#Listen to changes in the edit boxes</span>
+        <span class="c1">#Listen to changes in the controls</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_settingsOperationPerfilometer</span><span class="o">.</span><span class="n">columnEditBox</span><span class="o">.</span><span class="n">returnPressed</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">updateSettings</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_settingsOperationPerfilometer</span><span class="o">.</span><span class="n">widthEditBox</span><span class="o">.</span><span class="n">returnPressed</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">updateSettings</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_settingsOperationMeasureThickness</span> <span class="o">=</span> <span class="n">IOT_GUI_MeasureThicknessParameterSettings</span><span class="p">()</span>
-        <span class="c1">#Listen to changes in the edit boxes</span>
+        <span class="c1">#Listen to changes in the controls</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_settingsOperationMeasureThickness</span><span class="o">.</span><span class="n">columnEditBox</span><span class="o">.</span><span class="n">returnPressed</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">updateSettings</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_settingsOperationMeasureThickness</span><span class="o">.</span><span class="n">windowHalfWidthEditBox</span><span class="o">.</span><span class="n">returnPressed</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">updateSettings</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_settingsOperationMeasureThickness</span><span class="o">.</span><span class="n">pixelWidthEditBox</span><span class="o">.</span><span class="n">returnPressed</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">updateSettings</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_settingsOperationMeasureThickness</span><span class="o">.</span><span class="n">pixelHeightEditBox</span><span class="o">.</span><span class="n">returnPressed</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">updateSettings</span><span class="p">)</span>
         
+        <span class="bp">self</span><span class="o">.</span><span class="n">_settingsOperationBrush</span> <span class="o">=</span> <span class="n">IOT_GUI_BrushParameterSettings</span><span class="p">()</span>
+        <span class="c1">#Listen to changes in the controls</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_settingsOperationBrush</span><span class="o">.</span><span class="n">colorDropMenu</span><span class="o">.</span><span class="n">currentIndexChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">updateSettings</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_settingsOperationBrush</span><span class="o">.</span><span class="n">radiusEditBox</span><span class="o">.</span><span class="n">returnPressed</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">updateSettings</span><span class="p">)</span>
+
+
+
         <span class="bp">self</span><span class="o">.</span><span class="n">_settings</span><span class="o">.</span><span class="n">addTab</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_settingsOperationPerfilometer</span><span class="p">,</span><span class="s2">&quot;Perfilometer&quot;</span><span class="p">);</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_settings</span><span class="o">.</span><span class="n">addTab</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_settingsOperationMeasureThickness</span><span class="p">,</span><span class="s2">&quot;Thickness Measurement&quot;</span><span class="p">);</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_settings</span><span class="o">.</span><span class="n">addTab</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_settingsOperationBrush</span><span class="p">,</span><span class="s2">&quot;Brush&quot;</span><span class="p">);</span>
 
 
         <span class="n">frameLayout</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">();</span>
@@ -379,6 +390,7 @@
             <span class="n">imSegmented</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">initEditSegmentation</span><span class="p">(</span><span class="n">im</span><span class="p">,</span><span class="n">imSegmented</span><span class="p">)</span> <span class="c1">#This in turn</span>
                                         <span class="c1">#will call the ._generateDummySegmentation</span>
                                         <span class="c1">#if needed.</span>
+
             <span class="n">theDoc</span><span class="o">.</span><span class="n">segmentation</span> <span class="o">=</span> <span class="n">imSegmented</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">documentWindow</span><span class="o">.</span><span class="n">document</span> <span class="o">=</span> <span class="n">theDoc</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">documentWindow</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
@@ -478,7 +490,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017-8, Felipe Orihuela-Espina.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.2.
     </div>
   </body>
 </html>

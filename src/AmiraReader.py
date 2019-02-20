@@ -123,7 +123,6 @@ class AmiraReader(object):
         Amira file. It is simply assumed to be so.
         
         :Example:
-        ..
 
             from AmiraReader import AmiraReader
             r=AmiraReader()

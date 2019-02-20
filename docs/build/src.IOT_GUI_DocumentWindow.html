@@ -13,7 +13,6 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="4.1.1.1.4. src.IOT_GUI_EditSegmentationTools module" href="src.IOT_GUI_EditSegmentationTools.html" />
@@ -188,6 +187,22 @@ corresponding operation to be executed.</li>
 </ul>
 </td>
 </tr>
+<tr class="row-odd"><td>20-Jan-2019</td>
+<td>FOE</td>
+<td><ul class="first last simple">
+<li>Added support for the class:<cite>IOT_OperationBrush</cite>
+operation.</li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><td>13-Dec-2018</td>
+<td>FOE</td>
+<td><ul class="first last simple">
+<li>Updated deprecation package to “deprecation” due
+compilation problems with package “deprecated”.</li>
+</ul>
+</td>
+</tr>
 </tbody>
 </table>
 <div class="admonition seealso">
@@ -225,6 +240,22 @@ corresponding operation to be executed.</li>
 <p class="last">None</p>
 </div>
 <dl class="method">
+<dt id="src.IOT_GUI_DocumentWindow.IOT_GUI_DocumentWindow.brush">
+<code class="descname">brush</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/IOT_GUI_DocumentWindow.html#IOT_GUI_DocumentWindow.brush"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.IOT_GUI_DocumentWindow.IOT_GUI_DocumentWindow.brush" title="Permalink to this definition">¶</a></dt>
+<dd><p>Applies the brush operation over the segmentation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The document segmentation</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">class:<cite>IOT_OCTscanSegmentation</cite></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="src.IOT_GUI_DocumentWindow.IOT_GUI_DocumentWindow.closeEvent">
 <code class="descname">closeEvent</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/IOT_GUI_DocumentWindow.html#IOT_GUI_DocumentWindow.closeEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.IOT_GUI_DocumentWindow.IOT_GUI_DocumentWindow.closeEvent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Closes the document window and the application.</p>
@@ -256,14 +287,14 @@ corresponding operation to be executed.</li>
 <dl class="method">
 <dt id="src.IOT_GUI_DocumentWindow.IOT_GUI_DocumentWindow.flatten">
 <code class="descname">flatten</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/IOT_GUI_DocumentWindow.html#IOT_GUI_DocumentWindow.flatten"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.IOT_GUI_DocumentWindow.IOT_GUI_DocumentWindow.flatten" title="Permalink to this definition">¶</a></dt>
-<dd><p>Applies the flattening step.</p>
+<dd><p>Applies the flattening step to the study.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The flattened image</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">ndarray</td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">class:<cite>IOT_OCTscan</cite></td>
 </tr>
 </tbody>
 </table>
@@ -272,7 +303,18 @@ corresponding operation to be executed.</li>
 <dl class="method">
 <dt id="src.IOT_GUI_DocumentWindow.IOT_GUI_DocumentWindow.getClassName">
 <code class="descname">getClassName</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/IOT_GUI_DocumentWindow.html#IOT_GUI_DocumentWindow.getClassName"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.IOT_GUI_DocumentWindow.IOT_GUI_DocumentWindow.getClassName" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gets the class name as a string.</p>
+<dd><p>Get the class name as a string.</p>
+<p>Get the class name as a string.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The class name.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">string</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -349,7 +391,7 @@ corresponding operation to be executed.</li>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The segmentation</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">ndarray</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">class:<cite>IOT_OCTscanSegmentation</cite></p>
 </td>
 </tr>
 </tbody>
@@ -394,7 +436,7 @@ corresponding operation to be executed.</li>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The segmentation</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">ndarray</td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">class:<cite>IOT_OCTscanSegmentation</cite></td>
 </tr>
 </tbody>
 </table>
@@ -412,6 +454,9 @@ corresponding operation to be executed.</li>
 </tr>
 </tbody>
 </table>
+<div class="deprecated">
+<p><span class="versionmodified">Deprecated since version 0.2: </span>This will be removed in 0.3. Access property .document instead.</p>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -422,14 +467,14 @@ corresponding operation to be executed.</li>
 <dl class="method">
 <dt id="src.IOT_GUI_DocumentWindow.IOT_GUI_DocumentWindow.stitch">
 <code class="descname">stitch</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/IOT_GUI_DocumentWindow.html#IOT_GUI_DocumentWindow.stitch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.IOT_GUI_DocumentWindow.IOT_GUI_DocumentWindow.stitch" title="Permalink to this definition">¶</a></dt>
-<dd><p>Selects a second image and applies the stitching step.</p>
+<dd><p>Selects a second image and applies the stitching step to the study.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The image resulting from the stitching</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">ndarray</td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">class:<cite>IOT_OCTscan</cite></td>
 </tr>
 </tbody>
 </table>
@@ -442,7 +487,7 @@ corresponding operation to be executed.</li>
 
 <dl class="attribute">
 <dt id="src.IOT_GUI_DocumentWindow.IOT_GUI_DocumentWindow.workingDir">
-<code class="descname">workingDir</code><em class="property"> = 'C:\\Users\\Felipe\\OneDrive\\Git\\OCT-Tools\\docs'</em><a class="headerlink" href="#src.IOT_GUI_DocumentWindow.IOT_GUI_DocumentWindow.workingDir" title="Permalink to this definition">¶</a></dt>
+<code class="descname">workingDir</code><em class="property"> = 'C:\\Users\\fo067\\OneDrive\\Git\\OCT-Tools\\docs'</em><a class="headerlink" href="#src.IOT_GUI_DocumentWindow.IOT_GUI_DocumentWindow.workingDir" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -478,7 +523,7 @@ corresponding operation to be executed.</li>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017-8, Felipe Orihuela-Espina.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.2.
     </div>
   </body>
 </html>

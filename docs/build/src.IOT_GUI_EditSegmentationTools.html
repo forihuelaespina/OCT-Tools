@@ -13,7 +13,6 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="4.1.1.1.5. src.IOT_GUI_MeasureThicknessParameterSettings module" href="src.IOT_GUI_MeasureThicknessParameterSettings.html" />
@@ -80,8 +79,10 @@
 <p>-<em>- coding: utf-8 -</em>-</p>
 <p>File: IOT_GUI_EditSegmentationTools.py</p>
 <p>Class IOT_GUI_EditSegmentationTools</p>
-<p>A frame (QGroupBox) for accessing the editing segmentation tools (IOT_OperationEditSegmentation)</p>
-<p>IOT stands for INAOE OCT Tools</p>
+<p>A frame (QGroupBox) for accessing the editing segmentation tools
+(originally for operation in class:<cite>IOT_OperationEditSegmentation</cite> but
+later extended to other operations that work over class:<cite>IOT_OCTscanSegmentation</cite>)</p>
+<p>IOT stands for INAOE OCT Tools.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -129,6 +130,15 @@ the class</li>
 </ul>
 </td>
 </tr>
+<tr class="row-odd"><td>20-Jan-2019</td>
+<td>FOE</td>
+<td><ul class="first last simple">
+<li>Incorporated support for voxel based operations.
+This currently supports class:<cite>IOT_OperationBrush</cite>.</li>
+<li>Improved Sphinx comments on methods.</li>
+</ul>
+</td>
+</tr>
 </tbody>
 </table>
 <div class="admonition seealso">
@@ -147,12 +157,17 @@ the class</li>
 <dt id="src.IOT_GUI_EditSegmentationTools.IOT_GUI_EditSegmentationTools">
 <em class="property">class </em><code class="descclassname">src.IOT_GUI_EditSegmentationTools.</code><code class="descname">IOT_GUI_EditSegmentationTools</code><a class="reference internal" href="_modules/src/IOT_GUI_EditSegmentationTools.html#IOT_GUI_EditSegmentationTools"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.IOT_GUI_EditSegmentationTools.IOT_GUI_EditSegmentationTools" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QGroupBox</span></code></p>
-<p>A base class for operations on <code class="xref py py-class docutils literal notranslate"><span class="pre">IOT_OCTvolumes</span></code> and <code class="xref py py-class docutils literal notranslate"><span class="pre">IOT_OCTscans</span></code>.</p>
-<p>A base class for operations on <code class="xref py py-class docutils literal notranslate"><span class="pre">IOT_OCTvolumes</span></code> and
-class:<cite>IOT_OCTscans</cite>.</p>
+<p>A class:<cite>QGroupBox</cite> GUI for accesing operations over class:<cite>IOT_OCTscanSegmentation</cite>.</p>
+<p>A class:<cite>QGroupBox</cite> GUI for accesing operations over
+class:<cite>IOT_OCTscanSegmentation</cite>. This includes operations executed by:</p>
+<ul class="simple">
+<li>class:<cite>IOT_OperationEditSegmentation</cite> - Note that this in turn represent</li>
+</ul>
+<p>several ROI and COI based operations.
+* class:<cite>IOT_OperationBrush</cite></p>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
-<p class="last"><code class="xref py py-class docutils literal notranslate"><span class="pre">IOT_OperationEditSegmentation</span></code></p>
+<p class="last">None</p>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -165,37 +180,124 @@ class:<cite>IOT_OCTscans</cite>.</p>
 <dl class="method">
 <dt id="src.IOT_GUI_EditSegmentationTools.IOT_GUI_EditSegmentationTools.connectDocumentWindow">
 <code class="descname">connectDocumentWindow</code><span class="sig-paren">(</span><em>theDocWindow</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/IOT_GUI_EditSegmentationTools.html#IOT_GUI_EditSegmentationTools.connectDocumentWindow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.IOT_GUI_EditSegmentationTools.IOT_GUI_EditSegmentationTools.connectDocumentWindow" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Connects this GUI to a main document window class:<cite>IOT_GUI_DocumentWindow</cite>.</p>
+<p>Connects this GUI to a main document window class:<cite>IOT_GUI_DocumentWindow</cite>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="src.IOT_GUI_EditSegmentationTools.IOT_GUI_EditSegmentationTools.getClassName">
 <code class="descname">getClassName</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/IOT_GUI_EditSegmentationTools.html#IOT_GUI_EditSegmentationTools.getClassName"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.IOT_GUI_EditSegmentationTools.IOT_GUI_EditSegmentationTools.getClassName" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Get the class name as a string.</p>
+<p>Get the class name as a string.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The class name.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">string</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="src.IOT_GUI_EditSegmentationTools.IOT_GUI_EditSegmentationTools.opCOIChangeLabel">
 <code class="descname">opCOIChangeLabel</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/IOT_GUI_EditSegmentationTools.html#IOT_GUI_EditSegmentationTools.opCOIChangeLabel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.IOT_GUI_EditSegmentationTools.IOT_GUI_EditSegmentationTools.opCOIChangeLabel" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Calls for the execution of a class:<cite>IOT_OperationEditSegmentation</cite> COI change label operation</p>
+<p>Calls for the execution of a class:<cite>IOT_OperationEditSegmentation</cite> COI change label operation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="src.IOT_GUI_EditSegmentationTools.IOT_GUI_EditSegmentationTools.opCOIDelete">
 <code class="descname">opCOIDelete</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/IOT_GUI_EditSegmentationTools.html#IOT_GUI_EditSegmentationTools.opCOIDelete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.IOT_GUI_EditSegmentationTools.IOT_GUI_EditSegmentationTools.opCOIDelete" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Calls for the execution of a class:<cite>IOT_OperationEditSegmentation</cite> COI deletion operation</p>
+<p>Calls for the execution of a class:<cite>IOT_OperationEditSegmentation</cite> COI deletion operation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="src.IOT_GUI_EditSegmentationTools.IOT_GUI_EditSegmentationTools.opROIChangeLabel">
 <code class="descname">opROIChangeLabel</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/IOT_GUI_EditSegmentationTools.html#IOT_GUI_EditSegmentationTools.opROIChangeLabel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.IOT_GUI_EditSegmentationTools.IOT_GUI_EditSegmentationTools.opROIChangeLabel" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Calls for the execution of a class:<cite>IOT_OperationEditSegmentation</cite> ROI change label operation</p>
+<p>Calls for the execution of a class:<cite>IOT_OperationEditSegmentation</cite> ROI change label operation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="src.IOT_GUI_EditSegmentationTools.IOT_GUI_EditSegmentationTools.opROIDelete">
 <code class="descname">opROIDelete</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/IOT_GUI_EditSegmentationTools.html#IOT_GUI_EditSegmentationTools.opROIDelete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.IOT_GUI_EditSegmentationTools.IOT_GUI_EditSegmentationTools.opROIDelete" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Calls for the execution of a class:<cite>IOT_OperationEditSegmentation</cite> ROI deletion operation</p>
+<p>Calls for the execution of a class:<cite>IOT_OperationEditSegmentation</cite> ROI deletion operation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.IOT_GUI_EditSegmentationTools.IOT_GUI_EditSegmentationTools.opVOIBrush">
+<code class="descname">opVOIBrush</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/IOT_GUI_EditSegmentationTools.html#IOT_GUI_EditSegmentationTools.opVOIBrush"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.IOT_GUI_EditSegmentationTools.IOT_GUI_EditSegmentationTools.opVOIBrush" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calls for the execution of a class:<cite>IOT_OperationBrush</cite> operation</p>
+<p>Calls for the execution of a class:<cite>IOT_OperationBrush</cite> operation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="src.IOT_GUI_EditSegmentationTools.IOT_GUI_EditSegmentationTools.setEnable">
 <code class="descname">setEnable</code><span class="sig-paren">(</span><em>b</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/IOT_GUI_EditSegmentationTools.html#IOT_GUI_EditSegmentationTools.setEnable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.IOT_GUI_EditSegmentationTools.IOT_GUI_EditSegmentationTools.setEnable" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Enables buttons in the GUI.</p>
+<p>Enables buttons in the GUI</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 </dd></dl>
 
@@ -230,7 +332,7 @@ class:<cite>IOT_OCTscans</cite>.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017-8, Felipe Orihuela-Espina.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.2.
     </div>
   </body>
 </html>

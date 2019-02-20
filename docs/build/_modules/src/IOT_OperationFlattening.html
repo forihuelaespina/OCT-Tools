@@ -13,7 +13,6 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
   </head><body>
@@ -90,6 +89,9 @@
 <span class="sd">|  1-Dec-2018 | FOE    | - Adapted to new signature of inherited execute()    |</span>
 <span class="sd">|             |        |   method to accept parameters.                       |</span>
 <span class="sd">+-------------+--------+------------------------------------------------------+</span>
+<span class="sd">| 13-Dec-2018 | FOE    | - Updated deprecation package to &quot;deprecation&quot; due   |</span>
+<span class="sd">|             |        |   compilation problems with package &quot;deprecated&quot;.    |</span>
+<span class="sd">+-------------+--------+------------------------------------------------------+</span>
 
 <span class="sd">.. seealso:: None</span>
 <span class="sd">.. note:: None</span>
@@ -104,11 +106,10 @@
 
 
 <span class="c1">## Import</span>
-<span class="kn">from</span> <span class="nn">IOT_Operation</span> <span class="k">import</span> <span class="n">IOT_Operation</span>
-<span class="kn">from</span> <span class="nn">IOT_OCTscan</span> <span class="k">import</span> <span class="n">IOT_OCTscan</span>
-
 <span class="kn">import</span> <span class="nn">warnings</span>
-<span class="kn">from</span> <span class="nn">deprecated</span> <span class="k">import</span> <span class="n">deprecated</span>
+<span class="c1">#from deprecated import deprecated</span>
+<span class="kn">import</span> <span class="nn">deprecation</span>
+
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="c1">#import matplotlib.pyplot as plt</span>
@@ -117,6 +118,10 @@
 
 <span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="k">import</span> <span class="n">curve_fit</span>
  
+
+<span class="kn">from</span> <span class="nn">version</span> <span class="k">import</span> <span class="n">__version__</span>
+<span class="kn">from</span> <span class="nn">IOT_Operation</span> <span class="k">import</span> <span class="n">IOT_Operation</span>
+<span class="kn">from</span> <span class="nn">IOT_OCTscan</span> <span class="k">import</span> <span class="n">IOT_OCTscan</span>
 
 
 
@@ -236,7 +241,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="o">=</span> <span class="n">IOT_OCTscan</span><span class="p">(</span><span class="n">newgray</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">result</span></div>
 
-<div class="viewcode-block" id="IOT_OperationFlattening.flattening"><a class="viewcode-back" href="../../src.IOT_OperationFlattening.html#src.IOT_OperationFlattening.IOT_OperationFlattening.flattening">[docs]</a>    <span class="nd">@deprecated</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="s1">&#39;0.2&#39;</span><span class="p">,</span> <span class="n">reason</span><span class="o">=</span><span class="s2">&quot;Deprecated. Use method execute() instead.&quot;</span><span class="p">)</span>
+    <span class="c1">#@deprecated(version=&#39;0.2&#39;, reason=&quot;Deprecated. Use method execute() instead.&quot;)</span>
+<div class="viewcode-block" id="IOT_OperationFlattening.flattening"><a class="viewcode-back" href="../../src.IOT_OperationFlattening.html#src.IOT_OperationFlattening.IOT_OperationFlattening.flattening">[docs]</a>    <span class="nd">@deprecation</span><span class="o">.</span><span class="n">deprecated</span><span class="p">(</span><span class="n">deprecated_in</span><span class="o">=</span><span class="s2">&quot;0.2&quot;</span><span class="p">,</span> <span class="n">removed_in</span><span class="o">=</span><span class="s2">&quot;0.3&quot;</span><span class="p">,</span>
+                        <span class="n">current_version</span><span class="o">=</span><span class="n">__version__</span><span class="p">,</span>
+                        <span class="n">details</span><span class="o">=</span><span class="s2">&quot;Use method execute() instead.&quot;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">flattening</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">image</span><span class="p">):</span>
         <span class="c1">#Encapsulate the image as an IOT_OCTscan</span>
         <span class="n">tmp</span><span class="o">=</span><span class="n">IOT_OCTscan</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
@@ -266,7 +274,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017-8, Felipe Orihuela-Espina.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.2.
     </div>
   </body>
 </html>

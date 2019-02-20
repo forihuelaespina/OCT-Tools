@@ -13,7 +13,6 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
   </head><body>
@@ -74,6 +73,9 @@
 <span class="sd">| 26-Aug-2018 | FOE    | - Added property scantype.                           |</span>
 <span class="sd">|             |        | - Added __repr__ and __str__ methods                 |</span>
 <span class="sd">+-------------+--------+------------------------------------------------------+</span>
+<span class="sd">| 20-Jan-2019 | FOE    | - Default scan is now NOT empty, but a default black |</span>
+<span class="sd">|             |        |   image of an arbitrary size 480(H)x640(W) pixels.   |</span>
+<span class="sd">+-------------+--------+------------------------------------------------------+</span>
 
 <span class="sd">.. seealso:: None</span>
 <span class="sd">.. note:: None</span>
@@ -114,7 +116,7 @@
 
 <span class="sd">        The class constructor.</span>
 
-<span class="sd">        tmp = IOT_OCTscan() - Creates an empty scan with no data.</span>
+<span class="sd">        tmp = IOT_OCTscan() - Creates an black scan sized 480x640.</span>
 <span class="sd">        tmp = IOT_OCTScan(img) - Creates scan from the (grayscale) image. Assumed to be an A scan.</span>
 <span class="sd">        tmp = IOT_OCTScan(img,type) - Creates scan from the (grayscale) image.</span>
 
@@ -131,13 +133,11 @@
         <span class="c1">#Initialize attributes (without decorator @property)</span>
 
         <span class="c1">#Initialize properties (with decorator @property)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1">#The scan image itself</span>
-        <span class="c1">#self.shape = None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="mi">480</span><span class="p">,</span><span class="mi">640</span><span class="p">),</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint8</span> <span class="p">)</span> <span class="c1">#The default scan image</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">scantype</span> <span class="o">=</span> <span class="s1">&#39;A&#39;</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">=</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="c1">#self.shape = self.data.shape</span>
         <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">scantype</span><span class="o">=</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
             
@@ -161,7 +161,6 @@
 
     <span class="nd">@data</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">img</span><span class="p">):</span> <span class="c1">#data setter</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__data</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="n">img</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="c1">#Check whether the image is in RGB (ndim=3) or in grayscale (ndim=2)</span>
             <span class="c1">#and convert to grayscale if necessary</span>
@@ -261,7 +260,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017-8, Felipe Orihuela-Espina.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.2.
     </div>
   </body>
 </html>

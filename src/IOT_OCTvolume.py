@@ -20,6 +20,8 @@ A set of OCT scans. All scans are of :class:`IOT_OCTscan`s.
 +-------------+--------+------------------------------------------------------+
 | 13-Dec-2018 | FOE    | - Remove importing of deprecated.                    |
 +-------------+--------+------------------------------------------------------+
+| 19-Feb-2018 | FOE    | - Bug fixed. Importing of IOT_OCTscan.               |
++-------------+--------+------------------------------------------------------+
 
 .. seealso:: None
 .. note:: None
@@ -35,17 +37,18 @@ A set of OCT scans. All scans are of :class:`IOT_OCTscan`s.
 ## Import
 import warnings
 
+from IOT_OCTscan import IOT_OCTscan
 
 ## Class definition
 class IOT_OCTvolume(object):
     #Sphinx documentation
-    """A set of :class:`IOT_OCTscan`s
+    """A set of :class:`IOT_OCTscan`
 
-    A set of :class:`IOT_OCTscan`s
+    A set of :class:`IOT_OCTscan`
     
     .. seealso:: :class:`IOT_OCTscan`
-    .. note::
-    .. todo::
+    .. note:: None
+    .. todo:: None
 
     """
 
@@ -72,9 +75,10 @@ class IOT_OCTvolume(object):
 
         :getter: Gets the set of scans
         :setter: Sets the set of scans
-        :type: list. All scans are of :class:`IOT_OCTscan`s
+        :type: list. All scans are of :class:`IOT_OCTscan`
         
-        .. seealso: :func:`IOT_OCTvolume.addScan`, :func:`IOT_OCTvolume.removeScan`, :func:`IOT_OCTvolume.clear`
+        .. seealso:: :func:`IOT_OCTvolume.addScan` , :func:`IOT_OCTvolume.removeScan` , :func:`IOT_OCTvolume.clear`
+        
         """
         return self.__scans
 

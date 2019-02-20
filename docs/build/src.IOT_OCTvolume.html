@@ -13,7 +13,6 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="4.1.1.1.12. src.IOT_Operation module" href="src.IOT_Operation.html" />
@@ -116,6 +115,20 @@
 </ul>
 </td>
 </tr>
+<tr class="row-even"><td>13-Dec-2018</td>
+<td>FOE</td>
+<td><ul class="first last simple">
+<li>Remove importing of deprecated.</li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><td>19-Feb-2018</td>
+<td>FOE</td>
+<td><ul class="first last simple">
+<li>Bug fixed. Importing of IOT_OCTscan.</li>
+</ul>
+</td>
+</tr>
 </tbody>
 </table>
 <div class="admonition seealso">
@@ -134,11 +147,19 @@
 <dt id="src.IOT_OCTvolume.IOT_OCTvolume">
 <em class="property">class </em><code class="descclassname">src.IOT_OCTvolume.</code><code class="descname">IOT_OCTvolume</code><a class="reference internal" href="_modules/src/IOT_OCTvolume.html#IOT_OCTvolume"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.IOT_OCTvolume.IOT_OCTvolume" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
-<p>A set of :class:<a href="#id3"><span class="problematic" id="id4">`</span></a>IOT_OCTscan`s</p>
-<p>A set of :class:<a href="#id5"><span class="problematic" id="id6">`</span></a>IOT_OCTscan`s</p>
+<p>A set of <code class="xref py py-class docutils literal notranslate"><span class="pre">IOT_OCTscan</span></code></p>
+<p>A set of <code class="xref py py-class docutils literal notranslate"><span class="pre">IOT_OCTscan</span></code></p>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
 <p class="last"><code class="xref py py-class docutils literal notranslate"><span class="pre">IOT_OCTscan</span></code></p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">None</p>
+</div>
+<div class="admonition-todo admonition" id="index-1">
+<p class="first admonition-title">Todo</p>
+<p class="last">None</p>
 </div>
 <dl class="method">
 <dt id="src.IOT_OCTvolume.IOT_OCTvolume.addScan">
@@ -226,10 +247,14 @@
 </tr>
 <tr class="field-even field"><th class="field-name">Setter:</th><td class="field-body">Sets the set of scans</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">list. All scans are of :class:<a href="#id7"><span class="problematic" id="id8">`</span></a>IOT_OCTscan`s</td>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">list. All scans are of <code class="xref py py-class docutils literal notranslate"><span class="pre">IOT_OCTscan</span></code></td>
 </tr>
 </tbody>
 </table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#src.IOT_OCTvolume.IOT_OCTvolume.addScan" title="src.IOT_OCTvolume.IOT_OCTvolume.addScan"><code class="xref py py-func docutils literal notranslate"><span class="pre">IOT_OCTvolume.addScan()</span></code></a> , <code class="xref py py-func docutils literal notranslate"><span class="pre">IOT_OCTvolume.removeScan()</span></code> , <a class="reference internal" href="#src.IOT_OCTvolume.IOT_OCTvolume.clear" title="src.IOT_OCTvolume.IOT_OCTvolume.clear"><code class="xref py py-func docutils literal notranslate"><span class="pre">IOT_OCTvolume.clear()</span></code></a></p>
+</div>
 </dd></dl>
 
 </dd></dl>
@@ -265,7 +290,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017-8, Felipe Orihuela-Espina.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.2.
     </div>
   </body>
 </html>

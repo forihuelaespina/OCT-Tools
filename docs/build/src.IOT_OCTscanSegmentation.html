@@ -13,7 +13,6 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="4.1.1.1.11. src.IOT_OCTvolume module" href="src.IOT_OCTvolume.html" />
@@ -117,6 +116,14 @@
 </ul>
 </td>
 </tr>
+<tr class="row-even"><td>20-Dec-2018</td>
+<td>FOE</td>
+<td><ul class="first last simple">
+<li>Minor debugging. Assigment of property classMap
+in property setter was being “assigned” to cm.</li>
+</ul>
+</td>
+</tr>
 </tbody>
 </table>
 <div class="admonition seealso">
@@ -161,6 +168,7 @@ segmentation please refer to <code class="xref py py-class docutils literal notr
 <dd><p>The map of classes.</p>
 <p>The map of classes; the list of class names associated to each
 value in the segmentation map.</p>
+<p>..note: This list does NOT include the BACKGROUND class.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -232,7 +240,6 @@ the scan property even if declared in advance.</dd>
 <code class="descname">scan</code><a class="headerlink" href="#src.IOT_OCTscanSegmentation.IOT_OCTscanSegmentation.scan" title="Permalink to this definition">¶</a></dt>
 <dd><p>The base OCT scan. Please refer to <a class="reference internal" href="#src.IOT_OCTscanSegmentation.IOT_OCTscanSegmentation.data" title="src.IOT_OCTscanSegmentation.IOT_OCTscanSegmentation.data"><code class="xref py py-attr docutils literal notranslate"><span class="pre">data</span></code></a> for
 the segmentation map.</p>
-<p>Setting a new base scan resets/clears the current segmentation.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -298,7 +305,7 @@ the segmentation map.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017-8, Felipe Orihuela-Espina.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.2.
     </div>
   </body>
 </html>

@@ -13,7 +13,6 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
   </head><body>
@@ -97,6 +96,8 @@
 <span class="sd">|  1-Dec-2018 | FOE    | - Signature of execute() method now accepts          |</span>
 <span class="sd">|             |        |   parameters and return result instead of None.      |</span>
 <span class="sd">+-------------+--------+------------------------------------------------------+</span>
+<span class="sd">| 20-Jan-2018 | FOE    | - Added method setOperand.                           |</span>
+<span class="sd">+-------------+--------+------------------------------------------------------+</span>
 
 <span class="sd">.. seealso:: None</span>
 <span class="sd">.. note:: None</span>
@@ -118,13 +119,12 @@
 <span class="c1">## Class definition</span>
 <div class="viewcode-block" id="IOT_Operation"><a class="viewcode-back" href="../../src.IOT_Operation.html#src.IOT_Operation.IOT_Operation">[docs]</a><span class="k">class</span> <span class="nc">IOT_Operation</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
     <span class="c1">#Sphinx documentation</span>
-    <span class="sd">&quot;&quot;&quot;An abstract base class for operations on :class:`IOT_OCTvolume`s and :class:`IOT_OCTscan`s.</span>
+    <span class="sd">&quot;&quot;&quot;An abstract base class for operations on :class:`IOT_OCTvolume` and :class:`IOT_OCTscan` .</span>
 
-<span class="sd">    An abstract base class for operations on :class:`IOT_OCTvolume`s and</span>
-<span class="sd">    :class:`IOT_OCTscan`s.</span>
+<span class="sd">    An abstract base class for operations on :class:`IOT_OCTvolume` and</span>
+<span class="sd">    :class:`IOT_OCTscan`.</span>
 <span class="sd">    </span>
 <span class="sd">    :Example:</span>
-<span class="sd">    ::</span>
 <span class="sd">    </span>
 <span class="sd">        tmp = IOT_OCTscan(img)</span>
 <span class="sd">        o = IOT_OperationFlattening()</span>
@@ -134,6 +134,7 @@
 
 
 <span class="sd">    :Known subclasses:</span>
+
 <span class="sd">    * :class:`IOT_OperationEditSegmentation`</span>
 <span class="sd">    * :class:`IOT_OperationFlattening`</span>
 <span class="sd">    * :class:`IOT_OperationMeasureLayerThickness`</span>
@@ -286,6 +287,23 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__operands</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">op</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span></div>
         
+<div class="viewcode-block" id="IOT_Operation.setOperand"><a class="viewcode-back" href="../../src.IOT_Operation.html#src.IOT_Operation.IOT_Operation.setOperand">[docs]</a>    <span class="k">def</span> <span class="nf">setOperand</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">op</span><span class="p">,</span><span class="n">i</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set an operand; substitutes an existing operand with a new one.</span>
+<span class="sd">        </span>
+<span class="sd">        Calling setOperand when the :py:attr:`i`-th operand has not been</span>
+<span class="sd">        previously set will result in an out-of-range error.</span>
+<span class="sd">        </span>
+<span class="sd">        :param op: The new operand.</span>
+<span class="sd">        :type op: object</span>
+<span class="sd">        :param i: The operand order. Operand index is zero-base i.e. the</span>
+<span class="sd">            first operand occupies i=0</span>
+<span class="sd">        :type op: int</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__operands</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">op</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
 <div class="viewcode-block" id="IOT_Operation.arity"><a class="viewcode-back" href="../../src.IOT_Operation.html#src.IOT_Operation.IOT_Operation.arity">[docs]</a>    <span class="k">def</span> <span class="nf">arity</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Gets the operation arity (number of operands).</span>
 <span class="sd">        </span>
@@ -338,7 +356,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017-8, Felipe Orihuela-Espina.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.2.
     </div>
   </body>
 </html>

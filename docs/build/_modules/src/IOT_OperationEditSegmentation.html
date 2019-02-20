@@ -13,7 +13,6 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
   </head><body>
@@ -98,6 +97,12 @@
 <span class="sd">|             |        | - ROISelect method now searches for a labelled ROI   |</span>
 <span class="sd">|             |        |   within a neighobourhood.                           |</span>
 <span class="sd">+-------------+--------+------------------------------------------------------+</span>
+<span class="sd">|  9-Jan-2019 | FOE    | - Bug detected. Variable imgin in method execute had |</span>
+<span class="sd">|             |        |   not been set.                                      |</span>
+<span class="sd">+-------------+--------+------------------------------------------------------+</span>
+<span class="sd">| 13-Dec-2018 | FOE    | - Updated deprecation package to &quot;deprecation&quot; due   |</span>
+<span class="sd">|             |        |   compilation problems with package &quot;deprecated&quot;.    |</span>
+<span class="sd">+-------------+--------+------------------------------------------------------+</span>
 
 <span class="sd">.. seealso:: None</span>
 <span class="sd">.. note:: None</span>
@@ -113,8 +118,8 @@
 <span class="c1">## Import</span>
 
 <span class="kn">import</span> <span class="nn">warnings</span>
-<span class="kn">from</span> <span class="nn">deprecated</span> <span class="k">import</span> <span class="n">deprecated</span>
-
+<span class="c1">#from deprecated import deprecated</span>
+<span class="kn">import</span> <span class="nn">deprecation</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="c1">#from skimage import feature, color</span>
@@ -124,6 +129,7 @@
 <span class="kn">from</span> <span class="nn">scipy</span> <span class="k">import</span> <span class="n">ndimage</span>
 <span class="kn">from</span> <span class="nn">skimage</span> <span class="k">import</span> <span class="n">io</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">morphology</span>
 
+<span class="kn">from</span> <span class="nn">version</span> <span class="k">import</span> <span class="n">__version__</span>
 <span class="kn">from</span> <span class="nn">IOT_Operation</span> <span class="k">import</span> <span class="n">IOT_Operation</span>
 <span class="kn">from</span> <span class="nn">IOT_OCTscan</span> <span class="k">import</span> <span class="n">IOT_OCTscan</span>
 <span class="kn">from</span> <span class="nn">IOT_OCTscanSegmentation</span> <span class="k">import</span> <span class="n">IOT_OCTscanSegmentation</span>
@@ -273,7 +279,8 @@
         <span class="n">imageSegmented</span> <span class="o">=</span> <span class="n">IOT_OperationEditSegmentation</span><span class="o">.</span><span class="n">BACKGROUND</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">height</span><span class="p">,</span><span class="n">width</span><span class="p">),</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint8</span> <span class="p">)</span>
         <span class="n">stepHeight</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="mf">0.7</span><span class="o">*</span><span class="p">(</span><span class="n">height</span><span class="o">/</span><span class="p">(</span><span class="n">nLayers</span><span class="o">+</span><span class="mi">1</span><span class="p">)))</span>
         <span class="n">offset</span> <span class="o">=</span> <span class="nb">round</span><span class="p">((</span><span class="mf">0.3</span><span class="o">*</span><span class="n">height</span><span class="o">/</span><span class="p">(</span><span class="n">nLayers</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">nLayers</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">nLayers</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+            <span class="c1">#print (&#39;Layer&#39; + str(ii))</span>
             <span class="n">kk</span> <span class="o">=</span> <span class="n">offset</span> <span class="o">+</span> <span class="n">ii</span><span class="o">*</span><span class="n">stepHeight</span>
             <span class="c1">#imageSegmented[kk-2:kk+2,:] = tmp[ii-1] #5 pixels thick</span>
                 <span class="c1">#Watch out! Lines thinner than 3-5 pixels thick may not</span>
@@ -286,6 +293,8 @@
         <span class="c1">#Encapsulate</span>
         <span class="n">dummySegmentation</span> <span class="o">=</span> <span class="n">IOT_OCTscanSegmentation</span><span class="p">(</span><span class="n">refImage</span><span class="p">)</span>
         <span class="n">dummySegmentation</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">imageSegmented</span> 
+        
+        <span class="c1">#print(dummySegmentation.data)</span>
         
         <span class="k">return</span> <span class="n">dummySegmentation</span>
 
@@ -303,20 +312,22 @@
 <span class="sd">        :param editType: A string indicating the type of edition</span>
 <span class="sd">        :type editType: String</span>
 <span class="sd">        :returns: Result of executing the operation.</span>
-<span class="sd">        :rtype: :class:`IOT_OCTscan`</span>
+<span class="sd">        :rtype: :class:`IOT_OCTscanSegmentation`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1">#print(self._getClasName(),&quot;: flattening: Starting flattening&quot;)</span>
+        <span class="c1">#print(self._getClasName(),&quot;: editSegmentation: Starting edit segmentation&quot;)</span>
         
         <span class="c1">#Define a default result</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">operands</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span> <span class="c1">#Start by copying operand into result</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generateDummySegmentation</span><span class="p">(</span><span class="mi">480</span><span class="p">,</span><span class="mi">640</span><span class="p">);</span>
         
         <span class="c1">#Ensure the operand has been set.</span>
         <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arity</span><span class="p">()</span> <span class="o">&lt;</span><span class="mi">1</span><span class="p">):</span>
             <span class="n">warnMsg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getClassName</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;:execute: Operand not set.&#39;</span>
             <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">warnMsg</span><span class="p">,</span><span class="ne">SyntaxWarning</span><span class="p">)</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">result</span>
+
+        <span class="n">imgin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">operands</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="o">=</span> <span class="n">imgin</span><span class="p">;</span> <span class="c1">#Start by copying operand into result</span>
         
-        <span class="c1"># imgin = self.operands[0]</span>
         <span class="c1"># if isinstance(imgin,(IOT_OCTscanSegmentation,)):</span>
         <span class="c1">#     imgin=imgin.data</span>
 
@@ -341,7 +352,10 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">result</span>   </div>
     
     <span class="c1"># See: https://pypi.org/project/pynput/</span>
-<div class="viewcode-block" id="IOT_OperationEditSegmentation.initEditSegmentation"><a class="viewcode-back" href="../../src.IOT_OperationEditSegmentation.html#src.IOT_OperationEditSegmentation.IOT_OperationEditSegmentation.initEditSegmentation">[docs]</a>    <span class="nd">@deprecated</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="s1">&#39;0.2&#39;</span><span class="p">,</span> <span class="n">reason</span><span class="o">=</span><span class="s2">&quot;Deprecated. Use method addOperand() and add reference image as scan property of class:`IOT_OCTscanSegmentation`.&quot;</span><span class="p">)</span>
+    <span class="c1">#@deprecated(version=&#39;0.2&#39;, reason=&quot;Deprecated. Use method addOperand() and add reference image as scan property of class:`IOT_OCTscanSegmentation`.&quot;)</span>
+<div class="viewcode-block" id="IOT_OperationEditSegmentation.initEditSegmentation"><a class="viewcode-back" href="../../src.IOT_OperationEditSegmentation.html#src.IOT_OperationEditSegmentation.IOT_OperationEditSegmentation.initEditSegmentation">[docs]</a>    <span class="nd">@deprecation</span><span class="o">.</span><span class="n">deprecated</span><span class="p">(</span><span class="n">deprecated_in</span><span class="o">=</span><span class="s2">&quot;0.2&quot;</span><span class="p">,</span> <span class="n">removed_in</span><span class="o">=</span><span class="s2">&quot;0.3&quot;</span><span class="p">,</span>
+                        <span class="n">current_version</span><span class="o">=</span><span class="n">__version__</span><span class="p">,</span>
+                        <span class="n">details</span><span class="o">=</span><span class="s2">&quot;Use method addOperand() and add reference image as scan property of class:`IOT_OCTscanSegmentation`.&quot;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">initEditSegmentation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">refImage</span><span class="p">,</span><span class="n">imageSegmented</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initialize segmentation for editing from reference :class:`IOT_OCTscan`.</span>
 <span class="sd">        </span>
@@ -362,20 +376,23 @@
 
         <span class="c1">#print(&quot;OCT-Tools: IOT_operationSegmentation: Starting manual editing of retinal layer segmentation&quot;)</span>
         <span class="n">tmp</span><span class="o">=</span><span class="n">IOT_OCTscanSegmentation</span><span class="p">(</span><span class="n">refImage</span><span class="p">)</span>
-        <span class="n">tmp</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
         
         <span class="c1">#Second parameter is a seed segmentation. If none provided, generate a dummy one on the fly.</span>
         <span class="k">if</span> <span class="n">imageSegmented</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="c1">#print(&quot;OCT-Tools: IOT_operationSegmentation: Segmentation not found.&quot;)</span>
             <span class="n">tmpImgSize</span> <span class="o">=</span> <span class="n">refImage</span><span class="o">.</span><span class="n">shape</span>
             <span class="n">imageSegmented</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generateDummySegmentation</span><span class="p">(</span><span class="n">tmpImgSize</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">tmpImgSize</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-        
-        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">imageSegmented</span><span class="p">)</span> <span class="ow">is</span> <span class="n">IOT_OCTscanSegmentation</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">addOperand</span><span class="p">(</span><span class="n">imageSegmented</span><span class="p">)</span>
+            <span class="c1">#Update the segmentation but keep the reference image in tmp. In</span>
+            <span class="c1">#other words, ignore the dummy &quot;reference&quot; image.</span>
+            <span class="n">tmp</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">imageSegmented</span><span class="o">.</span><span class="n">data</span>
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">imageSegmented</span><span class="p">)</span> <span class="ow">is</span> <span class="n">IOT_OCTscanSegmentation</span><span class="p">:</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="n">imageSegmented</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">warnMsg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getClassName</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;:initEditSegmentation: Unexpected type for imageSegmented.&#39;</span>
             <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">warnMsg</span><span class="p">,</span><span class="ne">SyntaxWarning</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">imageSegmented</span>    </div>
+            
+        <span class="bp">self</span><span class="o">.</span><span class="n">addOperand</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">tmp</span>    </div>
 
 
     <span class="c1">#Manipulation of ROI</span>
@@ -699,7 +716,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017-8, Felipe Orihuela-Espina.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.2.
     </div>
   </body>
 </html>

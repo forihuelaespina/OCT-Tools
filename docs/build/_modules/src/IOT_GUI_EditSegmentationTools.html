@@ -13,7 +13,6 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
   </head><body>
@@ -60,9 +59,11 @@
 
 <span class="sd">Class IOT_GUI_EditSegmentationTools</span>
 
-<span class="sd">A frame (QGroupBox) for accessing the editing segmentation tools (IOT_OperationEditSegmentation)</span>
+<span class="sd">A frame (QGroupBox) for accessing the editing segmentation tools</span>
+<span class="sd">(originally for operation in class:`IOT_OperationEditSegmentation` but</span>
+<span class="sd">later extended to other operations that work over class:`IOT_OCTscanSegmentation`)</span>
 
-<span class="sd">IOT stands for INAOE OCT Tools</span>
+<span class="sd">IOT stands for INAOE OCT Tools.</span>
 
 <span class="sd">:Log:</span>
 
@@ -79,6 +80,10 @@
 <span class="sd">+-------------+--------+------------------------------------------------------+</span>
 <span class="sd">| 23-Sep-2018 | FOE    | - Updated comments and added Sphinx documentation to |</span>
 <span class="sd">|             |        |   the class                                          |</span>
+<span class="sd">+-------------+--------+------------------------------------------------------+</span>
+<span class="sd">| 20-Jan-2019 | FOE    | - Incorporated support for voxel based operations.   |</span>
+<span class="sd">|             |        |   This currently supports class:`IOT_OperationBrush`.|</span>
+<span class="sd">|             |        | - Improved Sphinx comments on methods.               |</span>
 <span class="sd">+-------------+--------+------------------------------------------------------+</span>
 
 <span class="sd">.. seealso:: None</span>
@@ -106,13 +111,17 @@
 <span class="c1">## Class description</span>
 <div class="viewcode-block" id="IOT_GUI_EditSegmentationTools"><a class="viewcode-back" href="../../src.IOT_GUI_EditSegmentationTools.html#src.IOT_GUI_EditSegmentationTools.IOT_GUI_EditSegmentationTools">[docs]</a><span class="k">class</span> <span class="nc">IOT_GUI_EditSegmentationTools</span><span class="p">(</span><span class="n">QGroupBox</span><span class="p">):</span>
     <span class="c1">#Sphinx documentation</span>
-    <span class="sd">&quot;&quot;&quot;A base class for operations on :class:`IOT_OCTvolumes` and :class:`IOT_OCTscans`.</span>
+    <span class="sd">&quot;&quot;&quot;A class:`QGroupBox` GUI for accesing operations over class:`IOT_OCTscanSegmentation`.</span>
 <span class="sd">    </span>
-<span class="sd">    A base class for operations on :class:`IOT_OCTvolumes` and</span>
-<span class="sd">    class:`IOT_OCTscans`.</span>
+<span class="sd">    A class:`QGroupBox` GUI for accesing operations over</span>
+<span class="sd">    class:`IOT_OCTscanSegmentation`. This includes operations executed by:</span>
+<span class="sd">    </span>
+<span class="sd">    * class:`IOT_OperationEditSegmentation` - Note that this in turn represent</span>
+<span class="sd">    several ROI and COI based operations.</span>
+<span class="sd">    * class:`IOT_OperationBrush`</span>
 <span class="sd">    </span>
 
-<span class="sd">    .. seealso:: :class:`IOT_OperationEditSegmentation`</span>
+<span class="sd">    .. seealso:: None</span>
 <span class="sd">    .. note:: None</span>
 <span class="sd">    .. todo:: None</span>
 <span class="sd">        </span>
@@ -123,6 +132,17 @@
 
     <span class="c1">#Class constructor</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The class constructor.</span>
+
+<span class="sd">        The class constructor.</span>
+<span class="sd">        </span>
+<span class="sd">        tmp = IOT_GUI_EditSegmentationTools - Creates a default </span>
+<span class="sd">            class:`QGroupBox` GUI for accesing operations over class:`IOT_OCTscanSegmentation`</span>
+
+<span class="sd">        :param theOCTScan: The OCT scan to be segmented</span>
+<span class="sd">        :type img: :class:`IOT_OCTscan`</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1">#Call superclass constructor</span>
         <span class="n">QGroupBox</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         
@@ -172,10 +192,26 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_buttonList</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bROIDelete</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_buttonList</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bROIChangeLabel</span><span class="p">)</span>
 
+
+        <span class="c1">#Group for Voxel (VOI) based manipulation operations</span>
+        <span class="n">VOIframe</span> <span class="o">=</span> <span class="n">QGroupBox</span><span class="p">(</span><span class="s2">&quot;VOI based manipulation&quot;</span><span class="p">)</span>
+
+        <span class="n">bVOIBrush</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s2">&quot;Brush&quot;</span><span class="p">)</span>
+        <span class="n">bVOIBrush</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">opVOIBrush</span><span class="p">)</span>
+        <span class="n">bVOIBrush</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">VOIframeLayout</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">();</span>
+        <span class="n">VOIframeLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">bVOIBrush</span><span class="p">);</span>
+        <span class="n">VOIframe</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">VOIframeLayout</span><span class="p">);</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_buttonList</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bVOIBrush</span><span class="p">)</span>
+
+
         <span class="c1">#Add subgroups to the main group</span>
         <span class="n">frameLayout</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">();</span>
         <span class="n">frameLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">COIframe</span><span class="p">);</span>
         <span class="n">frameLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">ROIframe</span><span class="p">);</span>
+        <span class="n">frameLayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">VOIframe</span><span class="p">);</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">frameLayout</span><span class="p">);</span>
         
         
@@ -189,16 +225,35 @@
 
     <span class="c1">#Public methods</span>
 <div class="viewcode-block" id="IOT_GUI_EditSegmentationTools.getClassName"><a class="viewcode-back" href="../../src.IOT_GUI_EditSegmentationTools.html#src.IOT_GUI_EditSegmentationTools.IOT_GUI_EditSegmentationTools.getClassName">[docs]</a>    <span class="k">def</span> <span class="nf">getClassName</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the class name as a string.</span>
+
+<span class="sd">        Get the class name as a string.</span>
+
+<span class="sd">        :returns: The class name.</span>
+<span class="sd">        :rtype: string</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span></div>
 
 <div class="viewcode-block" id="IOT_GUI_EditSegmentationTools.connectDocumentWindow"><a class="viewcode-back" href="../../src.IOT_GUI_EditSegmentationTools.html#src.IOT_GUI_EditSegmentationTools.IOT_GUI_EditSegmentationTools.connectDocumentWindow">[docs]</a>    <span class="k">def</span> <span class="nf">connectDocumentWindow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">theDocWindow</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_docWindow</span> <span class="o">=</span> <span class="n">theDocWindow</span></div>
+        <span class="sd">&quot;&quot;&quot;Connects this GUI to a main document window class:`IOT_GUI_DocumentWindow`.</span>
+
+<span class="sd">        Connects this GUI to a main document window class:`IOT_GUI_DocumentWindow`.</span>
+
+<span class="sd">        :returns: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_docWindow</span> <span class="o">=</span> <span class="n">theDocWindow</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
     
     
     
 
 <div class="viewcode-block" id="IOT_GUI_EditSegmentationTools.opCOIDelete"><a class="viewcode-back" href="../../src.IOT_GUI_EditSegmentationTools.html#src.IOT_GUI_EditSegmentationTools.IOT_GUI_EditSegmentationTools.opCOIDelete">[docs]</a>    <span class="k">def</span> <span class="nf">opCOIDelete</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="c1">#Execute a COI deletion operation</span>
+        <span class="sd">&quot;&quot;&quot;Calls for the execution of a class:`IOT_OperationEditSegmentation` COI deletion operation</span>
+
+<span class="sd">        Calls for the execution of a class:`IOT_OperationEditSegmentation` COI deletion operation</span>
+
+<span class="sd">        :returns: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1">#Get parameters</span>
         <span class="n">r</span> <span class="o">=</span> <span class="n">IOT_RetinalLayers</span><span class="p">()</span>
         <span class="n">items</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">getAllLayersNames</span><span class="p">()</span>
@@ -208,10 +263,15 @@
             <span class="n">params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">getLayerIndex</span><span class="p">(</span><span class="n">lName</span><span class="p">))</span>
             <span class="c1">#...and simply pass the command.</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_docWindow</span><span class="o">.</span><span class="n">opEditSegmentation</span><span class="p">(</span><span class="s1">&#39;COIDelete&#39;</span><span class="p">,</span><span class="n">params</span><span class="p">)</span>
-        <span class="k">return</span></div>
+        <span class="k">return</span> <span class="kc">None</span></div>
 
 <div class="viewcode-block" id="IOT_GUI_EditSegmentationTools.opCOIChangeLabel"><a class="viewcode-back" href="../../src.IOT_GUI_EditSegmentationTools.html#src.IOT_GUI_EditSegmentationTools.IOT_GUI_EditSegmentationTools.opCOIChangeLabel">[docs]</a>    <span class="k">def</span> <span class="nf">opCOIChangeLabel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="c1">#Execute a COI deletion operation</span>
+        <span class="sd">&quot;&quot;&quot;Calls for the execution of a class:`IOT_OperationEditSegmentation` COI change label operation</span>
+
+<span class="sd">        Calls for the execution of a class:`IOT_OperationEditSegmentation` COI change label operation</span>
+
+<span class="sd">        :returns: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1">#Get parameters</span>
         <span class="n">r</span> <span class="o">=</span> <span class="n">IOT_RetinalLayers</span><span class="p">()</span>
         <span class="n">items</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">getAllLayersNames</span><span class="p">()</span>
@@ -227,12 +287,17 @@
             <span class="c1">#...and simply pass the command.</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_docWindow</span><span class="o">.</span><span class="n">opEditSegmentation</span><span class="p">(</span><span class="s1">&#39;COIChangeLabel&#39;</span><span class="p">,</span><span class="n">params</span><span class="p">)</span>
             
-        <span class="k">return</span></div>
+        <span class="k">return</span> <span class="kc">None</span></div>
 
 
 
 <div class="viewcode-block" id="IOT_GUI_EditSegmentationTools.opROIDelete"><a class="viewcode-back" href="../../src.IOT_GUI_EditSegmentationTools.html#src.IOT_GUI_EditSegmentationTools.IOT_GUI_EditSegmentationTools.opROIDelete">[docs]</a>    <span class="k">def</span> <span class="nf">opROIDelete</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="c1">#Execute a ROI deletion operation</span>
+        <span class="sd">&quot;&quot;&quot;Calls for the execution of a class:`IOT_OperationEditSegmentation` ROI deletion operation</span>
+
+<span class="sd">        Calls for the execution of a class:`IOT_OperationEditSegmentation` ROI deletion operation</span>
+
+<span class="sd">        :returns: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1">#Get parameters</span>
         <span class="c1">#Select ROI</span>
         <span class="n">tmp</span><span class="o">=</span><span class="n">QMessageBox</span><span class="p">(</span><span class="n">QMessageBox</span><span class="o">.</span><span class="n">Information</span><span class="p">,</span><span class="s2">&quot;Select ROI&quot;</span><span class="p">,</span><span class="s2">&quot;Please click on figure to select ROI.&quot;</span><span class="p">)</span>
@@ -253,10 +318,15 @@
         
         <span class="c1">#...and simply pass the command.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_docWindow</span><span class="o">.</span><span class="n">opEditSegmentation</span><span class="p">(</span><span class="s1">&#39;ROIDelete&#39;</span><span class="p">,</span><span class="n">params</span><span class="p">)</span>
-        <span class="k">return</span></div>
+        <span class="k">return</span> <span class="kc">None</span></div>
 
 <div class="viewcode-block" id="IOT_GUI_EditSegmentationTools.opROIChangeLabel"><a class="viewcode-back" href="../../src.IOT_GUI_EditSegmentationTools.html#src.IOT_GUI_EditSegmentationTools.IOT_GUI_EditSegmentationTools.opROIChangeLabel">[docs]</a>    <span class="k">def</span> <span class="nf">opROIChangeLabel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="c1">#Execute a ROI deletion operation</span>
+        <span class="sd">&quot;&quot;&quot;Calls for the execution of a class:`IOT_OperationEditSegmentation` ROI change label operation</span>
+
+<span class="sd">        Calls for the execution of a class:`IOT_OperationEditSegmentation` ROI change label operation</span>
+
+<span class="sd">        :returns: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1">#Get parameters</span>
         <span class="c1">#Select ROI</span>
         <span class="n">tmp</span><span class="o">=</span><span class="n">QMessageBox</span><span class="p">(</span><span class="n">QMessageBox</span><span class="o">.</span><span class="n">Information</span><span class="p">,</span><span class="s2">&quot;Select ROI&quot;</span><span class="p">,</span><span class="s2">&quot;Please click on figure to select ROI.&quot;</span><span class="p">)</span>
@@ -285,13 +355,30 @@
             <span class="n">params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mousePos</span><span class="p">)</span>
             <span class="c1">#...and simply pass the command</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_docWindow</span><span class="o">.</span><span class="n">opEditSegmentation</span><span class="p">(</span><span class="s1">&#39;ROIChangeLabel&#39;</span><span class="p">,</span><span class="n">params</span><span class="p">)</span>
-        <span class="k">return</span></div>
+        <span class="k">return</span> <span class="kc">None</span></div>
 
+
+<div class="viewcode-block" id="IOT_GUI_EditSegmentationTools.opVOIBrush"><a class="viewcode-back" href="../../src.IOT_GUI_EditSegmentationTools.html#src.IOT_GUI_EditSegmentationTools.IOT_GUI_EditSegmentationTools.opVOIBrush">[docs]</a>    <span class="k">def</span> <span class="nf">opVOIBrush</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Calls for the execution of a class:`IOT_OperationBrush` operation</span>
+
+<span class="sd">        Calls for the execution of a class:`IOT_OperationBrush` operation</span>
+
+<span class="sd">        :returns: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_docWindow</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_docWindow</span><span class="o">.</span><span class="n">brush</span><span class="p">()</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
 
 <div class="viewcode-block" id="IOT_GUI_EditSegmentationTools.setEnable"><a class="viewcode-back" href="../../src.IOT_GUI_EditSegmentationTools.html#src.IOT_GUI_EditSegmentationTools.IOT_GUI_EditSegmentationTools.setEnable">[docs]</a>    <span class="k">def</span> <span class="nf">setEnable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">b</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Enables buttons in the GUI.</span>
+<span class="sd">        </span>
+<span class="sd">        Enables buttons in the GUI</span>
+
+<span class="sd">        :returns: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">theButton</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buttonList</span><span class="p">:</span>
             <span class="n">theButton</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
-        <span class="k">return</span></div></div>
+        <span class="k">return</span> <span class="kc">None</span></div></div>
 
 </pre></div>
 
@@ -315,7 +402,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017-8, Felipe Orihuela-Espina.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.2.
     </div>
   </body>
 </html>

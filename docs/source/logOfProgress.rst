@@ -84,6 +84,45 @@ advances in the previous days/weeks.
 
 
 
+.. _secLogAdvances20190226:
+
+Advances 26-Feb-2019
+--------------------
+
+* **Version**: v0.2beta
+* **Responsible**: FOE
+
+Summary of changes:
+
+* Refreshed Sphinx documentation.
+
+
+.. _secLogAdvances20190219:
+
+Advances 19-Feb-2019
+--------------------
+
+* **Version**: v0.2beta
+* **Responsible**: FOE
+
+Summary of changes:
+
+* Version v0.2 beta has been committed and pushed to GitHub
+* Installer generation tested on additional computer with a previous version
+  of conda. It failed to compile because of an issue with packages
+  certificates. A simple certificate update did not fixed the problem. A full
+  update of miniconda might be needed.
+* Upgraded version of python set in the installer.cfg from v3.6.5 to v3.7.1.
+  This additionally demanded new wheeled versions of packages:
+  
+  * wrapt 1.11.1 - Our previous version was compiled for python v3.6.5
+  * imutils 0.5.1 - Updated to v0.5.2
+
+* New installer for python v3.7.1 ready and shared with Rodrigo.
+
+
+
+
 .. _secLogAdvances20190213:
 
 Advances 13-Feb-2019
@@ -190,11 +229,13 @@ Summary of changes:
   uses.
 
 Bug fixing:
+
 * Major debugging of :class:`src.IOT_OperationBrush`.
 * Bug fixed in :class:`src.IOT_OperationBrush`:  Assigment of property
   classMap in property setter was being "assigned" to cm.
 
 Bug detected:
+
 * Attempting to open a new scan when one is already open, will launch
   the opening dialog, but this will be freezed.
 

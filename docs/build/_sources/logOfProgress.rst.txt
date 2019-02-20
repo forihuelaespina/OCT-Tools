@@ -5,15 +5,16 @@ Log of progress
 
 * **Author**: Felipe Orihuela-Espina
 * **Created**: December 17, 2018
-* **Revised**: December 17, 2018
+* **Revised**: January 21, 2018
 * **Copyright** (c) 2018 INAOE
 
 
-This file attempts to gather all the reporting of progress that has until now
-(17-Dec-2018) been occurring through e-mails sent to Rodrigo Matsui. This is
-a bit more wordly and descriptive than updates to the GitHub. Please, note
+This file attempts to gather all the reporting of progress that until
+17-Dec-2018 was occurring through e-mails sent to Rodrigo Matsui. After that
+date, we more or less succeeded in maintain this log up-to-date. Please, note
 however, that this account does not cover the very first part of the project,
-and that we may have missed some of the e-mails in the chain.
+and that we may have missed some of the e-mails in the chain. This is
+a bit more wordly and descriptive than updates to the GitHub.
 
 
 Authors acronyms:
@@ -58,6 +59,10 @@ Tasks pending for v0.3
 * Incorporation of segmentation edition suboperation of merge ROIs
   and shifting ROIs should be incorporated. These are not aplicable
   to COI.
+* Improving manual edition of segmentation borders.
+* Bug pending for the stitching of more than 3 scans.
+* Attempting to open a new scan when one is already open, will launch
+  the opening dialog, but this will be freezed.
 
 
 .. _secTaskForV0.2:
@@ -65,8 +70,6 @@ Tasks pending for v0.3
 Tasks pending for v0.2
 ----------------------
 
-* Translation of matlab's code for manual edition of segmentation borders.
-* Bug pending for the stitiching of more than 3 scans.
 * Find an alternative to Git LFS.
 * Packing and generating the installer.
 
@@ -78,6 +81,177 @@ Progress Log
 
 Plase note that advances indicated at a particular date, may actually refer to
 advances in the previous days/weeks.
+
+
+
+.. _secLogAdvances20190219:
+
+Advances 19-Feb-2019
+--------------------
+
+* **Version**: v0.2beta
+* **Responsible**: FOE
+
+Summary of changes:
+
+* Version v0.2 beta has been committed and pushed to GitHub
+* Installer generation tested on additional computer with a previous version
+  of conda. It failed to compile because of an issue with packages
+  certificates. A simple certificate update did not fixed the problem. A full
+  update of miniconda might be needed.
+* Upgraded version of python set in the installer.cfg from v3.6.5 to v3.7.1.
+  This additionally demanded new wheeled versions of packages:
+  
+  * wrapt 1.11.1 - Our previous version was compiled for python v3.6.5
+  * imutils 0.5.1 - Updated to v0.5.2
+
+* New installer for python v3.7.1 ready and shared with Rodrigo.
+
+
+
+
+.. _secLogAdvances20190213:
+
+Advances 13-Feb-2019
+--------------------
+
+* **Version**: v0.2alpha
+* **Responsible**: FOE
+
+Summary of changes:
+
+* Transitioned to package "deprecation" (from "deprecated"). This requires finer
+  control of package version. Modified classes are:
+  
+  * class:`src:OCTToolsApp`
+  * class:`src:IOT_Document`
+  * class:`src:IOT_GUI_DocumentWindow`
+  * class:`src:IOT_OCTvolume`
+  * class:`src:IOT_OperationBrush`
+  * class:`src:IOT_OperationFlattening`
+  * class:`src:IOT_OperationMesureLayerThickness`
+  * class:`src:IOT_OperationPerfilometer`
+  * class:`src:IOT_OperationSegmentation`
+  * class:`src:IOT_OperationStitch`
+  
+* Version control is now in version.py (instead of setup.py), and loaded in __init__.py
+
+    * Package version control in Python is not easy with over 7 different
+      potential ways to do it (https://packaging.python.org/guides/single-sourcing-package-version/#single-sourcing-the-version).
+      Another additonal option is to use package pbr which I may consider in
+      the future as explained here: 
+      https://stackoverflow.com/questions/458550/standard-way-to-embed-version-into-python-package
+      But for now I opted for the simplest option.      
+
+* Comments in setup.py and __init__.py updated to Sphinx style
+* Opening message now informs of version.
+* First version of the installer is FINALLY compiling. Installer is now being tested.
+* We are now in v0.2beta, but release to GitHub is pending
+
+
+.. _secLogAdvances20190205:
+
+Advances 5-Feb-2019
+--------------------
+
+* **Version**: v0.2alpha
+* **Responsible**: FOE
+
+Summary of changes:
+
+
+* New attempts to generate the installer; now under Anaconda, have failed. The library “deprecated” continues to give problems for compiling in either versions 1.2.3 and 1.2.4.
+* We’re now seeking alternatives:
+
+  * Package deprecation 2.0.6
+  * A shortcut by now may be to defer all deprecations to the next version.
+
+* Deprecation in general seems to be a more general problem in python; https://www.python.org/dev/peps/pep-0004/ which might partially explain the difficulties in compiling the deprecated module.
+
+
+
+.. _secLogAdvances20190127:
+
+Advances 27-Jan-2019
+--------------------
+
+* **Version**: v0.2
+* **Responsible**: FOE
+
+Summary of changes:
+
+* Version v0.2 alpha released and commited to GitHub.
+* Installer.cfg updated for new package versions.
+
+  * wrapt 1.10.11 -> wrapt 1.11.1
+  * deprecated 1.2.3 -> deprecated 1.2.4
+
+* Generation of installer in progress. The library "deprecated" which works
+  well when interpreted is giving some troubles during compilation. This has
+  been tested in two Windows 10 machines (FOE_INAOE laptop and CHOLULA desktop).
+  Currently, investigating a solution.
+
+
+
+.. _secLogAdvances20190120:
+
+Advances 20-Jan-2019
+--------------------
+
+* **Version**: v0.2
+* **Responsible**: FOE
+
+Summary of changes:
+
+* New class :class:`src.IOT_GUI_BrushParameterSettings` to support
+  GUI control of the brush operation parameters.
+* Modified classes :class:`src.IOT_GUI_DocumentWindow` with new method
+  brush to support mouse controlled brush operation.
+* Modified class :class:`src.IOT_GUI_EditSegmentationTools`: Added button
+  for executing Brush operation.
+* Modified class :class:`src.IOT_GUI_ToolsWindow`: Added tab in parameter
+  settings panel for hold :class:`src.IOT_GUI_BrushParameterSettings`.
+* New method setOperand in :class:`src.IOT_Operation`. The direct benefit
+  is a faster response of the brush. But it is easy to foresee additional
+  uses.
+
+Bug fixing:
+
+* Major debugging of :class:`src.IOT_OperationBrush`.
+* Bug fixed in :class:`src.IOT_OperationBrush`:  Assigment of property
+  classMap in property setter was being "assigned" to cm.
+
+Bug detected:
+
+* Attempting to open a new scan when one is already open, will launch
+  the opening dialog, but this will be freezed.
+
+
+.. _secLogAdvances20190117:
+
+Advances 17-Jan-2019
+--------------------
+
+* **Version**: v0.2
+* **Responsible**: FOE
+
+Summary of changes:
+
+* New class :class:`src.IOT_OperationBrush` defined for supporting the manual
+  modification of the segmentation. It will act as a painting brush.
+  Behaviour ready but pending testing and incorporation of controls to
+  the GUI.
+
+  NOTE; This class is using an algorithm that is different from the
+  one proposed by Arlem in MATLAB.
+
+* Bugs corrected in :class:`src.IOT_OperationEditSegmentation` whereby the output
+  of the method was not returning the OCT scan. Although I have not
+  experienced further errors, but I suspect that the fixing is still
+  not fully correct. Some further testing is necessary.
+* Bug corrected in the generation of the dummy segmentation where
+  no background scan was associated to object :class:`src.IOT_OCTscanSegmentation`
+  even when the :class:`src.IOT_OCTscan` was present.
 
 
 .. _secLogAdvances20181217:

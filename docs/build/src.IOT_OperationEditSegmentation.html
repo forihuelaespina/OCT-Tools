@@ -13,7 +13,6 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="4.1.1.1.14. src.IOT_OperationFlattening module" href="src.IOT_OperationFlattening.html" />
@@ -158,6 +157,22 @@ initEditSegmentation.</li>
 properties.</li>
 <li>ROISelect method now searches for a labelled ROI
 within a neighobourhood.</li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><td>9-Jan-2019</td>
+<td>FOE</td>
+<td><ul class="first last simple">
+<li>Bug detected. Variable imgin in method execute had
+not been set.</li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><td>13-Dec-2018</td>
+<td>FOE</td>
+<td><ul class="first last simple">
+<li>Updated deprecation package to “deprecation” due
+compilation problems with package “deprecated”.</li>
 </ul>
 </td>
 </tr>
@@ -437,7 +452,7 @@ outcome in <code class="xref py py-attr docutils literal notranslate"><span clas
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Result of executing the operation.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">IOT_OCTscan</span></code></td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">IOT_OCTscanSegmentation</span></code></td>
 </tr>
 </tbody>
 </table>
@@ -513,6 +528,9 @@ outcome in <code class="xref py py-attr docutils literal notranslate"><span clas
 </tr>
 </tbody>
 </table>
+<div class="deprecated">
+<p><span class="versionmodified">Deprecated since version 0.2: </span>This will be removed in 0.3. Use method addOperand() and add reference image as scan property of class:<cite>IOT_OCTscanSegmentation</cite>.</p>
+</div>
 </dd></dl>
 
 </dd></dl>
@@ -548,7 +566,7 @@ outcome in <code class="xref py py-attr docutils literal notranslate"><span clas
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017-8, Felipe Orihuela-Espina.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.2.
     </div>
   </body>
 </html>
