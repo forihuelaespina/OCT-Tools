@@ -21,7 +21,5 @@ Currently, the following operations are supported:
 
 Installer is generated using `pynsist`.
 
-[Git Large File Storage (LFS)](https://git-lfs.github.com/) is used to commit some large files (e.g. installer)
-
 
 

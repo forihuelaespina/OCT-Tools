@@ -1,7 +1,0 @@
-src.setup module
-================
-
-.. automodule:: src.setup
-    :members:
-    :undoc-members:
-    :show-inheritance:

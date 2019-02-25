@@ -13,7 +13,6 @@ Welcome to OCT-Tools's documentation!
 
    intro
    installation
-   sciMethFileFormatSpec
    technical
    logOfProgress
 
