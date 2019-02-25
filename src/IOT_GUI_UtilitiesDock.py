@@ -19,6 +19,9 @@ IOT stands for INAOE OCT Tools
 +=============+========+======================================================+
 | 12-Dec-2018 | FOE    | - Class created.                                     |
 +-------------+--------+------------------------------------------------------+
+| 24-Feb-2019 | FOE    | - Updated deprecation package to "deprecation" due   |
+|             |        |   compilation problems with package "deprecated".    |
++-------------+--------+------------------------------------------------------+
 
 .. seealso:: None
 .. note:: None
@@ -35,7 +38,7 @@ IOT stands for INAOE OCT Tools
 #import sys
 
 import warnings
-from deprecated import deprecated
+#import deprecation
 
 from PyQt5.QtCore import Qt #Imports constants
 from PyQt5.QtWidgets import QDockWidget, QWidget, QGroupBox, QGridLayout, \

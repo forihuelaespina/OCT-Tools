@@ -1,1 +1,20 @@
-build/nsis/**
+##
+##
+## Log:
+##
+## 24-Feb-2019 (v0.2 beta just released): Log of this file started.
+## 		Added the following patterns:
+##			__pycache__/**
+##			obsoleteOrTestingCode/**
+##			docs/build/**
+##
+##
+
+build/**
+__pycache__/**
+obsoleteOrTestingCode/**
+
+## Ignore the documentation build. Save only the documentation sources
+docs/build/**
+build/OCTToolsApp_v0.1_Installer.zip
+build/OCTToolsApp_v0.1_Installer.zip

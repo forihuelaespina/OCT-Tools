@@ -95,6 +95,15 @@ Advances 26-Feb-2019
 Summary of changes:
 
 * Refreshed Sphinx documentation.
+* The project will no longer be using Git LFS to avoid incurring in charges.
+  As a result, Git LFS is being uninstalled. Instead, as from now, installers
+  will be hosted in the `OSF project site <https://osf.io/by79t/>`_.
+* For a more correct use of GitHub, the following directories have been
+  declared in .gitignore to be no longer tracked, and hence are neither
+  committed/pushed:
+
+    * __pycache__/
+    * obsoleteOrTestingCode/
 
 
 .. _secLogAdvances20190219:
@@ -114,7 +123,7 @@ Summary of changes:
   update of miniconda might be needed.
 * Upgraded version of python set in the installer.cfg from v3.6.5 to v3.7.1.
   This additionally demanded new wheeled versions of packages:
-  
+
   * wrapt 1.11.1 - Our previous version was compiled for python v3.6.5
   * imutils 0.5.1 - Updated to v0.5.2
 
@@ -135,7 +144,7 @@ Summary of changes:
 
 * Transitioned to package "deprecation" (from "deprecated"). This requires finer
   control of package version. Modified classes are:
-  
+
   * class:`src:OCTToolsApp`
   * class:`src:IOT_Document`
   * class:`src:IOT_GUI_DocumentWindow`
@@ -146,15 +155,15 @@ Summary of changes:
   * class:`src:IOT_OperationPerfilometer`
   * class:`src:IOT_OperationSegmentation`
   * class:`src:IOT_OperationStitch`
-  
+
 * Version control is now in version.py (instead of setup.py), and loaded in __init__.py
 
     * Package version control in Python is not easy with over 7 different
       potential ways to do it (https://packaging.python.org/guides/single-sourcing-package-version/#single-sourcing-the-version).
       Another additonal option is to use package pbr which I may consider in
-      the future as explained here: 
+      the future as explained here:
       https://stackoverflow.com/questions/458550/standard-way-to-embed-version-into-python-package
-      But for now I opted for the simplest option.      
+      But for now I opted for the simplest option.
 
 * Comments in setup.py and __init__.py updated to Sphinx style
 * Opening message now informs of version.
