@@ -13,6 +13,9 @@
 build/**
 __pycache__/**
 obsoleteOrTestingCode/**
+src/__pycache__/**
+olderVersions/**
+
 
 ## Ignore the documentation build. Save only the documentation sources
 docs/build/**

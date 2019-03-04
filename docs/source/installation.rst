@@ -8,9 +8,9 @@ Installation
 Installing OCT-Tools:
 ---------------------
 
-1) Download the latest installer from `GitHub <https://github.com/forihuelaespina/OCT-Tools/tree/master/build>`_.
+1) Download the latest installer from `GitHub <https://github.com/forihuelaespina/OCTant/tree/master/build>`_.
 2) Unzip the installer anywhere
-3) Double click in OCTToolsApp_vX.X.exe
+3) Double click in OCTantApp_vX.X.exe
 4) Follow on screen instructions
 
 Ready to go!
@@ -53,13 +53,13 @@ Once the change has been made, you should be able to launch the application from
     in one of the steps, you were asked to confirm your installation folder.
     If you forgot to make note of this installation path, likely candidates are:
 
-    * If you opted for an installation for a single user e.g. you; "C:\Users\<USERNAME>\AppData\Local\OCTToolsApp\"
-    * If you opted for an installation for all users; "C:\Program Files\OCTToolsApp\". A variant may include a "(x86)" after "Program Files"
+    * If you opted for an installation for a single user e.g. you; "C:\Users\<USERNAME>\AppData\Local\OCTantApp\"
+    * If you opted for an installation for all users; "C:\Program Files\OCTantApp\". A variant may include a "(x86)" after "Program Files"
 
     To know for sure;
 
     * Open a file explorer windows. Go to "C:\" and try to navigate to either of the above paths.
-    * If none are available, in the task bar search OCTToolsApp and wait a few seconds. Windows would find the folder for you. Then, right click and "Open the folder location".
+    * If none are available, in the task bar search OCTantApp and wait a few seconds. Windows would find the folder for you. Then, right click and "Open the folder location".
 
 
 

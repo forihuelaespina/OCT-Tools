@@ -1,5 +1,8 @@
-# OCT-Tools
-Suite of tools for OCT analysis in Python.
+# OCTant
+
+OCTant is a suite of tools for OCT analysis in Python.
+
+Prior to v0.3, OCTant was known as OCT-tools.
 
 Documentation available at: [readthedocs](https://oct-tools.readthedocs.io/en/latest/)
 
@@ -16,10 +19,8 @@ Currently, the following operations are supported:
 * `scikit-image`
 * OpenCV (for pyhton); that's `cv2`
 * `PyQt5` (Qt for python for the GUI). Note that `sip` is "installed" separatedly
+* `deprecation`
 * `imutils`
 * `panorama`
 
 Installer is generated using `pynsist`.
-
-
-

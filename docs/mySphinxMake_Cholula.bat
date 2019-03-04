@@ -13,7 +13,7 @@
 :: See also:
 ::
 
-SET MYPROJECTPATH=C:\Users\fo067\OneDrive\Git\OCT-Tools
+SET MYPROJECTPATH=C:\Users\fo067\OneDrive\Git\OCTant
 
 :: First, run sphinx-apidoc  to generate the .rst files for autodoc
 ::
@@ -28,10 +28,10 @@ C:\ProgramData\Miniconda3\Scripts\sphinx-apidoc -f -M -a -e ^
 --tocfile srcPackageTOC ^
 -o %MYPROJECTPATH%\docs\source ^
 %MYPROJECTPATH%\src ^
-%MYPROJECTPATH%\src\panorama.py ^
-%MYPROJECTPATH%\src\Test.py ^
-%MYPROJECTPATH%\src\setup.py ^
-%MYPROJECTPATH%\src\segmentationUtils.py ^
+:: %MYPROJECTPATH%\src\panorama.py ^
+:: %MYPROJECTPATH%\src\Test.py ^
+:: %MYPROJECTPATH%\src\segmentationUtils.py ^
+:: %MYPROJECTPATH%\src\setup.py ^
 %MYPROJECTPATH%\src\*.spec
 
 :: Now build sphinx

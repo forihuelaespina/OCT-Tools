@@ -30,48 +30,7 @@ Testers acronyms:
 
 
 
-Tasks pending for future versions
-=================================
 
-These should be removed from here once attended.
-
-
-.. _secTaskForV0.3:
-
-Tasks pending for v0.3
-----------------------
-
-* Reorganise classes in subpackages; IOT (main), data (for classes corresponding
-  to the data model), Op (for classes related to the operation), GUI (for classes
-  related to the user interface)
-* Improve segmentation algorithm
-* Attend dependency on OpenCV (remove dependency on panorama for stitching?)
-* Stitching operation to work on only 2 images at a time. One may
-  still join as many as desired, but it will have to be done in pairs. For instance,
-  if 3 images have to be stitched; you will have to make first 2, and then to the
-  result add the 3rd. Although this works now, but it is not a desirable situation.
-* Check Duke images set to check whether they are useful to test the segmentation
-  algorithm.
-* Assign arbitrary colors to tissue layers.
-* Create support for application-wide Settings
-* Provide support for our :ref:`internal file format <rst-sciMethFileFormatSpec>`
-  saving.
-* Incorporation of segmentation edition suboperation of merge ROIs
-  and shifting ROIs should be incorporated. These are not aplicable
-  to COI.
-* Improving manual edition of segmentation borders.
-* Bug pending for the stitching of more than 3 scans.
-* Attempting to open a new scan when one is already open, will launch
-  the opening dialog, but this will be freezed.
-
-
-.. _secTaskForV0.2:
-
-Tasks pending for v0.2
-----------------------
-
-* Find an alternative to Git LFS.
-* Packing and generating the installer.
 
 
 .. _secProgressLog:
@@ -79,15 +38,135 @@ Tasks pending for v0.2
 Progress Log
 ============
 
-Plase note that advances indicated at a particular date, may actually refer to
+Please note that advances indicated at a particular date, may actually refer to
 advances in the previous days/weeks.
 
 
 
-.. _secLogAdvances20190226:
+.. _secLogAdvances20190305:
 
-Advances 26-Feb-2019
+Advances 5-Mar-2019
 --------------------
+
+* **Version**: v0.3
+* **Responsible**: FOE
+
+Summary of changes:
+
+* OCT-tools officially rebranded as OCTant. GitHub repository name updated,
+  and application rebranded as OCTantApp.
+* The versioning of the GUI shell and of the API are now separated. For
+  simplicity however both the API and App have been assigned v0.3, but
+  they will evolve separatedly from here onwards.
+* New logo and icon designed.
+* New package architecture in development. The previous prefix IOT in
+  class names is now abandoned as classes are packaged. The new package
+  structure now clearly separates the API from the app, and within they
+  API, the data model classes are further separated from the operational
+  classes. The folder structure is left as follows::
+
+    src/
+     |- app - The application. This is just a shell over the API.
+     |- octant - The API
+      |- data - Classes of the data model
+      |- op - Operational classes. These are the classes that provide functionality to the package.
+      |- util - A misceallaneous of additional functions and external dependencies
+
+* All classes have been moved to their corresponding folder. The classes
+  corresponding to operations are suggested to follow a naming convention
+  indicating the main operand type before the operation name.
+* All classes have now been migrated to the new architecture
+  pending testing:
+
+  +-------------------------------------------+-------------------------------------------+
+  | **Old class name**                        | **New class name**                        |
+  +===========================================+===========================================+
+  | IOT_Document                              | octant.data.Document                      |
+  +-------------------------------------------+-------------------------------------------+
+  | IOT_OCTscan                               | octant.data.OCTscan                       |
+  +-------------------------------------------+-------------------------------------------+
+  | IOT_OCTvolume                             | octant.data.OCTvolume                     |
+  +-------------------------------------------+-------------------------------------------+
+  | IOT_OCTscanSegmentation                   | octant.data.OCTscanSegmentation           |
+  +-------------------------------------------+-------------------------------------------+
+  | IOT_RetinalLayers                         | octant.data.RetinalLayers                 |
+  +-------------------------------------------+-------------------------------------------+
+  | IOT_Operation                             | octant.op.Operation                       |
+  +-------------------------------------------+-------------------------------------------+
+  | IOT_OperationFlattening                   | octant.op.OpScanFlatten                   |
+  +-------------------------------------------+-------------------------------------------+
+  | IOT_OperationMeasureLayerThickness        | octant.op.OpScanMeasureLayerThickness     |
+  +-------------------------------------------+-------------------------------------------+
+  | IOT_OperationSegmentation                 | octant.op.OpScanSegment                   |
+  +-------------------------------------------+-------------------------------------------+
+  | IOT_OperationStitch                       | octant.op.OpScanStitch                    |
+  +-------------------------------------------+-------------------------------------------+
+  | IOT_OperationPerfilometer                 | octant.op.OpScanPerfilometer              |
+  +-------------------------------------------+-------------------------------------------+
+  | IOT_OperationBrush                        | octant.op.OpSegmentationBrush             |
+  +-------------------------------------------+-------------------------------------------+
+  | IOT_OperationEditSegmentation             | octant.op.OpSegmentationEdit              |
+  +-------------------------------------------+-------------------------------------------+
+  | OCTToolsApp                               | app.OCTantApp                             |
+  +-------------------------------------------+-------------------------------------------+
+  | IOT_GUI_DocumentWindow                    | app.IOT_GUI_DocumentWindow                |
+  +-------------------------------------------+-------------------------------------------+
+  | IOT_GUI_ToolsWindow                       | app.ToolsDock                             |
+  +-------------------------------------------+-------------------------------------------+
+  | IOT_GUI_UtilitiesDock                     | app.UtilitiesDock                         |
+  +-------------------------------------------+-------------------------------------------+
+  | IOT_GUI_EditSegmentationTools             | app.OpSegmentationEditToolsPanel          |
+  +-------------------------------------------+-------------------------------------------+
+  | IOT_GUI_BrushParameterSettings            | app.SettingsGUIOpSegmentationBrush        |
+  +-------------------------------------------+-------------------------------------------+
+  | IOT_GUI_MeasureThicknessParameterSettings | app.SettingsGUIOpScanMeasurementThickness |
+  +-------------------------------------------+-------------------------------------------+
+  | IOT_GUI_PerfilometerParameterSettings     | app.SettingsGUIOpPerfilometer             |
+  +-------------------------------------------+-------------------------------------------+
+
+* The class octant.op.Operation now provides support for parameters.
+* The previously deprecated "original" methods for calling the operation
+  have now been fully removed. The use of method :func:`execute` is now compulsory.
+* Several calls to :func:`isinstance` have been changed by calls to
+  :func:`type`.
+* Tools window is now a child dock of DocumentWindow which is left as the
+  only QMainWindow of the app.
+
+* Documentation updates:
+
+  * Updated project README.md
+  * Updated intro.rst
+  * Updated toDo.rst
+  * Updated conf.py
+  * Updated installation.rst
+  * Updated technical.rst
+
+
+.. _secLogAdvances20190225:
+
+Advances 25-Feb-2019
+--------------------
+
+* **Version**: v0.3
+* **Responsible**: FOE
+
+Summary of changes:
+
+* Reading about subpackaging.
+* Planning separation of foundational classes to a separate project
+  because, in giving priority to Rodrigo's request, OCT-tools has naturally
+  departed from them and hence the project is not using them. Consequently,
+  the following folders and files have been removed from GitHub repository:
+
+    * docs/EclipseModelling/
+    * docs/source/sciMethFileFormatSpec
+
+  Older versions of these files can still of course be found in previous
+  commit history. Documentation of the new architecture is needed. New
+  Eclipse documentation will be now move to `OSF project site <https://osf.io/by79t/>`_.
+
+* List of pending tasks has been moved to :ref:`To Do <rst-toDo>`.
+
 
 * **Version**: v0.2beta
 * **Responsible**: FOE
@@ -104,6 +183,9 @@ Summary of changes:
 
     * __pycache__/
     * obsoleteOrTestingCode/
+    * docs/build/
+
+* Version v0.2 is now considered stable and fully released.
 
 
 .. _secLogAdvances20190219:

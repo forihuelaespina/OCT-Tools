@@ -13,7 +13,7 @@
 :: See also:
 ::
 
-SET MYPROJECTPATH=C:\Users\Felipe\OneDrive\Git\OCT-Tools
+SET MYPROJECTPATH=C:\Users\Felipe\OneDrive\Git\OCTant
 
 :: First, run sphinx-apidoc  to generate the .rst files for autodoc
 ::
@@ -22,17 +22,34 @@ SET MYPROJECTPATH=C:\Users\Felipe\OneDrive\Git\OCT-Tools
 ::
 :: Repeat the sphinx-apidoc statement below for other packages
 ::
-:: Package src
-C:\ProgramData\Miniconda3\Scripts\sphinx-apidoc -f -M -a -e ^
+
+:: Package octant
+C:\ProgramData\Anaconda3\Scripts\sphinx-apidoc -f -M -a -e ^
 -A "Felipe Orihuela-Espina" ^
---tocfile srcPackageTOC ^
+--tocfile octantPackageTOC ^
 -o %MYPROJECTPATH%\docs\source ^
-%MYPROJECTPATH%\src ^
-%MYPROJECTPATH%\src\panorama.py ^
-%MYPROJECTPATH%\src\Test.py ^
-%MYPROJECTPATH%\src\setup.py ^
-%MYPROJECTPATH%\src\segmentationUtils.py ^
-%MYPROJECTPATH%\src\*.spec
+%MYPROJECTPATH%\src\octant ^
+%MYPROJECTPATH%\src\octant\*.spec
+
+:: %MYPROJECTPATH%\src\octant\panorama.py ^
+:: %MYPROJECTPATH%\src\octant\Test.py ^
+:: %MYPROJECTPATH%\src\octant\setup.py ^
+:: %MYPROJECTPATH%\src\octant\segmentationUtils.py ^
+:: %MYPROJECTPATH%\src\octant\*.spec
+
+:: Package app
+C:\ProgramData\Anaconda3\Scripts\sphinx-apidoc -f -M -a -e ^
+-A "Felipe Orihuela-Espina" ^
+--tocfile appPackageTOC ^
+-o %MYPROJECTPATH%\docs\source ^
+%MYPROJECTPATH%\src\app ^
+%MYPROJECTPATH%\src\app\*.spec
+
+:: %MYPROJECTPATH%\src\app\panorama.py ^
+:: %MYPROJECTPATH%\src\app\Test.py ^
+:: %MYPROJECTPATH%\src\app\setup.py ^
+:: %MYPROJECTPATH%\src\app\segmentationUtils.py ^
+:: %MYPROJECTPATH%\src\app\*.spec
 
 :: Now build sphinx
-C:\ProgramData\Miniconda3\Scripts\sphinx-build -b html C:\Users\Felipe\OneDrive\Git\OCT-Tools\docs\source C:\Users\Felipe\OneDrive\Git\OCT-Tools\docs\build
+C:\ProgramData\Anaconda3\Scripts\sphinx-build -b html C:\Users\Felipe\OneDrive\Git\OCTant\docs\source C:\Users\Felipe\OneDrive\Git\OCTant\docs\build

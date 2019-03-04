@@ -9,7 +9,7 @@ if "%SPHINXBUILD%" == "" (
 )
 set SOURCEDIR=source
 set BUILDDIR=build
-set SPHINXPROJ=OCT-Tools
+set SPHINXPROJ=OCTant
 
 if "%1" == "" goto help
 
