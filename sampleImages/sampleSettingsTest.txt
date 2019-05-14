@@ -1,0 +1,7 @@
+
+#Comentario 1
+
+silly = 4
+ #Comentario 2
+
+stupid = 'a'

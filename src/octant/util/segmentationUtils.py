@@ -2,7 +2,29 @@
 """
 Created on Mon Jun 25 20:12:03 2018
 
-@author: Aleida
+
+:Log:
+
++-------------+--------+------------------------------------------------------+
+| Date        | Author | Description                                          |
++=============+========+======================================================+
+| 3-Aug-2018  | ACA    | - File created.                                      |
++-------------+--------+------------------------------------------------------+
+| ??-???-2018 | ACA    | - Addition of several functions and debugging.       |
++-------------+--------+------------------------------------------------------+
+| 30-Mar-2019 | FOE    | - Added file log.                                    |
++-------------+--------+------------------------------------------------------+
+
+
+.. seealso:: None
+.. note:: None
+.. todo:: None
+
+
+.. sectionauthor:: Felipe Orihuela-Espina <f.orihuela-espina@inaoep.mx>
+.. codeauthor:: Arlem Aleida Castillo Avila <acastillo@inaoep.mx>
+.. codeauthor:: Felipe Orihuela-Espina <f.orihuela-espina@inaoep.mx>
+
 """
 import matplotlib.pyplot as plt
 from skimage import io, filters
@@ -34,7 +56,7 @@ def carga_imagen(path):
     if img.format == 'PNG':
         nombre = '_'+str(randint(1000000, 9999999))+'_.jpg'
         img = img.convert("RGB")
-        img.save(nombre, "JPEG")    
+        img.save(nombre, "JPEG")
     #Carga imagen
     return [cv2.imread(nombre if nombre != '' else path),nombre]
 
@@ -167,7 +189,7 @@ def elimina_columnas(matrizIMG,x,yInicial):
         else:
             matrizIMG[y][x] = False
     return matrizIMG
-        
+
 #elimina ruido
 def elimina_ruido_canny(matrizIMG, iteraciones):
     for i in range(0,iteraciones):
@@ -175,7 +197,7 @@ def elimina_ruido_canny(matrizIMG, iteraciones):
             for x in range(1, np.size(matrizIMG,1) - 1):
                 if matrizIMG[y][x] and matrizIMG[y+1][x]:
                     matrizIMG = elimina_columnas(matrizIMG,x,y+1)
-                if matrizIMG[y][x] and (not matrizIMG[y][x+1] and not matrizIMG[y+1][x+1] and not matrizIMG[y-1][x+1] and 
+                if matrizIMG[y][x] and (not matrizIMG[y][x+1] and not matrizIMG[y+1][x+1] and not matrizIMG[y-1][x+1] and
                     not matrizIMG[y+1][x] and not matrizIMG[y][x-1] and not matrizIMG[y+1][x-1] and not matrizIMG[y-1][x-1]):
                     matrizIMG[y][x] = False
     return matrizIMG
@@ -240,7 +262,7 @@ def obten_bordes_externos(matrizIMG):
 #dado 2 arreglos en "y" modifica todos los valores mayores (arrayInferior) y menores (arraySuperior) a estos, por por el valor minimo en la imagen
 def elimina_desde_arreglos(matrizIMG,arraySuperior,arrayInferior):
     arrayImg = matrizIMG.reshape(-1)
-    media = min(arrayImg) 
+    media = min(arrayImg)
     for x in range(0,np.size(matrizIMG,1)):
         indiceY = arraySuperior[x]
         for y in range(indiceY-1,-1,-1):

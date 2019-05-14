@@ -12,8 +12,9 @@ Submodules
 .. toctree::
 
    app.DocumentWindow
-   app.OCTTantApp
+   app.OCTantApp
    app.OpSegmentationEditToolsPanel
+   app.ScansCarousel
    app.SettingsGUIOpScanMeasureThickness
    app.SettingsGUIOpScanPerfilometer
    app.SettingsGUIOpSegmentationBrush

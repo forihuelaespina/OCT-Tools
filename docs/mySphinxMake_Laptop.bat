@@ -13,7 +13,13 @@
 :: See also:
 ::
 
-SET MYPROJECTPATH=C:\Users\Felipe\OneDrive\Git\OCTant
+:: LOG
+::
+:: 13-May-2019: FOE:
+::   + Reset $MYPROJECTPATH to new laptop HP-SPECTRE
+
+:: SET MYPROJECTPATH=C:\Users\Felipe\OneDrive\Git\OCTant
+SET MYPROJECTPATH=C:\Users\felip\OneDrive\Git\OCTant
 
 :: First, run sphinx-apidoc  to generate the .rst files for autodoc
 ::
@@ -52,4 +58,5 @@ C:\ProgramData\Anaconda3\Scripts\sphinx-apidoc -f -M -a -e ^
 :: %MYPROJECTPATH%\src\app\*.spec
 
 :: Now build sphinx
-C:\ProgramData\Anaconda3\Scripts\sphinx-build -b html C:\Users\Felipe\OneDrive\Git\OCTant\docs\source C:\Users\Felipe\OneDrive\Git\OCTant\docs\build
+::C:\ProgramData\Anaconda3\Scripts\sphinx-build -b html C:\Users\Felipe\OneDrive\Git\OCTant\docs\source C:\Users\Felipe\OneDrive\Git\OCTant\docs\build
+C:\ProgramData\Anaconda3\Scripts\sphinx-build -b html C:\Users\felip\OneDrive\Git\OCTant\docs\source C:\Users\felip\OneDrive\Git\OCTant\docs\build

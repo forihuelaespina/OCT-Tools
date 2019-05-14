@@ -22,6 +22,10 @@ initialization code for the package or set the __all__ variable.
 +-------------+--------+------------------------------------------------------+   
 |  3-Mar-2019 | FOE    | - Made subpackage classes visible.                   |
 +-------------+--------+------------------------------------------------------+   
+| 10-Mar-2019 | FOE    | - Added Settings class.                              |
++-------------+--------+------------------------------------------------------+   
+|  4-Apr-2019 | FOE    | - Exported name OCTvolumeSegmentation.               |
++-------------+--------+------------------------------------------------------+   
 
 
 
@@ -39,6 +43,8 @@ from .Document import Document
 from .OCTscan import OCTscan
 from .OCTscanSegmentation import OCTscanSegmentation
 from .OCTvolume import OCTvolume
+from .OCTvolumeSegmentation import OCTvolumeSegmentation
 from .RetinalLayers import RetinalLayers
+from .Settings import Settings
 
 

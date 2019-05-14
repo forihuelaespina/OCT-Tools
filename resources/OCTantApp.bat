@@ -1,16 +1,14 @@
-:: File: OCTToolsApp.bat
+:: File: OCTantApp.bat
 :: 
-:: .bat launcher for OCT-Tools
+:: .bat launcher for OCTant application (previously OCTToolsApp)
 :: 
 :: For some reason, the installer does everything ok, but then "double
-:: clicking" the OCTToolsApp.launch.py is unable to find Python.exe
+:: clicking" the OCTantApp.launch.py is unable to find Python.exe
 :: or pythonw.exe. This .bat file only makes the familiar "double clicking"
 :: a reality.
 :: 
 :: 
-:: @dateCreated: 9-Sep-2018
-:: @authors: Felipe Orihuela-Espina
-:: @dateModified: 11-Sep-2018
+:: @author: Felipe Orihuela-Espina
 :: 
 :: See also:
 :: 
@@ -25,18 +23,22 @@
 ::	* Added conditional for running either Python.exe or Python/Python.exe. It
 ::	just seems to be different depending on the machine.
 ::  
+:: 17-Mar-2019: FOE:
+::	* File renaming to OCTantApp.bat (from OCTToolsApp.bat). Rebranding to
+::  OCTant and updated comments.
+::
 
 
 :: Do not display commands, only echo prints
 echo off
-title OCTToolsApp
-echo OCT-Tools: Setting up things. Please wait...
+title OCTantApp
+echo OCTant: Setting up things. Please wait...
 
 :: Launch the application
-Python.exe OCTToolsApp.launch.py
+Python.exe OCTant.launch.py
 IF %ERRORLEVEL% NEQ 0 (
 	::echo %ERRORLEVEL%
 	echo.
 	echo Unable to find Python in the system; trying local copy.
-	Python\Python.exe OCTToolsApp.launch.py
+	Python\Python.exe OCTantApp.launch.py
 )

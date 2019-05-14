@@ -1,9 +1,11 @@
 """
 -*- coding: utf-8 -*-
 
-File: EditSegmentationToolsPanel.py
+File: OpSegmentationEditToolsPanel.py
 
-Class EditSegmentationToolsPanel
+Class OpSegmentationEditToolsPanel
+
+.. inheritance-diagram:: OpSegmentationEditToolsPanel
 
 A frame (QGroupBox) for accessing the editing segmentation tools
 (originally for operation in class:`octant.op.OpSegmentationEdit` but
@@ -66,22 +68,22 @@ from octant.op import OpSegmentationEdit
 class OpSegmentationEditToolsPanel(QGroupBox):
     #Sphinx documentation
     """A class:`QGroupBox` GUI for accesing operations over class:`IOT_OCTscanSegmentation`.
-    
+
     A class:`QGroupBox` GUI for accesing operations over
     class:`octant.data.OCTscanSegmentation`. This includes operations executed by:
-    
+
     * class:`octant.data.OpSegmentationEdit` - Note that this in turn represent
       several ROI and COI based operations.
     * class:`octant.op.OpSegmentationBrush`
-    
+
 
     .. seealso:: None
     .. note:: None
     .. todo:: None
-        
+
     """
-    
- 
+
+
     #Private class attributes shared by all instances
 
     #Class constructor
@@ -89,28 +91,28 @@ class OpSegmentationEditToolsPanel(QGroupBox):
         """The class constructor.
 
         The class constructor.
-        
-        tmp = OpSegmentationEditTools - Creates a default 
+
+        tmp = OpSegmentationEditTools - Creates a default
             class:`QGroupBox` GUI for accesing operations over class:`octant.data.OCTscanSegmentation`
 
         :param theOCTScan: The OCT scan to be segmented
         :type img: :class:`octant.data.OCTscan`
-        
+
         """
         #Call superclass constructor
         QGroupBox.__init__(self)
-        
-        
+
+
         self._docWindow = None
         self._lastEvent = None #To temporally store mouse events
 
         self._seg = OpSegmentationEdit()
-        
+
         self._buttonList = list()
-        
+
         #Group for COI based manipulation operations
         COIframe = QGroupBox("COI based manipulation")
-        
+
         bCOIDelete = QPushButton("Delete")
         bCOIDelete.clicked.connect(self.opCOIDelete)
         bCOIDelete.setEnabled(True)
@@ -129,7 +131,7 @@ class OpSegmentationEditToolsPanel(QGroupBox):
 
         #Group for ROI based manipulation operations
         ROIframe = QGroupBox("ROI based manipulation")
-        
+
         bROIDelete = QPushButton("Delete")
         bROIDelete.clicked.connect(self.opROIDelete)
         bROIDelete.setEnabled(True)
@@ -137,12 +139,12 @@ class OpSegmentationEditToolsPanel(QGroupBox):
         bROIChangeLabel = QPushButton("Change Label")
         bROIChangeLabel.clicked.connect(self.opROIChangeLabel)
         bROIChangeLabel.setEnabled(True)
-        
+
         ROIframeLayout = QVBoxLayout();
         ROIframeLayout.addWidget(bROIDelete);
         ROIframeLayout.addWidget(bROIChangeLabel);
         ROIframe.setLayout(ROIframeLayout);
-        
+
         self._buttonList.append(bROIDelete)
         self._buttonList.append(bROIChangeLabel)
 
@@ -167,13 +169,13 @@ class OpSegmentationEditToolsPanel(QGroupBox):
         frameLayout.addWidget(ROIframe);
         frameLayout.addWidget(VOIframe);
         self.setLayout(frameLayout);
-        
-        
-        
-        
+
+
+
+
         self.setEnable(False)
         self.setVisible(True)
-        
+
         return
 
 
@@ -197,9 +199,9 @@ class OpSegmentationEditToolsPanel(QGroupBox):
         """
         self._docWindow = theDocWindow
         return None
-    
-    
-    
+
+
+
 
     def opCOIDelete(self):
         """Calls for the execution of a class:`octant.op.OpSegmentationEdit` COI deletion operation
@@ -237,10 +239,10 @@ class OpSegmentationEditToolsPanel(QGroupBox):
             params=list()
             params.append(r.getLayerIndex(newLName))
             params.append(r.getLayerIndex(lName))
-    
+
             #...and simply pass the command.
             self._docWindow.opEditSegmentation('COIChangeLabel',params)
-            
+
         return None
 
 
@@ -265,11 +267,11 @@ class OpSegmentationEditToolsPanel(QGroupBox):
         except:
             mousePos = (0,0)
             mouseCoords = (mEvent.xdata, mEvent.ydata)
-        mouseButton = mEvent.button 
-        
+        mouseButton = mEvent.button
+
         params=list()
         params.append(mousePos)
-        
+
         #...and simply pass the command.
         self._docWindow.opEditSegmentation('ROIDelete',params)
         return None
@@ -294,8 +296,8 @@ class OpSegmentationEditToolsPanel(QGroupBox):
         except:
             mousePos = (0,0)
             mouseCoords = (mEvent.xdata, mEvent.ydata)
-        mouseButton = mEvent.button 
-       
+        mouseButton = mEvent.button
+
         #Select new layer
         flagOKPressed = True
         if flagOKPressed:
@@ -325,7 +327,7 @@ class OpSegmentationEditToolsPanel(QGroupBox):
 
     def setEnable(self,b):
         """Enables buttons in the GUI.
-        
+
         Enables buttons in the GUI
 
         :returns: None
@@ -333,4 +335,3 @@ class OpSegmentationEditToolsPanel(QGroupBox):
         for theButton in self._buttonList:
             theButton.setEnabled(b)
         return None
-

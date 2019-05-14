@@ -1,0 +1,9 @@
+{
+#Comentario 1; JSON example
+
+"silly" : 4,
+ //Comentario 2
+
+"stupid" : "a" /*Holita Homer
+				What's app dude?*/
+}

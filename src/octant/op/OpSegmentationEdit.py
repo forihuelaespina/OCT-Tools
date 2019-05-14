@@ -63,6 +63,13 @@ Operation SegmentationEdit
 |             |        |   package OCTant structure; wrong imports and        |
 |             |        |   unupdated classes names.                           |
 +-------------+--------+------------------------------------------------------+
+|  4-Apr-2019 | FOE    | - Bug fixing. References to                          |
+|             |        |   :class:`octant.data.OCTscan` updated.              |
+|             |        | - Bug fixing. Call update from                       |
+|             |        |   OpEditSegmentation._BACKGROUND to                  |
+|             |        |   OpSegmentationEdit._BACKGROUND in method           |
+|             |        |   _generateDummySegmentation.                        |
++-------------+--------+------------------------------------------------------+
 
 .. seealso:: None
 .. note:: None
@@ -234,7 +241,7 @@ class OpSegmentationEdit(Operation):
         
         
         #Define a default output -simple nLayers lines (one per layer)
-        imageSegmented = OpEditSegmentation._BACKGROUND * np.ones((height,width), dtype = np.uint8 )
+        imageSegmented = OpSegmentationEdit._BACKGROUND * np.ones((height,width), dtype = np.uint8 )
         stepHeight = round(0.7*(height/(nLayers+1)))
         offset = round((0.3*height/(nLayers+1))/2)
         for ii in range(1,nLayers+1):
@@ -324,7 +331,7 @@ class OpSegmentationEdit(Operation):
         :rtype: :class:`octant.data.OCTscanSegmentation`
         """
         
-        if type(refImage) is not octant.OCTscan:
+        if type(refImage) is not OCTscan:
             #Encapsulate
             refImage=OCTscan(refImage)
             

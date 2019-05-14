@@ -1,0 +1,14 @@
+# 
+# File: ..\sampleImages\sampleSettingsTest_json_2.txt
+# 
+# This is an OCTant settings file.
+# You can add, edit or remove settings manually here.
+# File format is in JSON. Although comments are permitted, but they will be lost after resaving because of minification.
+# If you want your comments to be persistent declared them as "__comment" fields.
+# 
+# File last saved: 16-Mar-2019 05:21:52 UTC+0
+# 
+# (c) 2019. OCTant. Felipe Orihuela-Espina.
+# 
+
+{"silly": 4, "stupid": "a"}

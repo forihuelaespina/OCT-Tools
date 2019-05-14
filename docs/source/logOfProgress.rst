@@ -43,6 +43,407 @@ advances in the previous days/weeks.
 
 
 
+.. _secLogAdvances20190513:
+
+Advances 13-May-2019
+--------------------
+
+* **Version**: v0.3
+* **Responsible**: FOE
+
+Summary of changes:
+
+
+Miscellaneous
+
+* Data model with document based on :class:`octant.data.OCTvolume` is now considered
+  stable.
+  * **Commit executed** : "Data model based on OCTvolume stable"
+
+Bug fixing
+
+* Class :class:`app.ToolsDock` no longer import :class:`app.DocumentWindow`
+  breaking the circular import.
+* Class :class:`app.UtilitiesDock` no longer import :class:`app.DocumentWindow`
+  breaking the circular import.
+
+
+Documentation
+
+* Recompiled documentation.
+
+  * Bug fixed. Sys.paths in Sphynx `Conf.py` for package `app` was unable
+    to find the path `..\..\src\app` because `\a` is a escape character.
+    This was causing that the documentation of some of the classes in
+    this package were not being built correctly.
+  * Fixed some minor Sphinx related typos/mistakes in several files, including
+    this one, `util\segmentationUtils.py`, `intro.rst`
+  * Added inheritance diagrams to classes in package `app`
+
+
+
+.. _secLogAdvances20190506:
+
+Advances 6-May-2019
+--------------------
+
+* **Version**: v0.3
+* **Responsible**: FOE
+
+Summary of changes:
+
+New features of the app:
+
+* Operands passed to stitching can now be given in an arbitrary order.
+  Before, the first image always had to be the right most in the mosaic.
+
+Bug fixing
+
+* The "bug" in panorama apparently related to an issue with images depth,
+  and that happened to open Pandora's box with changes coming from the
+  latest OpenCV v4.0, and that we have been dealing with in the last several
+  weeks has finally been solved! Last week, we were already in the right
+  path by switching to ORB features, and the updating of the syntax to
+  OpernCV v4.0 but depth conversion to uint8 although mathematically
+  responsive (it yielded no error) but was not giving correct results and
+  thus the ORB feature detector failed to detect any features. Finally,
+  This week, we succeded in getting the depth conversion right (anecdotically
+  we almost got it right last week but we were scaling by 255 after downcasting
+  instead of before downcasting). So in summary, the bug a mixture of a real
+  issue with images depth (necessitating scaling followed by downcasting),
+  new syntax in OpenCV v4.0, the disappearing of SIFT feature detector as
+  a free option in OpenCV (requiring adaptation to a different feature
+  detector), and finally some parameter tuning (e.g. new value for parameters
+  on the feature detection and matching given the new feature detector
+  algorithm). The latest parameters are:
+
+  * nfeatures=100000 (this degrades speed a bit, so may be worth
+	adjusting a bit more to the smallest number we can).
+  * number pyramid levels = 16
+  * fastThreshold=10
+  * scoreType=cv2.ORB_FAST_SCORE
+  * ratio for keypoint matching = 0.9
+
+
+
+
+
+
+.. _secLogAdvances20190429:
+
+Advances 29-Abr-2019
+--------------------
+
+* **Version**: v0.3
+* **Responsible**: FOE
+
+Summary of changes:
+
+Bug fixing (or not)
+
+* A new bug appear in module panorama with the upgrade to OpenCV v4.0. At first
+  sight, it looks like a simple problem of panorama not being to handle
+  depth of 64 bits in the images, but then
+  that's only the tip of the iceberg. SIFT feature descriptors are no
+  longer free, and the syntax to create the feature detector has changed
+  with the new version of OpenCV. We have tried several things, but yet
+  without full success;
+
+  * Added support to panorama for OpenCV v4.0.
+  * Changed the feature detector from SIFT to ORB.
+  * Depth of images has been brought down to uint8 from float64. That
+    permits running the mosaicing without error, but the descriptor
+    then produces no features. Tested on a NON retinal image, ORB seems
+    to be working fine. So perhaps ORB is not good for retinal images.
+  * Changed the feature detector to BRISK. Same results as with ORB;
+    no descriptors on the retinal image.
+  * Attempted image normalization, but then panorama crashes again.
+
+
+.. _secLogAdvances20190409:
+
+Advances 9-Abr-2019
+--------------------
+
+* **Version**: v0.3
+* **Responsible**: FOE
+
+Summary of changes:
+
+New features of the data model:
+
+* New methods `getCurrentScanSegmentation` and `setCurrentScanSegmentation`
+  in :class:`octant.data.Document`
+
+New features of the app:
+* Several changes to :class:`octant.app.DocumentWindow`
+
+  * New method `_openDocument` to read OCTant documents. Since serialization
+    is not yet ready, by now it yields a warning and returns an empty document.
+  * Method `importAmiraFile` renamed `openFile`, as it was not actually neither
+    assuming that it was an Amira file, nor that it was an importing operation.
+    Further, it now distinguishes OCTant file extension to bifurcate execution
+    to call either importFile when the file is in an external format, or
+    `_openDocument` when it is in OCTant document format.
+  * Method `_getImageFilename` renamed `_getFilename`. Also, Sphinx styled
+    comments have been added.
+  * Bug fixed. Stitching was still calling "old" method `openDocument`. This
+    is a double bug; first, the method name should have been `importAmiraFile`
+    (now `openFile`), and second, because it assumes that the 2nd document has
+    to be imported from an external format, rather than read from my format.
+    Of course this is fine while we develop the document serialization, but
+    nonetheless, but should anticipate. Now it calls either `_openDocument` or
+    `_importImageFile` as appropriate.
+
+* Method `importAmiraFile` renamed `importFile` in :class:`octant.app.ToolsDock`
+
+
+Documentation
+
+* Added pending feature for v0.4: Allow selection of scan for stitching.
+  Currently stitching is made against default selected scan.
+* Annotated in toDo list detected bug in panorama.py regarding unsupported
+  color depth.
+
+
+Bug fixing
+
+* References to :class:`octant.data.OCTscan` in :class:`octant.op.OpScanFlatten`
+  updated.
+  updated.
+  * References to :class:`octant.data.OCTscan` in :class:`octant.op.OpSegmentationEdit`
+* Method editSegmentation in :class:`octant.app.ToolsDock` was still
+  using "old" property `documentWindow`. In now calls method parent().
+* Constructor in :class:`octant.data.OCTscanSegmentation` was still
+  making reference to :class:`IOT_OCTScan`.
+* Call update from OpEditSegmentation._BACKGROUND to
+  OpSegmentationEdit._BACKGROUND in method `_generateDummySegmentation`
+  in :class:`octant.data.OCTscanSegmentation`
+* Subpackage `octant.data` was not exporting :class:`octant.data.OCTscanSegmentation`
+  in `__init__.py`
+* Call to `study.addScanSegmentations` updated from `study.addScanSegmentation`
+  in method :func:`octant.data.Document.segmentation`. Also, parameter passed
+  is now correct.
+
+
+.. _secLogAdvances20190401:
+
+Advances 1-Abr-2019
+--------------------
+
+* **Version**: v0.3
+* **Responsible**: FOE
+
+Summary of changes:
+
+New features of the data model:
+
+* Property `currentScan` in :class:`octant.data.Document` replaced by
+  methods `getCurrentScan` and `setCurrentScan`.
+
+New features of the app:
+
+* Button `bOpenImage` in :class:`octant.app.ToolsDock` renamed to `bImportImage`
+  and relabelled to `Import image`
+* Main window now opens maximized
+* Utilities dock moved to bottom and left bottom corner conflict resolved.
+* Started class :class:`octant.app.ScansCarousel` for visualization of
+  OCT scans in a :class:`octant.data.OCTvolume` and selection of current
+  scan.
+
+  * Bug pending. Although loading of scans is correct but rendering
+    of the thumbnails is not.
+
+* Added tab to :class:`UtilitiesDock` to hold the :class:`octant.app.ScansCarousel`
+* :class:`octant.app.DcoumentWindow`: Importing file also updates scans
+  carousel in utils dock.
+
+Documentation
+
+* Added log to module `segmentationUtils`
+* Fixed comments of property docwindow in :class:`octant.app.OCTantApp` which
+  were referring to property settings.
+
+Bug fixing
+
+* Attribute `__version__` now imports correctly from :class:`octant.data.Document`
+  and :class:`octant.data.OCTvolume` .
+* :class:`octant.data.OCTvolume` now correctly imports deprecation.
+* :class:`octant.data.OCTvolume` flagAllOCTScans in method addScans is now
+  correctly returned in all cases.
+* :class:`octant.app.DocumentWindow` Importing image from common image
+  formats in _importImageFile now ensure that the third dimension corresponds
+  to scans and not to RGB filters.
+
+
+
+
+.. _secLogAdvances20190325:
+
+Advances 25-Mar-2019
+--------------------
+
+* **Version**: v0.3
+* **Responsible**: FOE
+
+Summary of changes:
+
+New features of the data model:
+
+* Class :class:`octant.data.OCTvolume` has seen several changes;
+
+  * Changed calls to isinstance for calls to type.
+  * Added method getClassName.
+  * Added method addScans.
+  * Added method getNScans.
+  * Deprecated method addScan.
+
+* New class :class:`octant.data.OCTvolumeSegmentation`.
+* Class :class:`octant.data.Document` has seen several changes;
+
+  * Added properties docsettings.
+  * Started migration to OCTvolume based document.
+  * Added new docsetting .selectedScan
+  * Added read only property currentScan
+  * Added method pickScan.
+
+
+New features of the app:
+
+* Class :class:`octant.app.DocumentWindow` has seen several changes;
+
+  * Method _openImageFile renamed to _importImageFile.
+  * Also, it now returns and OCTvolume rather than a set of scans or
+    an isolated of scan.
+  * Method importAmiraFile updated to call _importImageFile.
+
+
+
+
+.. _secLogAdvances201903018:
+
+Advances 18-Mar-2019
+--------------------
+
+* **Version**: v0.3
+* **Responsible**: FOE
+
+Summary of changes:
+
+Landmarks reached for v0.3:
+
+* Create support for application-wide Settings
+
+New features:
+
+* Class :class:`octant.data.Settings` can now read and write files. JSON
+  file format has been chosen for settings files.
+
+  * Note that new dependencies `re` and `json` for reading/writing JSON files
+    are both built-in features of python, and hence do not need to be
+    declared in installer.cfg
+
+* Added JSONminify module to package `octant:util`
+* Class :class:`octant.app.OCTandApp` new properties :func:`.appsettings`
+  and :func:`.appsettingsfile`
+* New file `resources/OCTantApp.config` for persistency of application settings.
+  Currently, only `workingdirectory` property has been set.
+* Launching BAT file renamed to `OCTantApp.bat` and updated.
+* `installer.cfg` updated for new BAT, link to new icons and new config file.
+* Menu previously in tools window, has now been moved to application
+  main window in :class:`octant.app.DocumentWindow`
+* Method :func:`openDocument` in class :class:`octant.app.DocumentWindow`
+  renamed :func:`importAmiraFile`.
+* New property :func:`parentapp in class :class:`octant.app.DocumentWindow`
+  connecting with the main application object.
+* Class :class:`app.OCTantApp` now becomes a `QApplication` (previously
+  we had 2 separated objects; one for the QApplication and another just
+  for "holding" the main window.) and underwent several changes:
+
+    * Added properties appsettings and appsettingsfile.
+    * docWindow attribute converted to docwindow property.
+    * Cleaner exit with call to deleteLater
+    * Removed method show. Now the document window show is called accesing
+      the docwindow property.
+
+
+.. _secLogAdvances201903012:
+
+Advances 12-Mar-2019
+--------------------
+
+* **Version**: v0.3
+* **Responsible**: FOE
+
+Summary of changes:
+
+New features:
+
+* New class :class:`octant.data.Settings` for handling document settings.
+
+    * The dynamic struct aspect appears to be working fine.
+    * :func:`read` method advanced but unfinished.
+
+* Given initial considerations to web-based implementation with Django (thanks
+  PHW for the tips!)
+
+Bug fixing:
+
+* Fixed: Attempting to open a new scan when one is already open, will launch
+  the opening dialog, but this will be freezed. The opening dialog does no
+  longer freezes and the new scan is loaded correctly.
+* Attended bug regarding stitching more than 2 images as well as panorama attribute
+  error;
+
+  * panorama.py, line 67: AttributeError: module 'cv2.cv2' has no attribute 'FeatureDetector_create'
+
+  It turns out, both issues were related. The source of the problem was that
+  since OpenCV version 3.0 algorithms that are either patented or in
+  experimental development (which is the case of ``FeatureDetector_create``)
+  were not included/installed by default with package ``opencv-python`` and
+  instead required package ``opencv-contrib-python`` (see:
+  https://www.pyimagesearch.com/2015/07/16/where-did-sift-and-surf-go-in-opencv-3/ ).
+  Further, packages ``opencv-contrib-python`` and ``opencv-python``
+  are incompatible hence requiring uninstalling package ``opencv-python``
+  before uninstalling ``opencv-contrib-python`` containing the contrib
+  modules. Finally, to make things worst, the::
+
+    pip uninstall opencv-python
+
+  in my case left a corrupted package
+  leaving pip itself in a corrupt state (``pip list`` will crash), and without
+  any error message indicating the offending corrupt package causing the issue.
+  It turns out, that although the latest version of ``pip`` already resolves this
+  issue, "people might still be experiencing this issue because of directories
+  that were corrupted before (or getting corrupted for a completely different
+  reason)" (see https://github.com/pypa/pip/issues/6194 ). As indicated in
+  this reference, finding the corrupt package has to be done "by hand".
+  This requires going to ``C:\ProgramData\Anaconda3\lib\site-packages\``
+  and looking for packages folders with a leading '-' in their names,
+  and manually removed them. After this, ``pip`` comes back to life and
+  ``opencv-contrib-python`` can be now installed::
+
+    pip install opencv-contrib-python
+
+  After successful installation of ``opencv-contrib-python`` both of the
+  above issues were resolved.
+
+  Please note that this refer the bug when trying to stitch the 3rd image
+  **in pairs of 2**. The fixing does not attend the desired feature for
+  stitching several images at once (as this is NOT a bug but a limitation
+  of panorama as indicated in the summary section Adrian Rosebrock's
+  (creator of python's panorama code) article:
+
+    https://www.pyimagesearch.com/2016/01/11/opencv-panorama-stitching/
+
+
+Documentation
+
+* Reorganized toDo.rst in sections
+* Added new pending features e.g. document class defaulting to volume
+  and need for scan navigation panel.
+
+
 .. _secLogAdvances20190305:
 
 Advances 5-Mar-2019
@@ -140,6 +541,8 @@ Summary of changes:
   * Updated conf.py
   * Updated installation.rst
   * Updated technical.rst
+
+* **Commit executed** : "OCTant Rebranding and repackaging"
 
 
 .. _secLogAdvances20190225:

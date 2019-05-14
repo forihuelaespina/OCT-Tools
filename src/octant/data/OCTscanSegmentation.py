@@ -29,6 +29,9 @@ A retinal layer segmentation over a class:`IOT_OCTscan`
 |             |        |   package are now made through package instead       |
 |             |        |   of one class at time.                              |
 +-------------+--------+------------------------------------------------------+
+|  4-Apr-2019 | FOE    | - Minor debugging. Updated call from `IOT_OCTScan` to|
+|             |        |   :class:`octant.data.OCTscan` in class constructor. |
++-------------+--------+------------------------------------------------------+
 
 .. seealso:: None
 .. note:: None
@@ -89,7 +92,7 @@ class OCTscanSegmentation(object):
         :type img: :class:`octant.data.OCTscan`
         
         """
-        refImage = IOT_OCTscan(); #Dummy reference
+        refImage = octant.OCTscan(); #Dummy reference
         if (len(args)==0):
             warnMsg = self.getClassName() + ':__init__: Unexpected number of input arguments. Generating a dummy reference scan.'
             warnings.warn(warnMsg,SyntaxWarning)

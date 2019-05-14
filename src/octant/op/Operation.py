@@ -8,14 +8,14 @@ File: Operation.py
 Class Operation
 
 A general abstract class for operations. Operations are functions over some
- objects of the data model e.g. over an :class:`octant.data.OCTscan` or a
+objects of the data model e.g. over an :class:`octant.data.OCTscan` or a
 :class:`octant.data.OCTscanSegmentation`.
 
 An operation can have any number of operands , and can be:
 
     * internal i.e. produce an object of the same type as the operands, or
     * external i.e. produce an object of different type as the operands.
-    
+
 In addition, since v0.3 the :class:`octant.op.Operation` also provides
 support for operation parameters (e.g. the betas of a regression model).
 The difference between operands and parameters from the mathematical point
@@ -24,7 +24,7 @@ more than additional operands. However, the distinction is important
 for the arity; only operands count towards the arity of the function.
 
 Subclasses are encourage to follow the following class name convention:
-    
+
 'Op' + <MainOperandType> + <OperationName>
 
 For instance;
@@ -100,9 +100,9 @@ class Operation(ABC):
 
     An abstract base class for operations on :class:`octant.data.OCTvolume` and
     :class:`octant.data.OCTscan`.
-    
+
     :Example:
-    
+
         tmp = octant.data.OCTscan(img)
         o = octant.op.OpScanFlattening()
         o.addOperand(tmp)
@@ -122,7 +122,7 @@ class Operation(ABC):
 
     .. seealso:: None
     .. note:: None
-    .. todo:: 
+    .. todo::
         * Support to hold operand names.
 
     """
@@ -141,7 +141,7 @@ class Operation(ABC):
 
         """
         super().__init__()
-        
+
         #Initialize attributes (without decorator @property)
 
         #Initialize properties (with decorator @property)
@@ -155,7 +155,7 @@ class Operation(ABC):
             for key, value in kwargs.items():
                 if (key=='name'):
                     self.name = value
-                    
+
         return
 
     #Properties getters/setters
@@ -236,7 +236,7 @@ class Operation(ABC):
     def result(self): #result getter
         """
         The list of results.
-        
+
         This is a read only property. There is no setter method.
 
         :getter: Gets the list of results
@@ -277,7 +277,7 @@ class Operation(ABC):
     def addOperand(self,op,i=None):
         """
         Add a new operand.
-        
+
         :param op: The operand.
         :type op: object
         :param i: (optional) The operand order. If given it may shift the
@@ -291,14 +291,14 @@ class Operation(ABC):
         else:
             self.__operands.insert(i,op)
         return None
-        
+
     def setOperand(self,op,i):
         """
         Set an operand; substitutes an existing operand with a new one.
-        
+
         Calling setOperand when the :py:attr:`i`-th operand has not been
         previously set will result in an out-of-range error.
-        
+
         :param op: The new operand.
         :type op: object
         :param i: The operand order. Operand index is zero-base i.e. the
@@ -312,7 +312,7 @@ class Operation(ABC):
     def addParameter(self,param,i=None):
         """
         Add a new parameter.
-        
+
         :param op: The parameter.
         :type op: object
         :param i: (optional) The paremeter order. If given it may shift the
@@ -326,14 +326,14 @@ class Operation(ABC):
         else:
             self.__parameters.insert(i,op)
         return None
-        
+
     def setParameter(self,op,i):
         """
         Set a parameter; substitutes an existing parameter with a new one.
-        
+
         Calling setParameter when the :py:attr:`i`-th parameter has not been
         previously set will result in an out-of-range error.
-        
+
         :param op: The new operand.
         :type op: object
         :param i: The operand order. Operand index is zero-base i.e. the
@@ -346,7 +346,7 @@ class Operation(ABC):
 
     def arity(self):
         """Gets the operation arity (number of operands).
-        
+
         :return: The operation arity
         :rtype: int
         """
@@ -355,21 +355,21 @@ class Operation(ABC):
     def clear(self):
         """
         Clears the operands; Removes all operands.
-        
+
         :return: None
         """
         self.__operands = list()
         return None
-    
+
     #@abstractmethod
     def execute(self,*args,**kwargs):
         """Executes the operation on the operands.
-        
+
         This is an abstract method. Executes the operation on the .operands
         and stores the outcome in .result
-        
+
         Operation meta-parameters may be also passed.
-        
+
         :returns: Result of executing the operation.
         :rtype: Type of result -depends on subclass implementation-.
         """

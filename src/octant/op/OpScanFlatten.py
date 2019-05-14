@@ -54,6 +54,9 @@ Initial code was isolated from previous file flattening.py
 |             |        |   package OCTant structure; wrong imports and        |
 |             |        |   unupdated classes names.                           |
 +-------------+--------+------------------------------------------------------+
+|  4-Apr-2019 | FOE    | - Bug fixing. References to                          |
+|             |        |   :class:`octant.data.OCTscan` updated.              |
++-------------+--------+------------------------------------------------------+
 
 
 .. seealso:: None
@@ -154,7 +157,7 @@ class OpScanFlatten(Operation):
             return None
         
         imgin = self.operands[0]
-        if type(imgin) is octant.OCTscan:
+        if type(imgin) is OCTscan:
             imgin=imgin.data
         
         #Check whether the image is in RGB (ndim=3) or in grayscale (ndim=2)
@@ -195,7 +198,7 @@ class OpScanFlatten(Operation):
         for i in range(0,len(a)):
             newgray[:,i] = np.roll(I2[:,i], flat[i], axis=0)
         
-        self.result = octant.data.OCTscan(newgray)
+        self.result = OCTscan(newgray)
         return self.result
 
 #    #@deprecated(version='0.2', reason="Deprecated. Use method execute() instead.")
@@ -203,8 +206,8 @@ class OpScanFlatten(Operation):
 #                        current_version=__version__,
 #                        details="Use method execute() instead.")
 #    def flattening(self,image):
-#        #Encapsulate the image as an IOT_OCTscan
-#        tmp=octant.data.OCTscan(image)
+#        #Encapsulate the image as an OCTscan
+#        tmp=OCTscan(image)
 #        self.clear()
 #        self.addOperand(tmp)
 #        #Execute

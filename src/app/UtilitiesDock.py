@@ -5,6 +5,8 @@ File: IOT_GUI_UtilitiesDock.py
 
 Class IOT_GUI_UtilitiesDock
 
+.. inheritance-diagram:: UtilitiesDock
+
 A dockable panel for tools and utilities. It provides a tabbed set of panels
 for selecting scan within a volume or reporting layer thicknesses among others.
 
@@ -24,11 +26,14 @@ IOT stands for INAOE OCT Tools
 +-------------+--------+------------------------------------------------------+
 |  3-Mar-2018 | FOE    | - Solved circular importing with DocumentWindow.     |
 +-------------+--------+------------------------------------------------------+
+| 31-Mar-2018 | FOE    | - Added tab and property for holding the scans       |
+|             |        |   carousel.                                          |
++-------------+--------+------------------------------------------------------+
 
 .. seealso:: None
 .. note:: None
 .. todo:: None
-   
+
 
 .. sectionauthor:: Felipe Orihuela-Espina <f.orihuela-espina@inaoep.mx>
 .. codeauthor:: Felipe Orihuela-Espina <f.orihuela-espina@inaoep.mx>
@@ -48,7 +53,8 @@ from PyQt5.QtWidgets import QDockWidget, QWidget, QGroupBox, QGridLayout, \
 #from PyQt5 import uic
 
 #from DocumentWindow import DocumentWindow
-import DocumentWindow #Use this formula to avoid circular importing clash
+#import DocumentWindow #Use this formula to avoid circular importing clash
+from ScansCarousel import ScansCarousel
 from octant.data import RetinalLayers
 
 
@@ -59,14 +65,14 @@ from octant.data import RetinalLayers
 class UtilitiesDock(QDockWidget):
     #Sphinx documentation
     """A dockable panel for tools and utilities.
-    
+
     A dockable panel for tools and utilities.
-    
-    
+
+
     .. seealso:: None
     .. note:: None
     .. todo:: None
-        
+
     """
     #Private class attributes shared by all instances
 
@@ -78,7 +84,7 @@ class UtilitiesDock(QDockWidget):
 
         tmp = UtilitiesDock() - Creates a dockable panel for tools
         and utilities
-                
+
         """
         #Call superclass constructor
         QDockWidget.__init__(self)
@@ -86,20 +92,20 @@ class UtilitiesDock(QDockWidget):
         #self.documentWindow = None
 
         self.setWindowTitle("OCTantApp - Utilities dock")
-        
+
         #Create the different utilities panels
-        
+
         #Panel for scan selection within volume
         #
         # PENDING
         #
 
-        #Panel for reporting layers thicknesses
+        #Tab for reporting layers thicknesses
         self._utilThickness = QGroupBox()
-        
+
         tmp = RetinalLayers()
         layers = tmp.getAllLayersIndexes()
-        
+
         tabLayout = QGridLayout();
         tmpThicknesses = list()
         layerNamesLabels = list()
@@ -116,20 +122,24 @@ class UtilitiesDock(QDockWidget):
         self.layerThicknesses = tmpThicknesses
         self.__layerThicknessesLabels = [QLabel("0") for x in range(len(layers))] #Just a trick. Do not remove!
         self.layerThicknessesLabels = thicknessValuesLabels
-        self._utilThickness.setLayout(tabLayout)    
-        
+        self._utilThickness.setLayout(tabLayout)
+
+        #Tab with the scans carousel
+        self.scanscarousel = ScansCarousel()
+
         #Create the tab widget and add the different utilities tabs
         self._utilities = QTabWidget()
         self._utilities.addTab(self._utilThickness,"Layer Thicknesses");
+        self._utilities.addTab(self.scanscarousel,"Scans Carousel");
 
         #Add tabbed panel to main dock
         self.setWidget(self._utilities)
         return
 
-#    #Properties getters/setters
-#    #
-#    # Remember: Sphinx ignores docstrings on property setters so all
-#    #documentation for a property must be on the @property method
+    #Properties getters/setters
+    #
+    # Remember: Sphinx ignores docstrings on property setters so all
+    #documentation for a property must be on the @property method
 #    @property
 #    def documentWindow(self): #documentWindow getter
 #        """
@@ -148,7 +158,7 @@ class UtilitiesDock(QDockWidget):
 ##            warnMsg = self.getClassName() + ':documentWindow: Main documentWindow not found.'
 ##            warnings.warn(warnMsg,SyntaxWarning)
 ##            newDocWindow = DocumentWindow() #Initialize a documentWindow
-#            self.__documentWindow = None; #Can be used to clear connection          
+#            self.__documentWindow = None; #Can be used to clear connection
 #        if (type(newDocWindow) is DocumentWindow):
 #            self.__documentWindow = newDocWindow
 #        else:
@@ -156,7 +166,31 @@ class UtilitiesDock(QDockWidget):
 #                        + 'Unexpected type ' + str(type(newDocWindow)) + '.'
 #            warnings.warn(warnMsg,SyntaxWarning)
 #        return None
-       
+
+    @property
+    def scanscarousel(self): #scanscarousel getter
+        """
+        The scans carousel.
+
+        :getter: Gets the scans carousel
+        :setter: Sets the scans carousel
+        :type: :class:`octant.app.ScansCarousel`
+        """
+        return self.__scanscarousel
+
+    @scanscarousel.setter
+    def scanscarousel(self,newCarousel): #scanscarousel setter
+        if (newCarousel is None):
+            #Initialize to empty
+            self.__scanscarousel = ScansCarousel()
+        elif (type(newCarousel) is ScansCarousel):
+            self.__scanscarousel = newCarousel
+        else:
+            warnMsg = self.getClassName() + ':scanscarousel: Unexpected document type.'
+            warnings.warn(warnMsg,SyntaxWarning)
+        return None
+
+
     @property
     def layerThicknesses(self): #layerThicknesses getter
         """
@@ -172,8 +206,8 @@ class UtilitiesDock(QDockWidget):
     def layerThicknesses(self,newThicknesses): #layerThicknesses setter
         self.__layerThicknesses = newThicknesses
         return None
-       
-    
+
+
     @property
     def layerThicknessesLabels(self): #layerThicknessesLabels getter
         """
@@ -202,9 +236,9 @@ class UtilitiesDock(QDockWidget):
                 self.__layerThicknessesLabels[pos].setText(str(labelsNewText[pos]))
             pos=pos+1
         return None
- 
+
     #Public methods
-    
+
     def getClassName(self):
         """Get the class name as a string.
 
@@ -214,12 +248,11 @@ class UtilitiesDock(QDockWidget):
         :rtype: string
         """
         return type(self).__name__
-    
-    
+
+
     def refresh(self):
         """Refreshes the thicknesses labels
         """
         self.layerThicknessesLabels = self.layerThicknesses
         self._utilThickness.update()
         return None
-        

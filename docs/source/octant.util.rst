@@ -11,6 +11,7 @@ Submodules
 
 .. toctree::
 
+   octant.util.jsonminify
    octant.util.panorama
    octant.util.segmentationUtils
 

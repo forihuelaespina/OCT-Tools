@@ -29,6 +29,17 @@ A set of OCT scans. All scans are of :class:`OCTscan`.
 |             |        |   package are now made through package instead       |
 |             |        |   of one class at time.                              |
 +-------------+--------+------------------------------------------------------+
+| 25-Mar-2019 | FOE    | - Changed calls to isinstance for calls to type.     |
+|             |        | - Added method getClassName.                         |
+|             |        | - Added method addScans.                             |
+|             |        | - Added method getNScans.                            |
+|             |        | - Deprecated method addScan.                         |
++-------------+--------+------------------------------------------------------+
+| 30-Mar-2019 | FOE    | - Bug fixed. Importing deprecation.                  |
+|             |        | - Bug fixed. Imports __version__ instead of version. |
+|             |        | - Bug fixed. flagAllOCTScans in method addScans is   |
+|             |        |   now correctly returned in all cases.               |
++-------------+--------+------------------------------------------------------+
 
 .. seealso:: None
 .. note:: None
@@ -43,8 +54,9 @@ A set of OCT scans. All scans are of :class:`OCTscan`.
 
 ## Import
 import warnings
+import deprecation
 
-from octant import version
+from octant import __version__
 import octant.data as octant
 
 ## Class definition
@@ -94,14 +106,14 @@ class OCTvolume(object):
     @scans.setter
     def scans(self,*args): #scans setter
         tmpScanSet=args[0]
-        if (not isinstance(tmpScanSet,(list,))):
+        if type(tmpScanSet) is not list:
             warnMsg = self.getClassName() + ':scans: Unexpected type. ' \
                             'Please provide a list of octant.data.OCTscan.'
             warnings.warn(warnMsg,SyntaxWarning)
         else:
             self.__scans = list()
             for x in tmpScanSet:
-                if (not isinstance(x,(octant.OCTscan,))):
+                if type(x) is not octant.OCTscan:
                     warnMsg = self.getClassName() + ':scans: Unexpected scan type ' \
                                 'for object ' + x + '. Skipping object.'
                     warnings.warn(warnMsg,SyntaxWarning)
@@ -111,6 +123,9 @@ class OCTvolume(object):
 
 
     #Public methods
+    def getClassName(self):
+        return type(self).__name__
+    
     def clear(self):
         """
         Clears the OCT volume; Removes all scans.
@@ -120,6 +135,10 @@ class OCTvolume(object):
         self.__scans = list()
         return None
     
+    
+    @deprecation.deprecated(deprecated_in="0.3", removed_in="1.0",
+                        current_version=__version__,
+                        details="Use method addScans() instead.")
     def addScan(self,theScan):
         """
         Add an OCT scan to the volume.
@@ -128,7 +147,7 @@ class OCTvolume(object):
         :type theScan: :class:`octant.data.OCTscan`
         :return: None
         """
-        if (not isinstance(theScan,(octant.OCTscan,))):
+        if type(theScan) is not octant.OCTscan:
             warnMsg = self.getClassName() + ':addScan: Unexpected scan type. ' \
                         'Nothing will be added.'
             warnings.warn(warnMsg,SyntaxWarning)
@@ -137,8 +156,31 @@ class OCTvolume(object):
         return None
         
     
-    
-    def getScans(self,type):
+    def addScans(self,theScans):
+        """
+        Add one or more OCT scans to the volume at once.
+        
+        :param theScans: The list of OCT scans.
+        :type theScan: list of :class:`octant.data.OCTscan` or
+            single :class:`octant.data.OCTscan`
+        :return: True if scans added, False otherwise.
+        """
+        flagAllOCTscans=True
+        if type(theScans) is octant.OCTscan:
+            self.__scans.append(theScans)
+        elif type(theScans) is list:
+            for elem in theScans:
+                if type(elem) is not octant.OCTscan:
+                    warnMsg = self.getClassName() + ':addScans: Unexpected scan type. ' \
+                                'Nothing will be added.'
+                    flagAllOCTscans=False
+                    break
+            if flagAllOCTscans:    
+                self.__scans.extend(theScans)
+        return flagAllOCTscans
+            
+   
+    def getScans(self,t):
         """
         Retrieves all scans in the volume of type t.
         
@@ -157,7 +199,7 @@ class OCTvolume(object):
         return theScans
         
     
-    def getVolume(self,type):
+    def getVolume(self,t):
         """
         Retrieves the (sub-)volume of scans of type t.
         
@@ -175,5 +217,20 @@ class OCTvolume(object):
                 theScans.addScan(x)
         return theScans
         
-    
 
+
+    def getNScans(self,t = None):
+        """Get the number of scans of a certain type.
+        
+        If type is not given, then the total number of scans is given.
+        
+        :param t: Scan type 'A', 'B' or 'C' or None
+        :type t: char
+        :return: The number of scans of a certain type
+        :rtype: int
+        """
+        if t is None:
+            res=len(self.__scans)
+        else:
+            res= self.getNScans(self.getVolume(t))
+        return res

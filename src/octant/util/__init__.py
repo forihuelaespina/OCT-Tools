@@ -22,6 +22,8 @@ initialization code for the package or set the __all__ variable.
 +-------------+--------+------------------------------------------------------+   
 |  3-Mar-2019 | FOE    | - Made subpackage classes visible.                   |
 +-------------+--------+------------------------------------------------------+   
+| 16-Mar-2019 | FOE    | - Added jsonminify.                                  |
++-------------+--------+------------------------------------------------------+   
 
 
 
@@ -37,4 +39,5 @@ initialization code for the package or set the __all__ variable.
 #Make .util subpackage classes visible to main OCTant package
 from .segmentationUtils import *
 from .panorama import Stitcher
+from .jsonminify import jsonminify, fastjsonminify
 

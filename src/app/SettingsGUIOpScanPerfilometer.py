@@ -5,6 +5,8 @@ File: SettingsGUIOpScanPerfilometer.py
 
 Class SettingsGUIOpScanPerfilometer
 
+.. inheritance-diagram:: SettingsGUIOpScanPerfilometer
+
 A frame (QGroupBox) for controlling the settings of the perfilometer
 (IOT_OperationFlattening); namely window width and pixel column.
 
@@ -51,39 +53,39 @@ from matplotlib.backend_bases import KeyEvent, MouseEvent
 class SettingsGUIOpScanPerfilometer(QGroupBox):
     #Sphinx documentation
     """A GUI to control the parameters of the perfilometer operation.
-    
+
     A GUI to control the parameters of the perfilometer operation.
-    
+
 
     .. seealso:: :class:`SettingGUIOpScanMeasureThickness`
     .. note:: None
     .. todo:: None
-        
+
     """
-    
+
     #Private class attributes shared by all instances
 
     #Class constructor
     def __init__(self):
         #Call superclass constructor
         QGroupBox.__init__(self)
-        
+
         #Labels
         helpLabel = QLabel("Press ´´Enter´´ to update.")
         columnLabel = QLabel("Pixel column (Use -1 for global):")
         #columnHelpLabel = QLabel("Use -1 for global.")
         widthLabel = QLabel("Window half width [in pixels]:")
-        
+
         #Edit controls
-        self.columnEditBox = QLineEdit() 
+        self.columnEditBox = QLineEdit()
         self.columnEditBox.setValidator(QIntValidator(-1,9999))
         self.columnEditBox.setText("-1") #default value
-        
+
         self.widthEditBox = QLineEdit()
         self.widthEditBox.setValidator(QIntValidator(1,9999))
         self.widthEditBox.setText("5") #default value
-        
-    
+
+
         #Add subgroups to the main group
         frameLayout = QVBoxLayout();
         frameLayout.addWidget(helpLabel);
@@ -93,31 +95,31 @@ class SettingsGUIOpScanPerfilometer(QGroupBox):
         frameLayout.addWidget(widthLabel);
         frameLayout.addWidget(self.widthEditBox);
         self.setLayout(frameLayout);
-        
+
         #self.setEnable(False)
         self.setVisible(True)
 
         return
-        
+
 
     def getPixelColumnValue(self):
         """ Retrieves the current value in the column edit box.
-        
+
         Retrieves the current value in the column edit box.
-        
+
         :returns: The pixel column value.
         :rtype: integer
-        
+
         """
         return int ( self.columnEditBox.text() )
 
     def getWidthValue(self):
         """ Retrieves the current value in the width edit box.
-        
+
         Retrieves the current value in the width edit box.
-        
+
         :returns: The pixel width value.
         :rtype: integer
-        
+
         """
         return int ( self.widthEditBox.text() )

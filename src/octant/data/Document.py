@@ -40,6 +40,22 @@ The document class.
 |             |        |   eliminated. Instead the default name is directly   |
 |             |        |   assigned to the property name in the constructor.  |
 +-------------+--------+------------------------------------------------------+
+| 25-Mar-2019 | FOE    | - Added properties docsettings.                      |
+|             |        | - Started migration to OCTvolume based document.     |
+|             |        |   As part of this, added new docsetting .selectedScan|
+|             |        | - Added read only property currentScan               |
+|             |        | - Added method pickScan.                             |
++-------------+--------+------------------------------------------------------+
+| 30-Mar-2019 | FOE    | - Bug fixed. Imports __version__ instead of version. |
+|             |        | - Property currentScan replaced by methods           |
+|             |        |   getCurrentScan and setCurrentScan.                 |
++-------------+--------+------------------------------------------------------+
+|  4-Apr-2019 | FOE    | - New methods getCurrentScanSegmentation and         |
+|             |        |   setCurrentScanSegmentation.                        |
+|             |        | - Bug fixed. Method `segmentation` now calls         |
+|             |        |   `addScanSegmentations`. Also, parameter passed is  |
+|             |        |   now correct.                                       |
++-------------+--------+------------------------------------------------------+
 
 
 .. seealso:: None
@@ -62,7 +78,7 @@ import deprecation
 #from IOT_OCTscan import IOT_OCTscan
 #from IOT_OCTscanSegmentation import IOT_OCTscanSegmentation
 #from IOT_OCTvolume import IOT_OCTvolume
-from octant import version
+from octant import __version__
 import octant.data as octant
 
 
@@ -94,8 +110,13 @@ class Document():
         
         #Initialize private attributes unique to this instance
         self.study = None #The current study.
-                #Currently, an OCT scan
-        self.segmentation = None
+                #Currently, an OCT volume
+        self.segmentation = None #The current study.
+                #Currently, an OCT volumeSegmentation
+
+
+        self.docsettings = octant.Settings()
+        self.docsettings.selectedScan = None; #shared between study and segmentation
                 
         #Document metadata
         self.folderName = '.' #Folder where the document is currently stored
@@ -109,25 +130,53 @@ class Document():
     # Remember: Sphinx ignores docstrings on property setters so all
     #documentation for a property must be on the @property method
     @property
+    def docsettings(self): #docsettings getter
+        """
+        The application settings.
+
+        :getter: Gets the document settings
+        :setter: Sets the document settings 
+        :type: class:`octant.data.Settings`
+        """
+        return self.__appsettings
+
+    @docsettings.setter
+    def docsettings(self,newSettings): #document setter
+        if newSettings is None:
+            newSettings = octant.Settings() #Initialize settings
+        if (type(newSettings) is octant.Settings):
+            self.__appsettings = newSettings
+        else:
+            warnMsg = self.getClassName() + ':docsettings: Unexpected settings type.'
+            warnings.warn(warnMsg,SyntaxWarning)
+        return None
+        
+
+    @property
     def study(self): #study getter
         """
-        The OCT scan being processed and analysed.
+        The OCT volume being processed and analysed.
         
         ..todo: Upgrade to volume. Watch out! This will affect many
             other classess using this method.
 
-        :getter: Gets the OCT scan.
-        :setter: Sets the OCT scan. 
-        :type: :class:`octant.data.OCTscan`
+        :getter: Gets the OCT volume.
+        :setter: Sets the OCT volume. 
+        :type: :class:`octant.data.OCTvolume`
         """
         return self.__study
 
     @study.setter
     def study(self,vol): #study setter
-        if (vol is None or type(vol) is octant.OCTscan):
+        if (vol is None or type(vol) is octant.OCTvolume):
             self.__study = vol
             #...and reset scan
             self.segmentedScan = None
+        elif type(vol) is octant.OCTscan:
+            warnMsg = self.getClassName() + ':study: OCTvolume expected but OCTscan received. Embedding scan.'
+            warnings.warn(warnMsg,SyntaxWarning)
+            self.__study = octant.OCTvolume();
+            self.__study.addScan(vol)
         else:
             warnMsg = self.getClassName() + ':study: Unexpected study type.'
             warnings.warn(warnMsg,SyntaxWarning)
@@ -139,18 +188,15 @@ class Document():
         """
         The segmentation over the OCT study being processed and analysed.
 
-        ..todo: Upgrade to volume. Watch out! This will affect many
-            other classess using this method.
-
-        :getter: Gets the OCT scan segmentation.
-        :setter: Sets the OCT scan segmentation. 
-        :type: :class:`IOT_OCTscanSegmentation`
+        :getter: Gets the OCT volume segmentation.
+        :setter: Sets the OCT volume segmentation. 
+        :type: :class:`octant.data.OCTvolumeSegmentation`
         """
         return self.__segmentation
 
     @segmentation.setter
     def segmentation(self,newSegmentation): #segmentation setter
-        if ((newSegmentation is None) or (type(newSegmentation) is octant.OCTscanSegmentation)):
+        if ((newSegmentation is None) or (type(newSegmentation) is octant.OCTvolumeSegmentation)):
             self.__segmentation = newSegmentation
             if (newSegmentation is not None):
               if self.study is None:
@@ -159,6 +205,11 @@ class Document():
               if(newSegmentation.shape == self.study.shape[0:1]):
                 warnMsg = self.getClassName() + ':segmentation: Unexpected size.'
                 warnings.warn(warnMsg,SyntaxWarning)
+        elif (type(newSegmentation) is octant.OCTscanSegmentation):
+            warnMsg = self.getClassName() + ':study: OCTvolumeSegmentation expected but OCTscanSegmentation received. Embedding scan.'
+            warnings.warn(warnMsg,SyntaxWarning)
+            self.__study = octant.OCTvolumeSegmentation();
+            self.__study.addScanSegmentations(newSegmentation)
         else:
             warnMsg = self.getClassName() + ':segmentation: Unexpected segmented scan type.'
             warnings.warn(warnMsg,SyntaxWarning)
@@ -249,4 +300,110 @@ class Document():
     #Public methods
     def getClassName(self):
         return type(self).__name__
+    
+
+    def getCurrentScan(self): 
+        """Get the current working OCT scan
+        
+        Change the current selection using :func:`pickScan`
+        
+        :returns: The current working OCT scan.
+        :rtype: :class:`octant.data.OCTscan`
+        """
+        if self.docsettings.selectedScan is None:
+            self.docsettings.selectedScan = 0
+        return self.__study.scans[self.docsettings.selectedScan]
+
+    def setCurrentScan(self,newScan): 
+        """Sets the current working OCT scan
+        
+        Change the current selection using :func:`pickScan`
+        
+        :param newScan: An OCT scan to be assigned to the current working OCT scan.
+        :type newScan: :class:`octant.data.OCTscan`
+        """
+        print(self.getClassName() + \
+              'setCurrentScan: BEFORE. Current scan=' + \
+              str(self.docsettings.selectedScan) + \
+              '; newScan size=[' + \
+              str(newScan.shape) + ']')
+        if self.docsettings.selectedScan is None:
+            self.docsettings.selectedScan = 0
+        if newScan is None:
+            if self.__study.getNScans() == 0:
+                #do nothing.
+                pass
+            else:
+                warnMsg = self.getClassName() + ':setcurrentscan: Unexpected scan type NoneType.'
+                warnings.warn(warnMsg,SyntaxWarning)
+        if (type(newScan) is octant.OCTscan):
+            self.__study.scans[self.docsettings.selectedScan] = newScan
+            print(self.getClassName() + \
+              'setCurrentScan: AFTER. Current scan=' + \
+              str(self.docsettings.selectedScan) + \
+              '; newScan size=[' + \
+              str(self.getCurrentScan().shape) + ']')
+        else:
+            warnMsg = self.getClassName() + ':setcurrentscan: Unexpected scan type.'
+            warnings.warn(warnMsg,SyntaxWarning)
+        return None
+        
+
+
+    def pickScan(self,i):
+        """Pick the i-th OCT scan (and its segmentation) for working.
+        
+        Sets the docsetting.selectedScan to i checking that it does exist.
+        
+        :param i: The selected scan index
+        :type i: int
+        :return: None
+        """
+        if type(i) is int and i<self.study.getNScans() and i>=0:
+            self.docsettings.selectedScan = i
+        else:
+            warnMsg = self.getClassName() + ':pickScan: Selected scan does not exist.'
+            warnings.warn(warnMsg,SyntaxWarning)
+        return None
+    
+    
+    
+    def getCurrentScanSegmentation(self):
+        """Get the current working OCT scanSegmentation
+        
+        Change the current selection using :func:`pickScan`
+        
+        :returns: The current working OCT scanSegmentation.
+        :rtype: :class:`octant.data.OCTscanSegmentation`
+        """
+        if self.docsettings.selectedScan is None:
+            self.docsettings.selectedScan = 0
+        return self.__segmentation.scanSegmentations[self.docsettings.selectedScan]
+
+
+    def setCurrentScanSegmentation(self,newScan): 
+        """Sets the current working OCT scanSegmentation
+        
+        Change the current selection using :func:`pickScan`
+        
+        :param newScan: An OCT scan to be assigned to the current working OCT scan.
+        :type newScan: :class:`octant.data.OCTscanSegmentation`
+        """
+        if self.docsettings.selectedScan is None:
+            self.docsettings.selectedScan = 0
+        if newScan is None:
+            if self.__segmentation.getNScans() == 0:
+                #do nothing.
+                pass
+            else:
+                warnMsg = self.getClassName() + ':setcurrentscansegmentation: Unexpected scan type NoneType.'
+                warnings.warn(warnMsg,SyntaxWarning)
+        if (type(newScan) is octant.OCTscanSegmentation):
+            self.__segmentation.scanSegmentations[self.docsettings.selectedScan] = newScan
+        else:
+            warnMsg = self.getClassName() + ':setcurrentscansegmentation: Unexpected scan type.'
+            warnings.warn(warnMsg,SyntaxWarning)
+        return None
+        
+
     

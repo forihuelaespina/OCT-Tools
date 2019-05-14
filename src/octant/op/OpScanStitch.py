@@ -62,6 +62,9 @@ Initial code isolated from previous file stitch.py
 |             |        |   package OCTant structure; wrong imports and        |
 |             |        |   unupdated classes names.                           |
 +-------------+--------+------------------------------------------------------+
+|  5-May-2019 | FOE    | - Adapted call to panorama to work correctly with    |
+|             |        |   latest changes.                                    |
++-------------+--------+------------------------------------------------------+
 
 
 .. seealso:: None
@@ -179,25 +182,14 @@ class OpScanStitch(Operation):
         
         else:
             #Normal behaviour of the function
-
-            #Panorama works only from RGB images
-            #...so convert to RGB if grayscales
-            if(len(imageA.shape)<3):
-                #print('**Converting to RGB')
-                #print(imageA)
-                imageA = np.dstack((imageA, imageA, imageA))
-                #print(imageA)
-            
-            if(len(imageB.shape)<3):
-                imageB = np.dstack((imageB, imageB, imageB))
-                
-
             
             # stitch the images together to create a panorama
             stitcher = Stitcher()
-            #print(imageA)
-            #print(imageB)
-            (result, vis) = stitcher.stitch([imageA, imageB], showMatches=True)
+            (result, vis) = stitcher.stitch([imageB, imageA], ratio=0.9, showMatches=True)
+            print('Img 1 (' + str(imageA.shape) +')' \
+                  'Img 2 (' + str(imageB.shape) +')' \
+                  ' -> Res (' + str(result.shape) +')')
+            print('Matches; ' + str(vis.shape))
             
             #Remove the "black" unused region on the "right" due to
             #shifting imageB over imageA
@@ -211,6 +203,7 @@ class OpScanStitch(Operation):
                     flagStop=True
                 col = col - 1
                     
+        #self.result = OCTscan(vis) #In case I want to see the matches
         self.result = OCTscan(result)
         
         return self.result
