@@ -118,6 +118,47 @@ The main document window for OCTantApp. This is where the current document
 |             |        |   document serialization, but nonetheless, but should|
 |             |        |   anticipate.                                        |
 +-------------+--------+------------------------------------------------------+
+| 19-May-2019 | FOE    | - Bug fixed. Call to segmentation operation          |
+|             |        |   was assigning the operand to wrong object.         |
+|             |        | - Bug fixed. Reference to the :class:`RetinalLayers` |
+|             |        |   class constructor in the `refresh` method was not  |
+|             |        |   indicating the subpackage.                         |
+|             |        | - Bug fixed. Retrieval of current segmentation scan  |
+|             |        |   in the `refresh` method was incorrectly pointing   |
+|             |        |   to the wrapping volume.                            |
+|             |        | - Bug fixed. Remaining references to old attribute   |
+|             |        |   _toolsWindow updated to _toolsDock.                |
+|             |        | - Bug fixed. Method `measureThickness` was setting   |
+|             |        |   the segmentation volume instead of the segmentation|
+|             |        |   scan as the operand for operation                  |
+|             |        |   :class:`octant.op.OpScanMeasureLayerThickness`.    |
+|             |        | - Importing scans from an external file format now   |
+|             |        |   also initializes the document segmentation         |
+|             |        |   property with an empty segmentation volume of the  |
+|             |        |   same size that the imported `OCTvolume`            |
++-------------+--------+------------------------------------------------------+
+|  1-May-2019 | FOE    | - Operation to stitch now also stitches the          |
+|             |        |   segmentation.                                      |
+|             |        | - New method _readOCTantFile for reading OCTant files|
+|             |        | - Method _openDocument deprecated in favour of       |
+|             |        |   method _readOCTantFile to avoid confusion with     |
+|             |        |   new method openDocument.                           |
+|             |        | - Method openFile is now static and does not modify  |
+|             |        |   the current document. Instead, new method          |
+|             |        |   openDocument wraps openFile and absorbs the non    |
+|             |        |   static operation, modifying the current document.  |
+|             |        | - Method _importImageFile is now static.             |
+|             |        | - Method _getSemiTransparentColormap is now static.  |
+|             |        | - Method _getFilename is now deprecated.             |
+|             |        | - Bug fixed. Reading second document during stitching|
+|             |        |   was also modifying the current document            |
+|             |        |   segmentation because of side effect from openFile  |
+|             |        |   not being static.                                  |
++-------------+--------+------------------------------------------------------+
+|  2-Jun-2019 | FOE    | - Bug fixing. Initialization of the segmentation     |
+|             |        |   scan for segmentation editing was passing the full |
+|             |        |   volume.                                            |
++-------------+--------+------------------------------------------------------+
 
 .. seealso:: None
 .. note:: None
@@ -163,7 +204,7 @@ else:
 
 
 from version import __version__
-import octant as octant
+import octant as oc
 
 from ToolsDock import ToolsDock
 from UtilitiesDock import UtilitiesDock
@@ -200,8 +241,6 @@ class DocumentWindow(QMainWindow):
         #QDockWidget.__init__(self)
         #QMainWindow.__init__(self)
         self.move(50,50)
-
-        #self._toolsWindow = None
 
         #Initialize private attributes unique to this instance
         from OCTantApp import OCTantApp #Keep this import here to avoid circular importing
@@ -283,7 +322,7 @@ class DocumentWindow(QMainWindow):
 
         maQuit = QAction('Quit', self)
         maQuit.setShortcut('Ctrl+Q')
-        maQuit.setStatusTip('Quite OCTant application')
+        maQuit.setStatusTip('Quit OCTant application')
         maQuit.triggered.connect(self.close)
         mArchive.addAction(maQuit)
 
@@ -343,8 +382,8 @@ class DocumentWindow(QMainWindow):
     @document.setter
     def document(self,newDoc): #document setter
 #        if newDoc is None:
-#            newDoc = octant.data.Document() #Initialize a document
-#        if (type(newDoc) is octant.data.Document):
+#            newDoc = oc.data.Document() #Initialize a document
+#        if (type(newDoc) is oc.data.Document):
 #            self.__document = newDoc
 #        else:
 #            warnMsg = self.getClassName() + ':document: Unexpected document type.'
@@ -367,7 +406,8 @@ class DocumentWindow(QMainWindow):
     #Private methods
 
 
-    def _getSemiTransparentColormap(self, N = 10):
+    @staticmethod
+    def _getSemiTransparentColormap(N = 10):
         """Creates a semi-transparent colormap.
 
         :param N: Number of elements in the colormap.
@@ -389,6 +429,9 @@ class DocumentWindow(QMainWindow):
 
 
 
+    @deprecation.deprecated(deprecated_in="0.3", removed_in="0.4",
+                        current_version=__version__,
+                        details="No substitute provided. Method openFile has become static.")
     def _getFilename(self):
         """ Open a Open file dialog window to select a file.
 
@@ -409,7 +452,8 @@ class DocumentWindow(QMainWindow):
 
 
 
-    def _importImageFile(self,fileName):
+    @staticmethod
+    def _importImageFile(fileName):
         """Imports an OCT volume from a file.
 
         The file must exist or an error is generated.
@@ -427,7 +471,7 @@ class DocumentWindow(QMainWindow):
         ext = fileName.split(".")
         extension = ext[-1] #Gets the last piece (that's the extension)
         if extension == "am":
-            amr = octant.op.AmiraReader()
+            amr = oc.op.AmiraReader()
             img = amr.readAmiraImage(fileName)
                 #Reads all scans!
 
@@ -440,20 +484,45 @@ class DocumentWindow(QMainWindow):
                               #image, but just to be precise...
                 img = np.expand_dims(img,axis=2) #So that the "scans" dimension exist
 
-
         imWidth = img.shape[0]
         imHeight = img.shape[1]
         nScans = img.shape[2]
-        print(self.getClassName(),':_openImageFile: Read ',nScans, \
+        print(':_openImageFile: Read ',nScans, \
                 'sized [w,h]=[', imWidth,',',imHeight,']')
 
-        vol = octant.data.OCTvolume()
+        vol = oc.data.OCTvolume()
         for ii in range(0,nScans,1):
-            vol.addScans(octant.data.OCTscan(img[:,:,ii]))
+            vol.addScans(oc.data.OCTscan(img[:,:,ii]))
 
         return vol
 
+    @deprecation.deprecated(deprecated_in="0.3", removed_in="0.4",
+                        current_version=__version__,
+                        details="Use method readOCTantFile() instead.")
     def _openDocument(self,fileName):
+        """DEPRECATED. Reads an OCTant document file.
+
+        The file must exist or an error is generated.
+
+        OCTant document files must have extension .octant
+
+        This methos is deprecate. Please use method readOCTantFile() instead.
+
+        :param fileName: The file name
+        :type fileName: str
+        :return: An OCTand document
+        :rtype: :class:`octant.data.Document`
+        """
+
+#        warnMsg = self.getClassName() + ':_openDocument: OCTant serialization not yet ready. Returning new document.'
+#        warnings.warn(warnMsg,SyntaxWarning)
+#
+#        doc = oc.data.Document();
+#        return doc
+        return self._readOCTantFile(self,fileName)
+
+    @staticmethod
+    def _readOCTantFile(fileName):
         """Reads an OCTant document file.
 
         The file must exist or an error is generated.
@@ -466,10 +535,11 @@ class DocumentWindow(QMainWindow):
         :rtype: :class:`octant.data.Document`
         """
 
-        warnMsg = self.getClassName() + ':_openDocument: OCTant serialization not yet ready. Returning new document.'
+        warnMsg = ':_readOCTantFile: OCTant serialization not yet ready. Returning new document.'
         warnings.warn(warnMsg,SyntaxWarning)
 
-        doc = octant.data.Document();
+        doc = oc.data.Document();
+        #doc = doc.readFile(fileName);
         return doc
 
 
@@ -492,11 +562,6 @@ class DocumentWindow(QMainWindow):
         :rtype: string
         """
         return type(self).__name__
-
-#    def connectToolsWindow(self,theToolsWindow):
-#        self._toolsWindow = theToolsWindow
-
-
 
 #    def closeEvent(self,event):
 #        """Closes the document window and the application."""
@@ -535,12 +600,8 @@ class DocumentWindow(QMainWindow):
         """Renders the perfilometer"""
         octScan = self.document.getCurrentScan()
         if octScan is not None:
-            tmp = octant.op.OpScanPerfilometer()
+            tmp = oc.op.OpScanPerfilometer()
             tmp.addOperand(octScan)
-#            if (self._toolsWindow is not None):
-#                settingsGUI = self._toolsWindow._settingsOperationPerfilometer
-#                tmp.pixelColumn = settingsGUI.getPixelColumnValue()
-#                tmp.windowHalfWidth = settingsGUI.getWidthValue()
             if (self._toolsDock is not None):
                 settingsGUI = self._toolsDock._settingsOperationPerfilometer
                 tmp.pixelColumn = settingsGUI.getPixelColumnValue()
@@ -553,7 +614,7 @@ class DocumentWindow(QMainWindow):
     def refresh(self):
         """Visualizes the selected scan, its perfilometer and its segmentation"""
         octScan = self.document.getCurrentScan()
-        octScanSegmentation = self.document.segmentation
+        octScanSegmentation = self.document.getCurrentScanSegmentation()
 
         #The following is a bug. It should be capture "on the fly" and
         #clearing axes rather than reset, but I cannot make it work :(
@@ -567,7 +628,7 @@ class DocumentWindow(QMainWindow):
 
         #Overlay segmentation if available (with a semitransparent colormap)
         if octScanSegmentation is not None:
-            r= octant.RetinalLayers()
+            r= oc.data.RetinalLayers()
             mycmap = self._getSemiTransparentColormap(N = r.getNumLayers())
             ax[0].imshow(octScanSegmentation.data, cmap=mycmap)
 
@@ -595,7 +656,7 @@ class DocumentWindow(QMainWindow):
 
 
     #Operation methods
-    def openFile(self):
+    def openDocument(self):
         """Open a file and sets the current document.
 
         Open a file selection dialog, and depending on the selected file,
@@ -612,40 +673,69 @@ class DocumentWindow(QMainWindow):
 
         tmp = self.document #Capture current document
         if tmp is None:
-            tmp = octant.data.Document() #Initialize an empty document
+            tmp = oc.data.Document() #Initialize an empty document
 
-        fileName = self._getFilename()
+        #Open a Open file dialog window to select a file.
+        options = QFileDialog.Options()
+        options |= QFileDialog.DontUseNativeDialog
+        fileName, _ = QFileDialog.getOpenFileName(self,"Open OCTant document", self.workingDir, "All Files (*);;Amira Files (*.am)", options=options)
+        self.workingDir, _ = os.path.split(fileName)
+        
+        self.document = DocumentWindow.openFile(fileName)
+        #self.show() #Ensure it is visible. Pressing the close button in the document window, only hides the document window
+        self._utilDock.scanscarousel.octvolume = self.document.study
+        #self._utilDock.refresh()
+        self.refresh()
+
+        return self.document
+
+
+    @staticmethod
+    def openFile(fileName):
+        """Open a file and sets the current document.
+
+        Open a file selection dialog, and depending on the selected file,
+        it either reads an OCTant document, or import the file content.
+
+        If opening the file succeeds, then it sets the current document.
+        If opening the file fails, it initializes the current document to
+        an empty one.
+
+
+        :returns: A document
+        :rtype: :class:`octant.data.Document`.
+        """
+
+        tmp = oc.data.Document()
+
         if fileName: #Empty strings evaluate to false in Python;
                      #If fileName is empty, this skips the attempt to open the file
             #print("OCT-Tools: OCTToolsMainWindow: Opening file ", fileName)
 
-            tmp = octant.data.Document() #Forget current document and initialize a new empty document
             tmp.name = fileName
-            tmp.folderName = self.workingDir
-            tmp.fileName = fileName
+            tmp.folderName, tmp.fileName = os.path.split(fileName)
 
             ext = fileName.split(".")
             extension = ext[-1] #Gets the last piece (that's the extension)
             if extension == "octant":
-                tmp.study = self._openDocument()
+                #Read all; the OCT volume and the segmentation
+                tmp = DocumentWindow._readOCTantFile(fileName)
             else: #Import file in external format
-                vol = self._importImageFile(fileName)
+                #Import only the OCT volume
+                vol = DocumentWindow._importImageFile(fileName)
                 tmp.study = vol
-
-
-
+                #...and create a dummy segmentation with the same number of
+                #scans
+                print('Generating dummy segmentation')
+                print('  Number of scans = ' + str(len(tmp.study.scans)))
+                for ii in range(len(tmp.study.scans)):
+                    tmp.segmentation.scanSegmentations.insert(ii,oc.data.OCTscanSegmentation(tmp.study.scans[ii]));
+                    print('  Scans ' + str(ii) + ' -> scan size=' + str(tmp.study.scans[ii].shape ) + '; segmentation size=' + str(tmp.segmentation.scanSegmentations[ii].shape ))
         else:
             #continue with current document
             pass
 
-
-        self.document = tmp
-        #self.show() #Ensure it is visible. Pressing the close button in the document window, only hides the document window
-        self._utilDock.scanscarousel.octvolume = self.document.study
-        self._utilDock.refresh()
-        self.refresh()
-
-        return self.document
+        return tmp
 
 
     def brush(self):
@@ -658,10 +748,10 @@ class DocumentWindow(QMainWindow):
             warnMsg = self.getClassName() + ':brush: Scan segmentation not initialized.'
             warnings.warn(warnMsg,SyntaxWarning)
         else:
-            tmp = octant.op.OpSegmentationBrush()
+            tmp = oc.op.OpSegmentationBrush()
             tmp.addOperand(self.document.segmentation)
-            if (self._toolsWindow is not None):
-                settingsGUI = self._toolsWindow._settingsOperationBrush
+            if (self._toolsDock is not None):
+                settingsGUI = self._toolsDock._settingsOperationBrush
                 tmp.color = settingsGUI.getColorValue()
                 tmp.radius = settingsGUI.getRadiusValue()
 
@@ -715,38 +805,70 @@ class DocumentWindow(QMainWindow):
 
         .. todo: Allow selection of scan for stitching.
 
-        :returns: The volume resulting from the stitching
-        :rtype: class:`octant.data.OCTscan`
+        :returns study: The stitched study
+        :rtype: class:`octant.data.OCTvolume`
+        :returns segmentation: The stitched segmentation
+        :rtype: class:`octant.data.OCTvolumeSegmentation`
         """
-        tmp = octant.op.OpScanStitch()
+        
+        #Open an Open file dialog window to select a file.
+        options = QFileDialog.Options()
+        options |= QFileDialog.DontUseNativeDialog
+        fileName, _ = QFileDialog.getOpenFileName(self,"Open OCTant document", self.workingDir, "All Files (*);;Amira Files (*.am)", options=options)
+        doc2 = DocumentWindow.openFile(fileName)
+        
+        tmp = oc.op.OpScanStitch()
         tmp.addOperand(self.document.getCurrentScan())
-        doc2 = self.openFile()
         tmp.addOperand(doc2.getCurrentScan())
         print('Current scan shape (before stitching): ' + str(self.document.getCurrentScan().shape))
         silly=tmp.execute()
-        print(silly.shape)
         #self.document.setCurrentScan(tmp.execute())
         self.document.setCurrentScan(silly)
         print('Current scan shape (after stitching): ' + str(self.document.getCurrentScan().shape))
+        
+        #Now also "stitch" the segmentations
+        #I need to fool the OpScanStich casting the OCTscanSegmentations
+        #into OCTscans
+        scanA = oc.data.OCTscan()
+        scanA.data = self.document.getCurrentScanSegmentation().data
+        scanB = oc.data.OCTscan()
+        scanB.data = doc2.getCurrentScanSegmentation().data
+        silly=tmp.applyStitch(scanA,scanB)
+        #and re-cast back to an OCTscanSegmentation
+        scanRes = oc.data.OCTscanSegmentation(silly)
+        scanRes.data = silly.data
+        self.document.setCurrentScanSegmentation(scanRes)
+        print('Current scan segmentation shape (after stitching): ' + str(self.document.getCurrentScanSegmentation().shape))
+
+        
         self.refresh()
-        return self.document.study
+        return (self.document.study, self.document.segmentation)
 
 
 
     def flatten(self):
-        """Applies the flattening step to the study.
+        """Applies the flattening step to the current scan in the volume.
 
-        .. todo:
-            Return an OCT volume
-
-        :returns: The flattened image
-        :rtype: class:`octant.data.OCTscan`
+        :returns study: The flattened study
+        :rtype: class:`octant.data.OCTvolume`
+        :returns segmentation: The flattened segmentation
+        :rtype: class:`octant.data.OCTvolumeSegmentation`
         """
-        tmp = octant.op.OpScanFlatten()
+        tmp = oc.op.OpScanFlatten()
         tmp.addOperand(self.document.getCurrentScan())
         self.document.setCurrentScan(tmp.execute())
+        #Now also "flatten" the segmentations
+        #I need to fool the OpScanStich casting the OCTscanSegmentations
+        #into OCTscans
+        scanA = oc.data.OCTscan()
+        scanA.data = self.document.getCurrentScanSegmentation().data
+        silly=tmp.applyOperation(scanA)
+        #and re-cast back to an OCTscanSegmentation
+        scanRes = oc.data.OCTscanSegmentation(silly)
+        scanRes.data = silly.data
+        self.document.setCurrentScanSegmentation(scanRes)
         self.refresh()
-        return self.document.study
+        return (self.document.study, self.document.segmentation)
 
 
     def measureThickness(self):
@@ -755,12 +877,12 @@ class DocumentWindow(QMainWindow):
         :returns: List of layers thicknesses
         :rtype: list
         """
-        theSegmentation = self.document.segmentation
+        theSegmentation = self.document.getCurrentScanSegmentation()
         if theSegmentation is not None:
-            tmp = octant.op.OpScanMeasureLayerThickness()
+            tmp = oc.op.OpScanMeasureLayerThickness()
             tmp.addOperand(theSegmentation)
-            if (self._toolsWindow is not None):
-                settingsGUI = self._toolsWindow._settingsOperationMeasureThickness
+            if (self._toolsDock is not None):
+                settingsGUI = self._toolsDock._settingsOperationMeasureThickness
                 tmp.pixelColumn = settingsGUI.getPixelColumnValue()
                 tmp.windowHalfWidth = settingsGUI.getWindowHalfWidthValue()
                 tmp.pixelWidth = settingsGUI.getPixelWidthValue()
@@ -768,7 +890,7 @@ class DocumentWindow(QMainWindow):
             thicknesses = tmp.execute()
         else:
             #Return a list of thickness<es of 0.
-            r= octant.data.RetinalLayers()
+            r= oc.data.RetinalLayers()
             layers = r.getAllLayersIndexes()
             thicknesses = [0 for elem in layers]
         return thicknesses
@@ -777,15 +899,13 @@ class DocumentWindow(QMainWindow):
     def segment(self):
         """Applies the segmentation step.
 
-        .. todo:
-            Return an OCT segmentation volume
-
-        :returns: The segmentation
-        :rtype: class:`octant.data.OCTscanSegmentation`
+        :returns segmentation: The segmentation
+        :rtype: class:`octant.data.OCTvolumeSegmentation`
         """
-        seg = octant.op.OpScanSegment()
+        tmp = oc.op.OpScanSegment()
         tmp.addOperand(self.document.getCurrentScan())
-        self.document.segmentation = tmp.execute()
+        result = tmp.execute()
+        self.document.setCurrentScanSegmentation(result)
         self.refresh()
         return self.document.segmentation
 
@@ -806,10 +926,12 @@ class DocumentWindow(QMainWindow):
         """
 
         #Catch current OCT scan
-        tmp = octant.op.OpSegmentationEdit()
+        tmp = oc.op.OpSegmentationEdit()
         im = self.document.getCurrentScan()
-        imSegmented = tmp.initEditSegmentation(im,self.document.segmentation)
-        self.document.segmentation = imSegmented #Sync, in case a dummy
+        imSegmentation = self.document.getCurrentScanSegmentation()
+        print(type(imSegmentation))
+        imSegmented = tmp.initEditSegmentation(im,imSegmentation)
+        #self.document.segmentation = imSegmented #Sync, in case a dummy
                                                  #one has been generated.
 
         #Indirect call to the operation
@@ -821,7 +943,7 @@ class DocumentWindow(QMainWindow):
             imSegmented = theOp(*params)
 
         if not isinstance(imSegmented,bool):
-            self.document.segmentation = imSegmented
+            self.document.setCurrentScanSegmentation(imSegmented)
         self.refresh()
 
         return self.document.segmentation

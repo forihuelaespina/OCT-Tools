@@ -103,6 +103,15 @@ A dockable panel for accessing tools
 |             |        |   parent window was still using "old" property       |
 |             |        |   `documentWindow`. In now calls method parent().    |
 +-------------+--------+------------------------------------------------------+
+|  1-Jun-2019 | FOE    | - Method `importFile` now calls newer method         |
+|             |        |   `openDocument` instead of `openFile` from parent   |
+|             |        |   class.                                             |
++-------------+--------+------------------------------------------------------+
+|  2-Jun-2019 |        | - Bug fixed. Upon enabling the segmentation edit, a  |
+|             |        |   new dummy segmentation was always being created    |
+|             |        |   even if one already existed.                       |
++-------------+--------+------------------------------------------------------+
+
 
 .. seealso:: None
 .. note:: None
@@ -329,7 +338,7 @@ class ToolsDock(QDockWidget):
 
         :returns: None
         """
-        tmp=self.parent().openFile()
+        tmp=self.parent().openDocument()
         if tmp is not None:
             buttonList  = self._menuTools.children();
             for b in buttonList:
@@ -341,19 +350,21 @@ class ToolsDock(QDockWidget):
 
     def editSegmentation(self):
         """Starts/Stops manual segmentation step
-
+        
+        If no segmentation is available for this scan a dummy one is generated.
+        
         :returns: None
         """
         #If there is no current segmentation, generate a dummy one
-        seg = octant.op.OpSegmentationEdit()
         theDoc = self.parent().document
-        im = theDoc.getCurrentScan()
-        imSegmented = theDoc.segmentation
-        imSegmented = seg.initEditSegmentation(im,imSegmented) #This in turn
-                                    #will call the ._generateDummySegmentation
-                                    #if needed.
+        imSegmented = theDoc.getCurrentScanSegmentation()
+        if imSegmented is None:
+            im = theDoc.getCurrentScan()
+            seg = octant.op.OpSegmentationEdit()
+            imSegmented = seg._generateDummySegmentation(im.shape[0],im.shape[1])
+            theDoc.setCurrentScanSegmentation(imSegmented)
 
-        theDoc.segmentation = imSegmented
+        #theDoc.segmentation = imSegmented
         self.parent().document = theDoc
         self.parent().refresh()
 

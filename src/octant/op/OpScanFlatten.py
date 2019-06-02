@@ -57,6 +57,17 @@ Initial code was isolated from previous file flattening.py
 |  4-Apr-2019 | FOE    | - Bug fixing. References to                          |
 |             |        |   :class:`octant.data.OCTscan` updated.              |
 +-------------+--------+------------------------------------------------------+
+|  2-Jun-2019 | FOE    | - New read only property deformation map to store    |
+|             |        |   the deformation map associated with the flattening |
+|             |        |   operation.                                         |
+|             |        | - New method applyOperation to repeat a known        |
+|             |        |   flatenning operation to operands. This can be used |
+|             |        |   to apply the same flattening to a different set    |
+|             |        |   of scans. In practical terms, it can be used to    |
+|             |        |   apply the same flatenning to segmentation scans    |
+|             |        |   after it has been precalculated to anatomical      |
+|             |        |   scans.                                             |
++-------------+--------+------------------------------------------------------+
 
 
 .. seealso:: None
@@ -116,8 +127,23 @@ class OpScanFlatten(Operation):
         
         #Set the operation name
         self.name = "Flattening"
-            
+        
+        self.__deformationMap = None
+        
         return
+    
+    
+    @property
+    def deformationMap(self): #name getter
+        """
+        A logical name for the study.
+        
+        This is a read only property.
+        
+        :getter: Gets the deformationMap associated to the last flattening.
+        :type: str
+        """
+        return self.__deformationMap
     
     
     #Private methods
@@ -187,12 +213,14 @@ class OpScanFlatten(Operation):
                 remover+= [i]
         x=np.delete(x0,remover)
         
-        popt, pcov = curve_fit(self.fittingQuadraticModel, x, markers, method = 'dogbox', loss = 'soft_l1')
-        a = self.fittingQuadraticModel(x0, *popt)
+        modelCoeffs, pcov = curve_fit(self.fittingQuadraticModel, x, markers, \
+                                    method = 'dogbox', loss = 'soft_l1')
+        a = self.fittingQuadraticModel(x0, *modelCoeffs)
         shift = np.max(a)
-        flat = shift-a
-        flat = np.round(flat)
-        flat =np.ravel(flat).astype(int)
+        flat  = shift-a
+        flat  = np.round(flat)
+        flat  = np.ravel(flat).astype(int)
+        self.__deformationMap = flat
         
         newgray = I2
         for i in range(0,len(a)):
@@ -212,3 +240,26 @@ class OpScanFlatten(Operation):
 #        self.addOperand(tmp)
 #        #Execute
 #        self.execute()
+
+
+    def applyOperation(self, scanA):
+        """Apply the current flattening to the given scan.
+        
+        Instead of calculating the fitting again needed for the
+        flattening, this method applies a known fitted quadratic model to
+        the given parameters.
+        
+        The result is NOT stored in :py:attr:`result`.
+        
+        :param scanA: Image to flatten.
+        :type scanA: :class:`octant.data.OCTscan`
+        :returns: Result of repeating the last flattening operation onto
+             parameter scanA.
+        :rtype: :class:`octant.data.OCTscan`
+        """
+        if type(scanA) is OCTscan:
+            scanA=scanA.data
+        newgray = scanA
+        for i in range(0,len(self.deformationMap)):
+            newgray[:,i] = np.roll(scanA[:,i], self.deformationMap[i], axis=0)
+        return OCTscan(newgray)

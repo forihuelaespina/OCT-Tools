@@ -65,6 +65,21 @@ Initial code isolated from previous file stitch.py
 |  5-May-2019 | FOE    | - Adapted call to panorama to work correctly with    |
 |             |        |   latest changes.                                    |
 +-------------+--------+------------------------------------------------------+
+| 19-May-2019 | FOE    | - Added property homographyMatrix to hold the        |
+|             |        |   homography matrix resulting from the stitching.    |
++-------------+--------+------------------------------------------------------+
+|  1-Jun-2019 | FOE    | - Added property switchedOperands to flag whether    |
+|             |        |   switching the order of the operands was needed.    |
+|             |        |   during stitching.                                  |
+|             |        | - Added property sparedCols to mark the size of the  |
+|             |        |   "black" spared region.                             |
+|             |        | - Added method applyStitch to repeat a known         |
+|             |        |   sticthing to operands. This can be used to apply   |
+|             |        |   the same stitch to a different set of scans. In    |
+|             |        |   practical terms, it can be used to apply the same  |
+|             |        |   panoramic stitching to segmentation scans after    |
+|             |        |   it has been precalculated to anatomical scans.     |
++-------------+--------+------------------------------------------------------+
 
 
 .. seealso:: None
@@ -81,13 +96,11 @@ Initial code isolated from previous file stitch.py
 ## Import
 import warnings
 #from deprecated import deprecated
-import deprecation
+#import deprecation
 
 #from pyimagesearch.panorama import Stitcher
 #import argparse
 import numpy as np
-import imutils
-import cv2 #That's OpenCV
 
 #from version import __version__
 from octant.data import OCTscan
@@ -135,8 +148,91 @@ class OpScanStitch(Operation):
         self.name = "Stitching"
         
         #Initialize private attributes unique to this instance
+        self.homographyMatrix = None
+        self.sparedCols = 0
+        self.switchedOperands = False
+        
+        return
     
-    
+
+    #Properties getters/setters
+    #
+    # Remember: Sphinx ignores docstrings on property setters so all
+    #documentation for a property must be on the @property method
+    @property
+    def homographyMatrix(self): #property getter
+        """
+        The homography matrix of the most recent execution of the
+        stitching operation.
+
+        :getter: Gets the homography matrix.
+        :setter: Sets the homography matrix.
+        :type: np.array
+        """
+        return self.__homographyMatrix
+
+
+    @homographyMatrix.setter
+    def homographyMatrix(self,H): #property setter
+        #if (not isinstance(opList,(list,))):
+        if H is None:
+            self.__homographyMatrix = None;
+        elif type(H) is not np.ndarray:
+            warnMsg = self.getClassName() + ':homographyMatrix: Unexpected type. ' \
+                            'Please provide homographyMatrix as a np.ndarray.'
+            warnings.warn(warnMsg,SyntaxWarning)
+        else:
+            self.__homographyMatrix = H;
+        return None
+
+    @property
+    def sparedCols(self): #property getter
+        """
+        Last valid pixel column before the spared region resulting from the stitching.
+        
+        :getter: Gets the sparedCols.
+        :setter: Sets the sparedCols.
+        :type: int
+        """
+        return self.__sparedCols
+
+
+    @sparedCols.setter
+    def sparedCols(self,val): #property setter
+        #if (not isinstance(opList,(list,))):
+        if type(val) is not int:
+            warnMsg = self.getClassName() + ':sparedCols: Unexpected type. ' \
+                            'Please provide sparedCols as a int.'
+            warnings.warn(warnMsg,SyntaxWarning)
+        else:
+            self.__sparedCols = val;
+        return None
+
+    @property
+    def switchedOperands(self): #property getter
+        """
+        The flag for operand switching of the most recent execution of the
+        stitching operation.
+        
+        The flag indicates whether operands were switched during stitching.
+        
+        :getter: Gets the switchedOperands.
+        :setter: Sets the switchedOperands.
+        :type: bool
+        """
+        return self.__switchedOperands
+
+
+    @switchedOperands.setter
+    def switchedOperands(self,flag): #property setter
+        #if (not isinstance(opList,(list,))):
+        if type(flag) is not bool:
+            warnMsg = self.getClassName() + ':switchedOperands: Unexpected type. ' \
+                            'Please provide switchedOperands as a bool.'
+            warnings.warn(warnMsg,SyntaxWarning)
+        else:
+            self.__switchedOperands = flag;
+        return None
 
     # #Private methods
 
@@ -190,19 +286,24 @@ class OpScanStitch(Operation):
                   'Img 2 (' + str(imageB.shape) +')' \
                   ' -> Res (' + str(result.shape) +')')
             print('Matches; ' + str(vis.shape))
+            self.homographyMatrix = stitcher.homographyMatrix
+            self.switchedOperands = stitcher.switchedOperands
+            print('Switched operands? ' + str(self.switchedOperands))
             
-            #Remove the "black" unused region on the "right" due to
+            #Remove the "black" spared region on the "right" due to
             #shifting imageB over imageA
             width = result.shape[1]
             flagStop = False
             col=width-1
+            self.sparedCols = width #By default there is no spared region
             while not flagStop:
                 if (result[:,col,:]==0).all():
                     result=np.delete(result,col,1)
+                    self.sparedCols = col
                 else:
                     flagStop=True
                 col = col - 1
-                    
+        print("Spared cols: " +str(self.sparedCols))
         #self.result = OCTscan(vis) #In case I want to see the matches
         self.result = OCTscan(result)
         
@@ -221,3 +322,49 @@ class OpScanStitch(Operation):
 #        self.addOperand(tmp2)
 #        #Execute
 #        self.execute()
+
+
+    def applyStitch(self, scanA, scanB):
+        """Apply the current stitching (see property homographyMatrix) to the
+        given scans.
+        
+        Instead of calculating the homography matrix needed for the
+        stitching, this method applies a known homography matrix to
+        the current set of operands.
+        
+        If operands were switched during the last call to :func:`execute()`
+        the parameters here will also be switched.
+        
+        The result is NOT stored in :py:attr:`result`.
+        
+        :param scanA: First image to stitch.
+        :type scanA: :class:`octant.data.OCTscan`
+        :param scanB: First image to stitch.
+        :type scanB: :class:`octant.data.OCTscan`
+        :returns: Result of repeating the last stitching the operation onto
+             parameters scanA and scanB .
+        :rtype: :class:`octant.data.OCTscan`
+        """
+        
+        if type(scanA) is OCTscan:
+            scanA=scanA.data
+        
+        if type(scanB) is OCTscan:
+            scanB=scanB.data
+        
+        stitcher = Stitcher()
+        if self.switchedOperands:
+            print('Applying stitch over switched operands')
+            result = stitcher.applyStitch([scanA, scanB],
+                        H=self.homographyMatrix, switchedOperands=False)
+        else:
+            result = stitcher.applyStitch([scanB, scanA],
+                        H=self.homographyMatrix, switchedOperands=False)
+        
+        #Finally, remove the spared black region
+        width = result.shape[1]
+        result=np.delete(result,range(self.sparedCols,width),1)
+        print('Applying Stitch: Img 1 (' + str(scanA.shape) +')' \
+              'Img 2 (' + str(scanB.shape) +')' \
+              ' -> Res (' + str(result.shape) +')')
+        return OCTscan(result)

@@ -211,7 +211,7 @@ class OCTscanSegmentation(object):
         :setter: Sets the base OCT scan
         :type: :class:`octant.data.OCTscan`
         """
-        return self.__classMapS
+        return self.__classMap
 
     @classMap.setter
     def classMap(self,cm): #classMap setter

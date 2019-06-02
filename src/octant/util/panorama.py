@@ -18,6 +18,19 @@
 #	+ Some additional cleaning.
 #	+ Relaxed the need to provide the images to stitch in a specific order.
 #
+# 19-May-2019: FOE
+#	+ The homography matrix estimated for the stitching is now saved
+#	as a public attribute. This permits that I can use this later
+#	for mimicking the stitching in segmentation scans.
+#
+# 1-Jun-2019: FOE
+#	+ Class stitcher now remembers whether the order of the operands
+#	were inverted during stitching (see property).
+#	+ Parameters of the last stitching (ratio, reprojThresh and showMatches)
+#	are also remembered.
+#
+
+
 
 
 # import the necessary packages
@@ -31,9 +44,20 @@ class Stitcher:
 		self.isv2 = imutils.is_cv2() #28-Apr-2019: FOE added
 		self.isv3 = imutils.is_cv3()
 		self.isv4 = imutils.is_cv4() #28-Apr-2019: FOE added
+		self.homographyMatrix = None #19-May-2019: FOE added
+		self.ratio=0.75 #1-Jun-2019: FOE added
+		self.reprojThresh=4.0 #1-Jun-2019: FOE added
+		self.showMatches=False #1-Jun-2019: FOE added
+		self.switchedOperands=False #1-Jun-2019: FOE added. True if operands have to be switched in order.
 
 	def stitch(self, images, ratio=0.75, reprojThresh=4.0,
 		showMatches=False):
+		
+		self.ratio=ratio #1-Jun-2019: FOE added
+		self.reprojThresh=reprojThresh #1-Jun-2019: FOE added
+		self.showMatches=showMatches #1-Jun-2019: FOE added
+		
+		
 		# unpack the images, then detect keypoints and extract
 		# local invariant descriptors from them
 		(imageB, imageA) = images
@@ -63,7 +87,8 @@ class Stitcher:
 		(matches, H, status) = M
 		#print('MATCHES')
 		#print(matches)
-		
+		self.homographyMatrix = H #19-May-2019: FOE added
+		self.switchedOperands=False #1-Jun-2019: FOE added.
 		
 		#print('status')
 		#print(status)
@@ -104,18 +129,17 @@ class Stitcher:
 				(result,vis) = self.stitch((imageA, imageB), ratio, reprojThresh,showMatches)
 			else:
 				result = self.stitch((imageA, imageB), ratio, reprojThresh,showMatches)
-				
+			self.switchedOperands=True #1-Jun-2019: FOE added.
 		
 		# check to see if the keypoint matches should be visualized
 		if showMatches:
 			#print('Showing matches')
 			vis = self.drawMatches(imageA, imageB, kpsA, kpsB, matches,
 				status)
-
 			# return a tuple of the stitched image and the
 			# visualization
 			return (result, vis)
-
+		
 		# return the stitched image
 		return result
 
@@ -227,3 +251,37 @@ class Stitcher:
 
 		# return the visualization
 		return vis
+	
+	
+	
+	def applyStitch(self, images, H=None,switchedOperands=None):
+		"""Apply the a knwon stitching to the images.
+		
+		Instead of calculating the homography matrix needed for the
+		stitching, this method applies a known homography matrix to
+		the current set of operands.
+		
+		:param H: The homography matrix. By default it uses the last calculated H.
+			If the last calculated H is None, then a normal stitch operation
+			is attempted.
+		:type H: numpy.array
+		:param switchedOperands: Indicates whether the operands should be switched in order.
+		:type switchedOperands: Boolean.
+		"""
+		if H is None:
+			H = self.homographyMatrix
+		if switchedOperands is None:
+			switchedOperands=self.switchedOperands
+		
+		# unpack the images
+		(imageB, imageA) = images
+		
+		if H is None: #Note that self.homographyMatrix may still be None.
+			result = self.stitch((imageB, imageA), self.ratio, self.reprojThresh,self.showMatches)
+		else:
+			result = cv2.warpPerspective(imageA, H,
+								(imageA.shape[1] + imageB.shape[1], imageA.shape[0]))
+			result[0:imageB.shape[0], 0:imageB.shape[1]] = imageB
+		# return the stitched image
+		return result
+

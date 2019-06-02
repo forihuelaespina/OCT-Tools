@@ -70,6 +70,10 @@ Operation SegmentationEdit
 |             |        |   OpSegmentationEdit._BACKGROUND in method           |
 |             |        |   _generateDummySegmentation.                        |
 +-------------+--------+------------------------------------------------------+
+|  2-Jun-2019 | FOE    | - Bug fixing. Initialization of the segmentation     |
+|             |        |   scan was always resetting to a dummy segmentation. |
++-------------+--------+------------------------------------------------------+
+
 
 .. seealso:: None
 .. note:: None
@@ -333,6 +337,7 @@ class OpSegmentationEdit(Operation):
         
         if type(refImage) is not OCTscan:
             #Encapsulate
+            print('Encapsulating reference image in OCTscan.')
             refImage=OCTscan(refImage)
             
         #Operand is the image to be segmented
@@ -351,7 +356,8 @@ class OpSegmentationEdit(Operation):
         elif type(imageSegmented) is OCTscanSegmentation:
             tmp = imageSegmented
         else:
-            warnMsg = self.getClassName() + ':initEditSegmentation: Unexpected type for imageSegmented.'
+            warnMsg = self.getClassName() + ':initEditSegmentation: Unexpected type ' \
+                + str(type(imageSegmented)) + 'for imageSegmented.'
             warnings.warn(warnMsg,SyntaxWarning)
             
         self.addOperand(tmp)

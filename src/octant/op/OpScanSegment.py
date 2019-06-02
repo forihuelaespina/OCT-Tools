@@ -57,6 +57,9 @@ Initial code isolated from previous file segment.py
 |             |        |   package OCTant structure; wrong imports and        |
 |             |        |   unupdated classes names.                           |
 +-------------+--------+------------------------------------------------------+
+| 19-May-2019 | FOE    | - Bug fixed. Method execute was not testing for      |
+|             |        |   number of operands correctly.                      |
++-------------+--------+------------------------------------------------------+
 
 
 .. seealso:: None
@@ -107,7 +110,7 @@ class OpScanSegment(Operation):
     #Class constructor
     def __init__(self):
         #Call superclass constructor
-        super().__init__(1) #Set operation arity to 1.
+        super().__init__()
 
         #Set the operation name
         self.name = "Segmentation"
@@ -132,7 +135,7 @@ class OpScanSegment(Operation):
         :rtype: :class:`IOT_OCTscanSegmentation`
         """
         #Ensure the operand has been set.
-        if (len(self.operands <1)):
+        if (len(self.operands) <1):
             warnMsg = self.getClassName() + ':execute: Operand not set.'
             warnings.warn(warnMsg,SyntaxWarning)
             return None
@@ -226,10 +229,6 @@ class OpScanSegment(Operation):
         img2 = segmentationUtils.ejecuta_close(img2,2,1)
         img2 = feature.canny(img2,sigma = 2.5)
         img2 = segmentationUtils.elimina_ruido_canny(img2,1)
-        
-                
-        print(self.getClassName(),": execute: Finishing retinal layer segmentation")
-        
         
         #if isinstance(imgin,(OCTscan,)):
         if type(imgin) is OCTscan:

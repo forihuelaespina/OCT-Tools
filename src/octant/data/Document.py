@@ -56,6 +56,21 @@ The document class.
 |             |        |   `addScanSegmentations`. Also, parameter passed is  |
 |             |        |   now correct.                                       |
 +-------------+--------+------------------------------------------------------+
+| 19-May-2019 | FOE    | - Bug fixed. Segmentation property setter was        |
+|             |        |   incorrectly setting property study.                |
+|             |        | - Bug fixed. Segmentation property setter was        |
+|             |        |   asserting the number of scans against the study    |
+|             |        |   reference using shape instead of len.              |
+|             |        | - Bug fixed. Methods `getCurrentScan' and            |
+|             |        |   `getCurrentScanSegmentation` were not checking for |
+|             |        |   empty scan lists.                                  |
+|             |        | - Properties `study` and `segmentation` are now      |
+|             |        |   initialized to :class:`OCTvolume` and              |
+|             |        |   :class:`OCTvolumeSegmentation` respectively.       |
++-------------+--------+------------------------------------------------------+
+|  4-Apr-2019 | FOE    | - New method readFile in preparation for persistence.|
+|             |        |   Still naive though.                                |
++-------------+--------+------------------------------------------------------+
 
 
 .. seealso:: None
@@ -73,6 +88,8 @@ The document class.
 import warnings
 #from deprecated import deprecated
 import deprecation
+
+import os
 
 #from version import __version__
 #from IOT_OCTscan import IOT_OCTscan
@@ -109,9 +126,9 @@ class Document():
         
         
         #Initialize private attributes unique to this instance
-        self.study = None #The current study.
+        self.study = octant.OCTvolume() #The current study.
                 #Currently, an OCT volume
-        self.segmentation = None #The current study.
+        self.segmentation = octant.OCTvolumeSegmentation() #The current study.
                 #Currently, an OCT volumeSegmentation
 
 
@@ -202,14 +219,14 @@ class Document():
               if self.study is None:
                 warnMsg = self.getClassName() + ':segmentation: No reference image.'
                 warnings.warn(warnMsg,SyntaxWarning)
-              if(newSegmentation.shape == self.study.shape[0:1]):
+              if not (len(newSegmentation.scanSegmentations) == len(self.study.scans)):
                 warnMsg = self.getClassName() + ':segmentation: Unexpected size.'
                 warnings.warn(warnMsg,SyntaxWarning)
         elif (type(newSegmentation) is octant.OCTscanSegmentation):
             warnMsg = self.getClassName() + ':study: OCTvolumeSegmentation expected but OCTscanSegmentation received. Embedding scan.'
             warnings.warn(warnMsg,SyntaxWarning)
-            self.__study = octant.OCTvolumeSegmentation();
-            self.__study.addScanSegmentations(newSegmentation)
+            self.__segmentation = octant.OCTvolumeSegmentation();
+            self.__segmentation.addScanSegmentations(newSegmentation)
         else:
             warnMsg = self.getClassName() + ':segmentation: Unexpected segmented scan type.'
             warnings.warn(warnMsg,SyntaxWarning)
@@ -308,11 +325,14 @@ class Document():
         Change the current selection using :func:`pickScan`
         
         :returns: The current working OCT scan.
-        :rtype: :class:`octant.data.OCTscan`
+        :rtype: :class:`octant.data.OCTscan` or None if the study contains no scans
         """
         if self.docsettings.selectedScan is None:
             self.docsettings.selectedScan = 0
-        return self.__study.scans[self.docsettings.selectedScan]
+        res = None
+        if len(self.__study.scans) > 0:
+            res = self.__study.scans[self.docsettings.selectedScan]
+        return res
 
     def setCurrentScan(self,newScan): 
         """Sets the current working OCT scan
@@ -322,11 +342,6 @@ class Document():
         :param newScan: An OCT scan to be assigned to the current working OCT scan.
         :type newScan: :class:`octant.data.OCTscan`
         """
-        print(self.getClassName() + \
-              'setCurrentScan: BEFORE. Current scan=' + \
-              str(self.docsettings.selectedScan) + \
-              '; newScan size=[' + \
-              str(newScan.shape) + ']')
         if self.docsettings.selectedScan is None:
             self.docsettings.selectedScan = 0
         if newScan is None:
@@ -338,11 +353,6 @@ class Document():
                 warnings.warn(warnMsg,SyntaxWarning)
         if (type(newScan) is octant.OCTscan):
             self.__study.scans[self.docsettings.selectedScan] = newScan
-            print(self.getClassName() + \
-              'setCurrentScan: AFTER. Current scan=' + \
-              str(self.docsettings.selectedScan) + \
-              '; newScan size=[' + \
-              str(self.getCurrentScan().shape) + ']')
         else:
             warnMsg = self.getClassName() + ':setcurrentscan: Unexpected scan type.'
             warnings.warn(warnMsg,SyntaxWarning)
@@ -378,7 +388,10 @@ class Document():
         """
         if self.docsettings.selectedScan is None:
             self.docsettings.selectedScan = 0
-        return self.__segmentation.scanSegmentations[self.docsettings.selectedScan]
+        res = None
+        if len(self.__segmentation.scanSegmentations) > 0:
+            res = self.__segmentation.scanSegmentations[self.docsettings.selectedScan]
+        return res
 
 
     def setCurrentScanSegmentation(self,newScan): 
@@ -406,4 +419,23 @@ class Document():
         return None
         
 
-    
+    def readFile(self,filename):
+        """Reads an OCTant document file.
+
+        This method is currently a sham, and it will be updated
+        when serialization is incorporated to OCTant. Currently,
+        it returns an empty document. Nevertheless, it already
+        updates the document, clearing all fields to default values,
+        and updates the filename and folder
+        
+        The file must exist or an error is generated.
+        The file must be in OCTant file format.
+
+        :param fileName: The file name
+        :type fileName: str
+        :return: This document
+        :rtype: :class:`octant.data.Document`
+        """
+        self = Document()
+        self.folderName, self.fileName = os.path.split(filename)
+        return self

@@ -23,6 +23,10 @@ A set of :class:`octant.OCTscanSegmentation` . All scans are of :class:`OCTscanS
 +=============+========+======================================================+
 | 25-Mar-2019 | FOE    | - Class created.                                     |
 +-------------+--------+------------------------------------------------------+
+| 19-May-2019 | FOE    | - Bug fixed. Method addScanSegmentation flag for     |
+|             |        |   testing all inputs to be of type OCTscans was not  |
+|             |        |   being correctly initialized.                       |
++-------------+--------+------------------------------------------------------+
 
 .. seealso:: None
 .. note:: None
@@ -123,7 +127,9 @@ class OCTvolumeSegmentation(object):
             single :class:`octant.data.OCTscanSegmentation`
         :return: None
         """
+        flagAllOCTscans=False
         if type(theScanSegmentations) is octant.OCTscanSegmentation:
+            flagAllOCTscans=True
             self.__scanSegmentations.append(theScanSegmentations)
         elif type(theScanSegmentations) is list:
             flagAllOCTscans=True

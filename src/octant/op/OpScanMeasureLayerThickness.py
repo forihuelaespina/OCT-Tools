@@ -62,6 +62,9 @@ class:`octant.data.OCTscanSegmentation`.
 |             |        |   package OCTant structure; wrong imports and        |
 |             |        |   unupdated classes names.                           |
 +-------------+--------+------------------------------------------------------+
+|  1-Jun-2019 | FOE    | - Bug fixed. Indexing of window was being made from  |
+|             |        |   from rows instead of columns.                      |
++-------------+--------+------------------------------------------------------+
 
 
 .. seealso:: None
@@ -363,7 +366,7 @@ class OpScanMeasureLayerThickness(Operation):
                 xmax = min(I2.shape[1],self.pixelColumn+self.windowHalfWidth)
                 
             #Extract window of interest
-            imgin = imgin[xmin:xmax,:]
+            imgin = imgin[:,xmin:xmax]
             
             tmpThicknesses = list()
             for elem in self.layers:

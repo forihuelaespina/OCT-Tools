@@ -43,6 +43,151 @@ advances in the previous days/weeks.
 
 
 
+.. _secLogAdvances20190601:
+
+Advances 1-Jun-2019
+--------------------
+
+* **Version**: v0.3
+* **Responsible**: FOE
+
+Summary of changes:
+
+
+* **Commit executed** : "Operations model based on OCTvolume stable"
+* Added several new properties (ratio, projThresh and showMatches) to
+  :class:`Stitcher` in panorama. It now keeps track of whether the operands
+  were switched, and also remembers parameterization. 
+* New method readFile in :class:`octant.data.Document` preparation for
+  persistence. Still naive though.
+* Class :class:`octant.op.OpScanStitch` underwent several changhes;
+
+  * Added property switchedOperands to flag whether switching the order
+    of the operands was needed during stitching.
+  * Added property sparedCols to mark the size of the "black" spared region.
+  * Added method applyStitch to repeat a known sticthing to operands. This
+    can be used to apply the same stitch to a different set of scans. In
+	practical terms, it can be used to apply the same panoramic 
+	stitching to segmentation scans after it has been precalculated to
+	anatomical scans.
+
+* Class :class:`octant.op.OpScanFlatten` underwent several changhes;
+
+  * New read only property deformation map to store the deformation map
+    associated with the flattening operation. 
+  * New method applyOperation to repeat a known flatenning operation to
+    operands. This can be used to apply the same flattening to a different set 
+	of scans. In practical terms, it can be used to
+	apply the same flatenning to segmentation scans
+	after it has been precalculated to anatomical scans.
+
+
+
+* Class :class:`octant.app.DocumentWindow` underwent several changhes;
+
+  * Operation to stitch now also stitches the segmentation. 
+  * Operation to flatten now also flattens the segmentation. 
+  * New method _readOCTantFile for reading OCTant files
+  * Method _openDocument deprecated in favour of method `_readOCTantFile`
+    to avoid confusion with new method openDocument.
+  * Method openFile is now static and does not modify the current document.
+    Instead, new method `openDocument` wraps openFile and absorbs the non
+	static operation, modifying the current document.
+  * Method _importImageFile is now static.
+  * Method _getSemiTransparentColormap is now static.
+  * Method _getFilename is now deprecated.
+
+
+
+Bug fixing
+
+* :class:`OpScanMeasureLayerThickness`
+
+  * Indexing of window was being made from from rows instead of columns.
+
+* Class :class:`octant.app.DocumentWindow`
+
+  * Reading second document during stitching was also modifying
+    the current document segmentation because of side effect from `openFile`
+	not being static. 
+
+* Class :class:`octant.app.ToolsDock`
+
+  * Upon enabling the segmentation edit, a new dummy segmentation was always
+    being created even if one already existed.
+
+
+
+.. _secLogAdvances20190519:
+
+Advances 19-May-2019
+--------------------
+
+* **Version**: v0.3
+* **Responsible**: FOE
+
+Summary of changes:
+
+
+Currently implementing the collateral stitching of the segmentations, but
+yet unfinished.
+
+
+New features
+
+* class:`octant.data.Document`
+  
+  * Properties `study` and `segmentation` are now initialized to
+    :class:`OCTvolume` and :class:`OCTvolumeSegmentation` respectively.
+
+* :class:`DocumentWindow`
+
+  * Importing scans from an external file format now also initializes
+    the document segmentation property with an empty segmentation volume
+	of the same size that the imported `OCTvolume`.
+
+* Added new property `homographyMatrix` in :class:`octant.op.OpScanStitch`.
+  This permits transmitting the stitching to the segmentation scans.
+  
+  * This has required making this information accesible in panorama. Hence,
+    I have also added an analogous new property `homographyMatrix` to
+	:class:`octant.util.Stitcher`.
+
+
+Bug fixing
+
+* :class:`DocumentWindow`
+
+  * Call to segment operation was assigning operand of
+    :class:`octant.op.OpScanSegment` to the wrong object.
+  * Reference to the :class:`octant.data.RetinalLayers` class constructor
+    in the :func:`refresh` method was not indicating the subpackage.
+  * Retrieval of current segmentation scan the `refresh` method was
+	incorrectly pointing to the wrapping volume.
+  * Remaining references to old attribute _toolsWindow updated to _toolsDock.
+  * Method `measureThickness` was setting the segmentation volume instead
+    of the segmentation scan as the operand for operation
+	:class:`octant.op.OpScanMeasureLayerThickness`
+  
+	
+* class:`octant.op.OpScanSegment`
+	
+  * Method :func:`execute` was not testing for number of operands correctly.
+
+* class:`octant.data.OCTvolumeSegmentation`
+
+  * The flag for testing all inputs in method :func:`addScanSegmentation` to
+  be of type OCTscans was not being correctly initialized.
+  
+* class:`octant.data.Document`
+  
+  * Segmentation property setter was incorrectly setting property study.
+  * Segmentation property setter was attempting to assert the number of
+    scans against the study reference using shape instead of len.
+  * Methods `getCurrentScan' and `getCurrentScanSegmentation` were not
+  checking for empty scan lists.
+
+
 .. _secLogAdvances20190513:
 
 Advances 13-May-2019
