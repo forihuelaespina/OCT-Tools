@@ -2,6 +2,6 @@ app.OCTantApp module
 ====================
 
 .. automodule:: app.OCTantApp
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:

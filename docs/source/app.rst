@@ -2,9 +2,9 @@ app package
 ===========
 
 .. automodule:: app
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 Submodules
 ----------
@@ -21,4 +21,3 @@ Submodules
    app.ToolsDock
    app.UtilitiesDock
    app.version
-

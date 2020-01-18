@@ -1,5 +1,6 @@
 # Test.py
 import os
+import sys
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -8,103 +9,89 @@ from matplotlib.figure import Figure
 #from matplotlib.backend_bases import KeyEvent, MouseEvent
 from skimage import io
 
-from IOT_Document import IOT_Document
-from IOT_GUI_DocumentWindow import IOT_GUI_DocumentWindow
-from IOT_OperationEditSegmentation import IOT_OperationEditSegmentation
+import copy #Permits deep copying objects
 
+import octant as oc
+#Add paths
+if not sys.path[0] == './app':
+	sys.path.insert(0, './app')
 
-def _getSemiTransparentColormap(nLayers = 10):
-#Creates semi-transparent colormap
-    N=nLayers
-    base = plt.cm.get_cmap('jet')
-    color_list = base(np.linspace(0, 1, N+1))
-    cmap_name = base.name + str(N+1)
-    mycmap=base.from_list(cmap_name, color_list, N+1)
-    mycmap._init()
-    #mycmap._lut[:,-1] = np.linspace(0, 0.8, N+4)
-    tmp = [] #Create an empty array
-    tmp.append(0)
-    tmp.extend(np.ones(N+3))
-    mycmap._lut[:,-1] = tmp #Transparent background, but fully visible layers
-    return mycmap
+import app as ocapp
+#from app import *
 
 
 def myInitFigure():
-    #Prepare the matplotlib figure area to render the current OCT scan
-    #theFig = Figure(figsize=(10, 8))
-    theFig = plt.figure()
-    
-    #Prepare the grid
-    gs = gridspec.GridSpec(1, 2, width_ratios=[5, 1])
-    #ax = list() #Create an empty list
-    #tmp = self._fig.add_subplot(gs[0]) #The OCT image
-    #ax.append(tmp)
-    #tmp = plt.subplot(gs[1]) #The perfilometer
-    #tmp = self._fig.add_subplot(gs[1]) #The perfilometer
-    #ax.append(tmp)
-    # theFig.add_subplot(gs[0]) #The OCT image
-    # theFig.add_subplot(gs[1]) #The perfilometer
-    plt.subplot(gs[0])
-    plt.subplot(gs[1])
-    
-    #make ticklabels invisible
-    for i, axs in enumerate(plt.gcf().axes):
-        axs.text(0.5, 0.5, "ax%d" % (i+1), va="center", ha="center")
-        axs.tick_params(labelbottom=False, labelleft=False)
-    
-    
-    plt.show()    
-    return theFig
+	#Prepare the matplotlib figure area to render the current OCT scan
+	#theFig = Figure(figsize=(10, 8))
+	theFig = plt.figure(figsize=(12, 10))
+	
+	#Prepare the grid
+	#gs = gridspec.GridSpec(1, 2, width_ratios=[5, 1]) #With perfilometer
+	gs = gridspec.GridSpec(1, 1) #Without perfilometer
+	plt.subplot(gs[0]) #The OCT image
+	#plt.subplot(gs[1]) #The perfilometer
+	
+	#make ticklabels invisible
+	for i, axs in enumerate(plt.gcf().axes):
+		axs.text(0.5, 0.5, "ax%d" % (i+1), va="center", ha="center")
+		axs.tick_params(labelbottom=False, labelleft=False)
+	
+	#plt.show()
+	#theFig.canvas.draw()
+	return theFig
 
 def myPaint(theFig,doc):
-#Visualizes the selected scan, its perfilometer and its segmentation
-    octScan = doc.getStudy()
-    octScanSegmentation = doc.getScanSegmentation()
-    
+	#Visualizes the selected scan, its perfilometer and its segmentation
+	if type(doc) is oc.data.Document: 
+		octScan = doc.getCurrentScan()
+		octScanSegmentation = doc.getCurrentScanSegmentation()
+	elif type(doc) is oc.data.OCTscan:
+		octScan = doc
+		octScanSegmentation = oc.data.OCTscanSegmentation(octScan)
 
-    #theCanvas = FigureCanvas(theFig) #first link the figure to the FigureCanvas 
-    #theFig.set_canvas(theCanvas); #Then, inform the figure who is its cointainer
-    ax = theFig.axes
-    
-    #Plot 1: The image
-    ax[0].clear()
-    if octScan is not None:
-        ax[0].imshow(octScan, cmap = plt.get_cmap('gray'))
-    
-    #Overlay segmentation if available (with a semitransparent colormap)
-    if octScanSegmentation is not None:
-        mycmap = _getSemiTransparentColormap(nLayers = 10)
-        ax[0].imshow(octScanSegmentation, cmap=mycmap)
-    
-    
-    # #Plot 2: The perfilometer
-    # perfil = self.perfilometro()  #Updates the perfilometer
-    # ax[1].clear()
-    # ax[1].plot(perfil, np.arange(0,len(perfil)))
+	#theCanvas = FigureCanvas(theFig) #first link the figure to the FigureCanvas 
+	#theFig.set_canvas(theCanvas); #Then, inform the figure who is its cointainer
+	ax = theFig.axes
+	
+	#Plot 1: The image
+	ax[0].clear()
+	if octScan is not None:
+		ax[0].imshow(octScan.data, cmap = plt.get_cmap('gray'))
+	
+	#Overlay segmentation if available (with a semitransparent colormap)
+	if octScanSegmentation is not None:
+		mycmap = ocapp.DocumentWindow._getSemiTransparentColormap(N = 12)
+		ax[0].imshow(octScanSegmentation.data, cmap=mycmap)
+	
+	# #Plot 2: The perfilometer
+	# perfil = self.perfilometro()  #Updates the perfilometer
+	# ax[1].clear()
+	# ax[1].plot(perfil, np.arange(0,len(perfil)))
 
-    #Update
-    plt.draw()
-    #theFig.draw()
-    # theFig.canvas.draw()
-    # theFig.canvas.flush_events()
+	#Update
+	#plt.draw()
+	#theFig.draw()
+	theFig.canvas.draw()
+	# theFig.canvas.flush_events()
 
-    return
-    
+	return theFig
+	
 
 
 
 ##MAIN
+def main():
 
-#Test the AmiraReader
-from AmiraReader import AmiraReader
-import random
-r=AmiraReader()
-#fileName = 'C:\\Users\\Felipe\\OneDrive\\Documentos\\Research\\OCT\\experimentalData\\Triton\\wetransfer-f56351\\TUV86_20180214_133911_3DOCT00_R_01.am'
-fileName = 'E:\\Felipe\\OneDrive\\Documentos\\Research\\OCT\\experimentalData\\Triton\\wetransfer-f56351\\TUV86_20180214_133911_3DOCT00_R_01.am'
-img = r.readAmiraImage(fileName)
-print(img.shape)
-theScan = IOT_OCTscan(img)
-theSegmentation =IOT_OCTscanSegmentation(theScan)
+##Test the AmiraReader
+#from AmiraReader import AmiraReader
+#import random
+#r=AmiraReader()
+##fileName = 'C:\\Users\\Felipe\\OneDrive\\Documentos\\Research\\OCT\\experimentalData\\Triton\\wetransfer-f56351\\TUV86_20180214_133911_3DOCT00_R_01.am'
+#fileName = 'E:\\Felipe\\OneDrive\\Documentos\\Research\\OCT\\experimentalData\\Triton\\wetransfer-f56351\\TUV86_20180214_133911_3DOCT00_R_01.am'
+#img = r.readAmiraImage(fileName)
+#print(img.shape)
+#theScan = IOT_OCTscan(img)
+#theSegmentation =IOT_OCTscanSegmentation(theScan)
 
 # imWidth = img.shape[0]
 # imHeight = img.shape[1]
@@ -121,111 +108,87 @@ theSegmentation =IOT_OCTscanSegmentation(theScan)
 # theFig = plt.figure()
 # gs = gridspec.GridSpec(int(round(tmpScans/2)), 2, width_ratios=[1, 1])
 # for i in range(tmpScans):
-#     plt.subplot(gs[i])
-#     ax = theFig.axes
-#     ax[i].imshow(img[:,:,rnd[i]], cmap = plt.get_cmap('gray'))
-# plt.show()    
+#	 plt.subplot(gs[i])
+#	 ax = theFig.axes
+#	 ax[i].imshow(img[:,:,rnd[i]], cmap = plt.get_cmap('gray'))
+# plt.show()	
 
 
 
 
-# print("Init testing...")        
-# print("Loading image.")        
-# fileName = '../image3.png'
-# img = io.imread(fileName)
-# 
-# print("Creating document.")        
-# doc = IOT_Document() #Initialize a document
-# doc.setName(fileName)
-# tmp, _ = os.path.split(fileName)
-# doc.setFolderName(tmp)
-# doc.setFileName(fileName)
-# doc.setStudy(img)
-# 
-# print("Plot raw document.")        
-# #Catch current OCT scan
-# im = doc.getStudy()
-# imSegmented = doc.getScanSegmentation()
-# 
-# seg = IOT_OperationEditSegmentation()
-# imSegmented = seg.initEditSegmentation(im,imSegmented)
-# doc.setScanSegmentation(imSegmented)
-# 
-# 
-# hFig = myInitFigure()
-# myPaint(hFig,doc) #Plot raw with dummy segmentation
-# 
-# #Apply here some segmentation edit operation
-# 
-# pos=(3,35)
-# #seg.ROISelect(pos)
-# #imSegmented2 = seg.ROIChangeLabel(4)
-# imSegmented2 = seg.ROIChangeLabel(4,pos)
-# doc.setScanSegmentation(imSegmented2)
-# 
-# 
-# myPaint(myInitFigure(),doc) #Plot edited
-# 
+	print("Init testing...")
+	print("Loading image.")
+	fileName = '../sampleImages/image3.png'
+	img = io.imread(fileName)
+	scan = oc.data.OCTscan(img);
+	scanSegmentation = oc.data.OCTscanSegmentation(scan);
+
+	print("Creating document.")
+	study = oc.data.OCTvolume() #Initialize a document
+	study.addScans(scan)
+	segmentationVol = oc.data.OCTvolumeSegmentation() #Initialize a document
+	segmentationVol.addScanSegmentations(scanSegmentation)
+	doc = oc.data.Document() #Initialize a document
+	doc.name = fileName
+	tmp, _ = os.path.split(fileName)
+	doc.folderName = tmp
+	doc.fileName= fileName
+	doc.study = study
+	doc.segmentation = segmentationVol
+
+	#Keep reference image.
+	print("Replicating image.")
+	doc2 = copy.deepcopy(doc)
+	#Flattening
+	print("-- Flattening.")
+	flt = oc.op.OpScanFlatten()
+	flt.addOperand(doc2.getCurrentScan())
+	imFlattened = flt.execute()
+	doc2.setCurrentScan(imFlattened)
+	#Segmentation
+	print("-- Segmenting.")
+	doc3 = copy.deepcopy(doc2)
+	seg = oc.op.OpScanSegment()
+	seg.addOperand(doc3.getCurrentScan())
+	imSegmented = seg.execute()
+	doc3.setCurrentScanSegmentation(imSegmented)
+	
+
+	#Load colormap
+	print("-- Plotting.")
+	appsettings = oc.data.Settings()
+	appsettingsfile = '..\\resources\\OCTantApp.config'
+	appsettings.read(appsettingsfile)
+	cmap=appsettings.retinallayerscolormap
+	# hFig = myInitFigure()
+	# myPaint(hFig,doc) #Plot raw with dummy segmentation
+	#hFig = myPaint(myInitFigure(),doc) #Plot raw
+	hFig = myPaint(myInitFigure(),doc2) #Plot flattened
+	hFig = myPaint(myInitFigure(),doc3) #Plot segmented
 
 
+	# pos=(3,35)
+	# #seg.ROISelect(pos)
+	# #imSegmented2 = seg.ROIChangeLabel(4)
+	# imSegmented2 = seg.ROIChangeLabel(4,pos)
+	# doc.setScanSegmentation(imSegmented2)
+	#
+	#
+	# myPaint(myInitFigure(),doc) #Plot edited
+	#
 
-
-# _docWindow = IOT_GUI_DocumentWindow()
-# _docWindow.setDocument(doc)
-# 
-# 
-# #Get parameters
-# x = 3
-# y = 3
-# pos=(x,y)
-# 
-# params=list()
-# params.append(pos)
-# 
-# # _docWindow.opEditSegmentation('ROISelect',params)
-# # _docWindow.opEditSegmentation('ROIDelete') #Since there is no memory of the selection this shall pass... 
-# # _docWindow.opEditSegmentation('ROIDelete',params)
-# 
-# params.append(4)
-# _docWindow.opEditSegmentation('ROIChangeLabel',params)
-# 
-# #Show the windows
-# _docWindow.show()
-
-
-# from skimage import morphology
-# b = np.zeros((6,6), dtype=np.int)
-# b[2:4, 2:4] = 1
-# b[4, 4] = 1
-# b[:2, :3] = 2
-# b[0, 5] = 3
-# b[5, 4:7] = 7
-# print(b)
-# #Select COI
-# coiIdx = np.nonzero(b==1)
-# print(coiIdx)
-# #Select ROI
-# region_labels,nr_labels = morphology.label(b, neighbors=4,background=0,return_num=True) #Get connected components
-# cIdx = region_labels[2,2] #Find component index associated to active ROI
-# roiIdx=np.nonzero(region_labels==cIdx)#Retrieve indexes
-# print(roiIdx)
-# region_labels[roiIdx]
-# #...but when the ROI is BG, morphology.label it does not split BG regions
-# cIdx = region_labels[2,0] #Find component index associated to active ROI
-# roiIdx=np.nonzero(region_labels==cIdx)#Retrieve indexes
-# print(roiIdx)
-# len(roiIdx[0])
-# #...so I need to trick him into believing the background is NOT the backgrond
-# #Prepare a dummy binary image where all foreground is grouped under a single label
-# theBG = 0
-# tmpDummy = b==theBG
-# tmpDummy = tmpDummy.astype(np.int) #Now change from boolean to integers
-# #...and now operate over the dummy image instead
-# region_labels2,nr_labels2 = morphology.label(tmpDummy, neighbors=4,background=0,return_num=True) #Get connected components
-# cIdx = region_labels2[2,0] #Find component index associated to active ROI
-# roiIdx=np.nonzero(region_labels2==cIdx)#Retrieve indexes
-# print(roiIdx)
-# print(len(roiIdx[0]))
-
-
-print("Done.")        
+if __name__ == "__main__":
+	#With the new graphical progress bar in method :func:`execute` of
+    #class :class:`OpScanSegment`, matplotlib backend was no longer
+    #automatically launching inline in the IPython console.
+	#Remember to run in the console BEFORE launching this script
+	# 1) Activate matplotlib backend (Qt5Agg)
+	#%matplotlib
+	# 2) Make it work inline, that is within the IPython console
+	#%matplotlib inline
+	#
+	# You might not need it though becuase I left the progress bar
+	#disconnected using the var `mode` to 'terminal'.
+	
+	main()
+	print("Done.")		

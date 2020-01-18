@@ -2,9 +2,9 @@ octant.op package
 =================
 
 .. automodule:: octant.op
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 Submodules
 ----------
@@ -20,4 +20,3 @@ Submodules
    octant.op.OpSegmentationBrush
    octant.op.OpSegmentationEdit
    octant.op.Operation
-

@@ -1,5 +1,6 @@
-# -*- coding: utf-8 -*-
 """
+-*- coding: utf-8 -*-
+
 Created on Fri Mar 15 23:59:24 2019
 
 File: jsonminify.py
@@ -11,10 +12,11 @@ The JSON format does not naturally permits comments, but
 of course they are useful. A common two step approach is to first minimize
 the file and then parse the JSON. Something like::
 
-    JSON.parse(JSON.minify(my_str));
+   JSON.parse(JSON.minify(my_str));
 
 
 See:
+
     https://stackoverflow.com/questions/244777/can-comments-be-used-in-json
     http://crockford.com/javascript/jsmin
 
@@ -26,9 +28,8 @@ See:
 | 10-Mar-2019 | FOE    | - File created and methods jsonminify and            |
 |             |        |   fastjsonminify copied from GitHub.                 |
 +-------------+--------+------------------------------------------------------+
-
-
-
+| 11-Aug-2019 | FOE    | - Comments corrections during Sphyinx compilation.   |
++-------------+--------+------------------------------------------------------+
 
 .. seealso:: None
 .. note:: None
@@ -48,13 +49,19 @@ def jsonminify(string, strip_space=True):
        Based on JSON.minify.js: https://github.com/getify/JSON.minify
        Contributers:
        - Gerald Storer
+
          - Contributed original version
+
        - Felipe Machado
+
          - Performance optimization
+
        - Pradyun S. Gedam
+
          - Conditions and variable names changed
          - Reformatted tests and moved to separate file
          - Made into a PyPI Package
+
     """
     tokenizer = re.compile('"|(/\*)|(\*/)|(//)|\n|\r')
     end_slashes_re = re.compile(r'(\\)*$')
@@ -120,6 +127,7 @@ def fastjsonminify(s):
 
     Claimed to run faster than jsonminify above:
     https://stackoverflow.com/questions/244777/can-comments-be-used-in-json
+
     """
     inCommentSingle = False
     inCommentMulti = False

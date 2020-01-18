@@ -25,6 +25,9 @@ initialization code for the package or set the __all__ variable.
 +-------------+--------+------------------------------------------------------+
 | 17-Mar-2019 | FOE    | - Name updated to OCTantApp.                         |
 +-------------+--------+------------------------------------------------------+
+|  9-Jun-2019 | FOE    | - Added import of individual classes to make it      |
+|             |        |   available as a package.                            |
++-------------+--------+------------------------------------------------------+
 
 
 
@@ -39,5 +42,20 @@ initialization code for the package or set the __all__ variable.
 
 from version import __version__
 
+from .ScansCarousel import ScansCarousel
+from .SettingsGUIOpScanMeasureThickness import SettingsGUIOpScanMeasureThickness
+from .SettingsGUIOpScanPerfilometer import SettingsGUIOpScanPerfilometer
+from .SettingsGUIOpSegmentationBrush import SettingsGUIOpSegmentationBrush
+from .OpSegmentationEditToolsPanel import OpSegmentationEditToolsPanel
+from .DocumentWindow import DocumentWindow
+from .UtilitiesDock import UtilitiesDock
+#from .ToolsDock import ToolsDock
+from .OCTantApp import OCTantApp
+
 name = "OCTantApp"
+
+
+
+
+
 

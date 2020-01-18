@@ -3,11 +3,11 @@
 
 .. currentmodule: src
 
-File: IOT_OCTscanSegmentation.py
+File: OCTscanSegmentation.py
 
-Class IOT_OCTscanSegmentation
+Class :class:`octant.data.OCTscanSegmentation`
 
-A retinal layer segmentation over a class:`IOT_OCTscan`
+A retinal layer segmentation over a :class:`octant.data.OCTscan`
 
 :Log:
 
@@ -64,13 +64,14 @@ class OCTscanSegmentation(object):
     
     Please note that this is a data model class; it keeps the segmentation
     but it is NOT capable of "computing" such segmentation. To compute a
-    segmentation please refer to :class:`octant.op.OpSegment`.
+    segmentation please refer to :class:`octant.op.OpScanSegment`.
     
-    The segmentation is sized and shaped equal to its base :class:`OCTscan`.
+    The segmentation is sized and shaped equal to its base
+    :class:`octant.data.OCTscan`.
     
     A default segmentation sets the whole segmentation to BACKGROUND.
     
-    .. seealso:: :class:`octant.data.OCTscan`, :class:`octant.op.OpSegment`
+    .. seealso:: :class:`octant.data.OCTscan`, :class:`octant.op.OpScanSegment`
     .. note:: None
     .. todo:: None
 

@@ -2,9 +2,9 @@ octant.util package
 ===================
 
 .. automodule:: octant.util
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 Submodules
 ----------
@@ -14,4 +14,3 @@ Submodules
    octant.util.jsonminify
    octant.util.panorama
    octant.util.segmentationUtils
-

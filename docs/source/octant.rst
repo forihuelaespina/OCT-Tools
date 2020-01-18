@@ -2,18 +2,18 @@ octant package
 ==============
 
 .. automodule:: octant
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 Subpackages
 -----------
 
 .. toctree::
 
-    octant.data
-    octant.op
-    octant.util
+   octant.data
+   octant.op
+   octant.util
 
 Submodules
 ----------
@@ -21,4 +21,3 @@ Submodules
 .. toctree::
 
    octant.version
-

@@ -2,9 +2,9 @@ octant.data package
 ===================
 
 .. automodule:: octant.data
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 Submodules
 ----------
@@ -18,4 +18,3 @@ Submodules
    octant.data.OCTvolumeSegmentation
    octant.data.RetinalLayers
    octant.data.Settings
-
