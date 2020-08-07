@@ -32,6 +32,14 @@ A retinal layer segmentation over a :class:`octant.data.OCTscan`
 |  4-Apr-2019 | FOE    | - Minor debugging. Updated call from `IOT_OCTScan` to|
 |             |        |   :class:`octant.data.OCTscan` in class constructor. |
 +-------------+--------+------------------------------------------------------+
+| 16-Jan-2020 | FOE    | - Import line:                                       |
+|             |        |     import octant.data as octant                     |
+|             |        |   was causing error:                                 |
+|             |        |     AttributeError: module 'octant' has no attribute |
+|             |        |    'data'                                            |
+|             |        |   It has now been updated to:                        |
+|             |        |    from octant import data as octant                 |
++-------------+--------+------------------------------------------------------+
 
 .. seealso:: None
 .. note:: None
@@ -51,7 +59,8 @@ import numpy as np
 #from skimage import color
 
 from octant import version
-import octant.data as octant
+#import octant.data as octant
+from octant import data as octant
 
 
 ## Class definition

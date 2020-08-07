@@ -71,6 +71,14 @@ The document class.
 |  4-Apr-2019 | FOE    | - New method readFile in preparation for persistence.|
 |             |        |   Still naive though.                                |
 +-------------+--------+------------------------------------------------------+
+| 16-Jan-2020 | FOE    | - Import line:                                       |
+|             |        |     import octant.data as octant                     |
+|             |        |   was causing error:                                 |
+|             |        |     AttributeError: module 'octant' has no attribute |
+|             |        |    'data'                                            |
+|             |        |   It has now been updated to:                        |
+|             |        |    from octant import data as octant                 |
++-------------+--------+------------------------------------------------------+
 
 
 .. seealso:: None
@@ -96,7 +104,9 @@ import os
 #from IOT_OCTscanSegmentation import IOT_OCTscanSegmentation
 #from IOT_OCTvolume import IOT_OCTvolume
 from octant import __version__
-import octant.data as octant
+#import octant.data as octant
+from octant import data as octant
+
 
 
 ## Class definition

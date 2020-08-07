@@ -27,6 +27,14 @@ A set of :class:`octant.OCTscanSegmentation` . All scans are of :class:`OCTscanS
 |             |        |   testing all inputs to be of type OCTscans was not  |
 |             |        |   being correctly initialized.                       |
 +-------------+--------+------------------------------------------------------+
+| 16-Jan-2020 | FOE    | - Import line:                                       |
+|             |        |     import octant.data as octant                     |
+|             |        |   was causing error:                                 |
+|             |        |     AttributeError: module 'octant' has no attribute |
+|             |        |    'data'                                            |
+|             |        |   It has now been updated to:                        |
+|             |        |    from octant import data as octant                 |
++-------------+--------+------------------------------------------------------+
 
 .. seealso:: None
 .. note:: None
@@ -43,7 +51,9 @@ A set of :class:`octant.OCTscanSegmentation` . All scans are of :class:`OCTscanS
 import warnings
 
 from octant import version
-import octant.data as octant
+#import octant.data as octant
+from octant import data as octant
+
 
 ## Class definition
 class OCTvolumeSegmentation(object):

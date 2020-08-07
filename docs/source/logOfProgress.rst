@@ -21,6 +21,7 @@ advances in the previous days/weeks.
    :maxdepth: 1
    :caption: Table of Contents
 
+   logOfProgress_2020
    logOfProgress_2019
    logOfProgress_2018
 
@@ -45,6 +46,7 @@ Authors acronyms:
 * ACA: Arlem Aleida Castillo Ávila
 * FOE: Felipe Orihuela-Espina
 * PHW: Patrick Heyer-Wollenberg
+* BGP: Benjamin Israel Guillén Paz
 
 Testers acronyms:
 * JHV: Javier Herrera-Vega

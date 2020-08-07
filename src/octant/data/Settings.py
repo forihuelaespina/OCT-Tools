@@ -45,6 +45,7 @@ from octant import version
 from octant.util import jsonminify, fastjsonminify
 
 
+
 ## Class definition
 class Settings(object):
     #Sphinx documentation

@@ -40,6 +40,14 @@ A set of OCT scans. All scans are of :class:`OCTscan`.
 |             |        | - Bug fixed. flagAllOCTScans in method addScans is   |
 |             |        |   now correctly returned in all cases.               |
 +-------------+--------+------------------------------------------------------+
+| 16-Jan-2020 | FOE    | - Import line:                                       |
+|             |        |     import octant.data as octant                     |
+|             |        |   was causing error:                                 |
+|             |        |     AttributeError: module 'octant' has no attribute |
+|             |        |    'data'                                            |
+|             |        |   It has now been updated to:                        |
+|             |        |    from octant import data as octant                 |
++-------------+--------+------------------------------------------------------+
 
 .. seealso:: None
 .. note:: None
@@ -57,7 +65,9 @@ import warnings
 import deprecation
 
 from octant import __version__
-import octant.data as octant
+#import octant.data as octant
+from octant import data as octant
+
 
 ## Class definition
 class OCTvolume(object):
